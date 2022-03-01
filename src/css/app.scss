@@ -1,0 +1,21 @@
+// app global css in SCSS form
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-block {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.badge {
+  background: $primary;
+  color: white;
+  border-radius: 50%;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+}
