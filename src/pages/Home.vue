@@ -2,7 +2,11 @@
   <q-page class="container">
     <div class="container-panel">
       <template v-for="link in essentialLinks" :key="link.title">
-        <div class="card" v-if="link.is_home">
+        <div
+          class="card"
+          v-if="link.is_home"
+          @click="$router.push({ name: link.link })"
+        >
           <div class="card-body">
             <i :class="link.icon"></i>
             <p>{{ link.title }}</p>
