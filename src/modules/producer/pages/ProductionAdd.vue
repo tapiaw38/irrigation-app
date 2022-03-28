@@ -3,40 +3,56 @@
     <div class="q-gutter-md" style="max-width: 700px">
       <q-toolbar-title class="flex-column items-center content-center">
         <q-icon
-          name="las la-users"
+          name="las la-seedling"
           color="accent"
           size="2.2em"
           class="q-pa-md"
         />
-        <span>Agregar Productor</span>
+        <span>Agregar Producción</span>
       </q-toolbar-title>
       <div class="q-gutter-md text-center">
         <q-input
-          v-model="first_name"
-          label="Nombre"
+          v-model="production"
+          label="Producción"
           type="text"
           class="q-mr-sm"
         />
         <q-input
-          v-model="last_name"
-          label="Apellido"
+          v-model="production_name"
+          label="Nombre de Producción"
           type="text"
           class="q-mr-sm"
         />
-        <q-input v-model="dni" label="DNI" type="text" class="q-mr-sm" />
         <q-input
-          v-model="address"
-          label="Dirección"
+          v-model="production_type"
+          label="Tipo de Producción"
           type="text"
           class="q-mr-sm"
         />
-        <q-input v-model="phone" label="Teléfono" type="text" class="q-mr-sm" />
         <q-input
-          v-model="birth_date"
-          label="Fecha de Nacimiento"
-          type="text"
+          v-model="production_lng"
+          label="Longitud"
+          type="number"
           class="q-mr-sm"
         />
+        <q-input
+          v-model="production_lat"
+          label="Latitud"
+          type="number"
+          class="q-mr-sm"
+        />
+        <q-file
+          color="teal"
+          outlined
+          v-model="production_img"
+          label="Agregar imagen"
+        >
+          <template v-slot:append>
+            <q-avatar>
+              <q-icon name="las la-image" />
+            </q-avatar>
+          </template>
+        </q-file>
         <q-btn
           class="full-width"
           color="primary"
@@ -52,7 +68,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "ProducerAdd",
+  name: "ProductionAdd",
   setup() {
     return {};
   },

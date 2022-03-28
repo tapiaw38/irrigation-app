@@ -13,7 +13,7 @@ export default {
       path: "producer/add",
       name: "producer_add",
       component: () =>
-        import(/* webpackChunkName: "producer_add" */ "../pages/ProducerAdd")
+        import(/* webpackChunkName: "producerAdd" */ "../pages/ProducerAdd")
     },
     {
       path: "poducer/:id/detail",
@@ -26,6 +26,24 @@ export default {
       name: "producer_edit",
       component: () =>
         import(/* webpackChunkName: "producerEdit" */ "../pages/ProducerEdit")
-    }
+    },
+    {
+      path: "",
+      name: "production",
+      component: () =>
+        import(/* webpackChunkName: "production" */ "../pages/Productions")
+    },
+    {
+      path: "production/add",
+      name: "production_add",
+      component: () =>
+        import(/* webpackChunkName: "productionAdd" */ "../pages/ProductionAdd")
+    },
+    {
+      path: "poduction/:id/detail",
+      name: "production_detail",
+      component: () =>
+        import(/* webpackChunkName: "producerDetail" */ "../pages/ProductionDetail")
+    },
   ],
 };

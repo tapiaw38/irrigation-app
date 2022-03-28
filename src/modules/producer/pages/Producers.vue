@@ -3,7 +3,7 @@
     <div class="q-pb-sm q-gutter-sm">
       <q-btn
         color="primary"
-        icon="las la-user-plus"
+        icon="las la-users"
         @click="$router.push({ name: 'producer_add' })"
       />
     </div>
@@ -17,12 +17,12 @@
       </thead>
       <tbody>
         <tr v-for="(_, i) in 5" :key="i">
-          <td class="text-left">Frozen Yogurt</td>
-          <td class="text-left">159</td>
-          <td class="text-left">6</td>
-          <td class="text-left">24</td>
-          <td class="text-left">4</td>
-          <td class="text-left">87</td>
+          <td class="text-left">Nombre de productor</td>
+          <td class="text-left">Apellido</td>
+          <td class="text-left">36132663</td>
+          <td class="text-left">Dirección</td>
+          <td class="text-left">3837435567</td>
+          <td class="text-left">01/01/1982</td>
           <td class="text-left">
             <q-btn round color="secondary" icon="las la-file" class="q-mr-sm" />
             <q-btn round color="secondary" icon="las la-edit" class="q-mr-sm" />
