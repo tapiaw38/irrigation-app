@@ -8,12 +8,6 @@
         text-color="primary"
         @click="$router.push({ name: 'home' })"
       />
-      <q-btn
-        round
-        color="primary"
-        icon="las la-users"
-        @click="$router.push({ name: 'producer_add' })"
-      />
     </div>
     <q-markup-table>
       <thead>
@@ -25,26 +19,15 @@
       </thead>
       <tbody>
         <tr v-for="(_, i) in 5" :key="i">
-          <td class="text-left">Nombre de productor</td>
-          <td class="text-left">Apellido</td>
-          <td class="text-left">36132663</td>
-          <td class="text-left">Dirección</td>
-          <td class="text-left">3837435567</td>
-          <td class="text-left">01/01/1982</td>
+          <td class="text-left">Nombre de usuario</td>
+          <td class="text-left">123</td>
+          <td class="text-left">Productor</td>
+          <td class="text-left">2</td>
           <td class="text-left">
             <q-btn
               round
-              text-color="secondary"
-              icon="las la-file"
-              class="q-mr-sm"
-              @click="
-                $router.push({ name: 'producer_detail', params: { id: 1 } })
-              "
-            />
-            <q-btn
-              round
-              text-color="secondary"
-              icon="las la-edit"
+              color="secondary"
+              icon="las la-cloud-upload-alt"
               class="q-mr-sm"
             />
             <q-btn
@@ -64,17 +47,9 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Producers",
+  name: "Records",
   setup() {
-    const producerItems = [
-      "Nombre",
-      "Apellido",
-      "DNI",
-      "Dirección",
-      "Teléfono",
-      "Fecha de Nacimiento",
-      "",
-    ];
+    const producerItems = ["Usuario", "Registro", "Tipo", "Cantidad", ""];
 
     return {
       producerItems,

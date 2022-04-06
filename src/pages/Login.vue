@@ -1,7 +1,7 @@
 <template>
   <q-page class="container">
     <div class="container-login">
-      <h4>Iniciar sesion</h4>
+      <h4 class="text-center">Iniciar sesion</h4>
       <q-input
         v-model="email"
         label="Email"
@@ -29,7 +29,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "PageIndex",
+  name: "Login",
 });
 </script>
 

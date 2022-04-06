@@ -34,6 +34,20 @@ const linksList = [
     link: "",
     is_home: true,
   },
+  {
+    title: "Exportar",
+    caption: "",
+    icon: "las la-cloud-upload-alt",
+    link: "record",
+    is_home: true,
+  },
+  {
+    title: "Usuarios",
+    caption: "",
+    icon: "las la-user",
+    link: "",
+    is_home: true,
+  },
 ];
 
 export default linksList;

@@ -2,6 +2,14 @@
   <div class="q-pa-md">
     <div class="q-pb-sm q-gutter-sm">
       <q-btn
+        round
+        color="white"
+        icon="las la-arrow-alt-circle-left"
+        text-color="primary"
+        @click="$router.push({ name: 'home' })"
+      />
+      <q-btn
+        round
         color="primary"
         icon="las la-seedling"
         @click="$router.push({ name: 'production_add' })"
@@ -28,17 +36,22 @@
           <td class="text-left">
             <q-btn
               round
-              color="secondary"
+              text-color="secondary"
               icon="las la-file"
               class="q-mr-sm"
               @click="
                 $router.push({ name: 'production_detail', params: { id: 1 } })
               "
             />
-            <q-btn round color="secondary" icon="las la-edit" class="q-mr-sm" />
             <q-btn
               round
-              color="negative"
+              text-color="secondary"
+              icon="las la-edit"
+              class="q-mr-sm"
+            />
+            <q-btn
+              round
+              text-color="negative"
               icon="las la-trash-alt"
               class="q-mr-sm"
             />

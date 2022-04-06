@@ -10,21 +10,56 @@
         @click="toggleSideMenu"
       />
 
-      <q-toolbar-title> IR Tinogasta </q-toolbar-title>
+      <q-toolbar-title>
+        <q-icon size="2rem" name="las la-layer-group" />
+        Intendicia de riego
+      </q-toolbar-title>
 
       <div>
         <q-btn flat dense round icon="las la-bell" aria-label="Notifications" />
-        <q-btn flat dense round icon="las la-user" aria-label="Profile" />
-        <q-btn
-          flat
-          dense
-          round
-          icon="las la-sign-out-alt"
-          aria-label="Logout"
-        />
-      </div>
-      <div>
-        <q-btn flat dense round icon="las la-sign-in-alt" aria-label="Login" />
+        <q-btn-dropdown
+          split
+          color="primary"
+          push
+          glossy
+          no-caps
+          icon="las la-user"
+          dropdown-icon="las la-angle-down"
+          label="Nombre"
+          @click="$router.push({ name: 'profile', params: { id: 1 } })"
+        >
+          <q-list>
+            <q-item
+              clickable
+              v-close-popup
+              @click="$router.push({ name: 'profile', params: { id: 1 } })"
+            >
+              <q-item-section avatar>
+                <q-avatar>
+                  <q-img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Perfil</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-close-popup @click="onItemClick">
+              <q-item-section avatar>
+                <q-avatar>
+                  <q-icon
+                    name="las la-sign-out-alt"
+                    class="text-primary"
+                    size="2em"
+                  />
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Cerrar sesion</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </div>
     </q-toolbar>
   </q-header>
