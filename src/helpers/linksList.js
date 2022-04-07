@@ -45,7 +45,7 @@ const linksList = [
     title: "Usuarios",
     caption: "",
     icon: "las la-user",
-    link: "",
+    link: "users",
     is_home: true,
   },
 ];
