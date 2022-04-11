@@ -12,7 +12,7 @@
 
       <q-toolbar-title>
         <q-icon size="2rem" name="las la-layer-group" />
-        Intendicia de riego
+        Intendencia de riego
       </q-toolbar-title>
 
       <div>

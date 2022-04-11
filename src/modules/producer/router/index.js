@@ -16,19 +16,13 @@ export default {
         import(/* webpackChunkName: "producerAdd" */ "../pages/ProducerAdd")
     },
     {
-      path: "poducer/:id/detail",
+      path: ":id/producer",
       name: "producer_detail",
       component: () =>
         import(/* webpackChunkName: "producerDetail" */ "../pages/ProducerDetail")
     },
     {
-      path: "producer/:id/edit",
-      name: "producer_edit",
-      component: () =>
-        import(/* webpackChunkName: "producerEdit" */ "../pages/ProducerEdit")
-    },
-    {
-      path: "",
+      path: "/production",
       name: "production",
       component: () =>
         import(/* webpackChunkName: "production" */ "../pages/Productions")
@@ -40,10 +34,22 @@ export default {
         import(/* webpackChunkName: "productionAdd" */ "../pages/ProductionAdd")
     },
     {
-      path: "poduction/:id/detail",
+      path: ":id/production",
       name: "production_detail",
       component: () =>
         import(/* webpackChunkName: "producerDetail" */ "../pages/ProductionDetail")
+    },
+    {
+      path: "/geolocation",
+      name: "geolocation",
+      component: () =>
+        import(/* webpackChunkName: "geolocation" */ "../pages/GeoHome")
+    },
+    {
+      path: "/geolocation/production",
+      name: "geo-production",
+      component: () =>
+        import(/* webpackChunkName: "geoProduction" */ "../pages/GeoProduction")
     },
   ],
 };

@@ -1,31 +1,31 @@
 <template>
-  <div class="q-pa-md">
-    <div class="q-gutter-md" style="max-width: 700px">
+  <div class="q-pa-lg">
+    <div class="q-gutter-md">
       <q-toolbar-title class="flex-column items-center content-center">
         <q-icon
           name="las la-seedling"
-          color="accent"
+          color="primary"
           size="2.2em"
           class="q-pa-md"
         />
         <span>Nombre Productor</span>
       </q-toolbar-title>
-      <div class="row col-12">
-        <div class="column col-6 items-left">
+      <div class="container-detail">
+        <div class="items-left">
           <div>
             <div class="text-h6">Producción</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">Distrito</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">Partida</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">N Lote</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">M. Catastral</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">Producción</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">Nombre</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">Tipo</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">Distrito</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">Partida</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">N Lote</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">M. Catastral</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">Producción</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">Nombre</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">Tipo</div>
           </div>
         </div>
-        <div class="column col-6">
+        <div class="items-left">
           <q-toolbar-title>
-            <span class="text-subtitle2 text-accent q-pa-xs"
+            <span class="text-subtitle2 text-grey q-pa-xs"
               >Geolocalizacion</span
             >
           </q-toolbar-title>
@@ -34,43 +34,36 @@
       </div>
     </div>
     <!--Dialog content-->
-    <q-dialog v-model="basic" transition-show="rotate" transition-hide="rotate">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Terms of Agreement</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <p v-for="n in 15" :key="n">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-            repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
-            perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-            minima, porro labore.
-          </p>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="Decline" color="primary" v-close-popup />
-          <q-btn flat label="Accept" color="primary" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import useMapbox from "../composables/useMapbox";
 
 export default defineComponent({
   name: "ProductionDetail",
   components: {},
   setup() {
-    const { crateMap } = useMapbox();
+    const { createMap } = useMapbox();
 
-    return {
-      crateMap,
+    let map = {
+      container: "map",
+      center: [-67.564368, -28.065752],
+      zoom: 13,
+      markers: [
+        {
+          coordinates: [-67.560005, -28.057496],
+          title: `<div class="text-h6">Producción</div>`,
+        },
+      ],
     };
+
+    onMounted(async () => {
+      await createMap(map);
+    });
+
+    return {};
   },
 });
 </script>
@@ -78,19 +71,16 @@ export default defineComponent({
 <style lang="scss" scoped>
 .map-production {
   width: 100%;
-  height: 300px;
+  height: 60vh;
 }
 
-.mapboxgl-control-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  button {
-    background: transparent;
-    border: none;
-    padding: 0;
-    margin: 0;
+.container-detail {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-gap: 1em;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
   }
 }
 </style>

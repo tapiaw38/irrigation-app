@@ -19,6 +19,13 @@
       </thead>
       <tbody>
         <tr v-for="(_, i) in 5" :key="i" :class="rowColor">
+          <td class="text-left">
+            <q-item-section avatar>
+              <q-avatar>
+                <q-img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+              </q-avatar>
+            </q-item-section>
+          </td>
           <td class="text-left">Nombre</td>
           <td class="text-left">Apellido</td>
           <td class="text-left">email@example.com</td>
@@ -33,6 +40,7 @@
               text-color="white"
               icon="las la-check-circle"
               class="q-mr-sm"
+              @click="isActive = true"
             />
             <q-btn
               v-else
@@ -41,6 +49,7 @@
               text-color="white"
               icon="las la-times-circle"
               class="q-mr-sm"
+              @click="isActive = false"
             />
           </td>
         </tr>
@@ -61,7 +70,12 @@ export default defineComponent({
       return isActive.value ? "active" : "deactivated";
     });
 
+    const toggleActive = () => {
+      isActive.value = !isActive.value;
+    };
+
     const producerItems = [
+      "",
       "Nombre",
       "Apellido",
       "Email",
@@ -74,6 +88,8 @@ export default defineComponent({
     return {
       producerItems,
       rowColor,
+      isActive,
+      toggleActive,
     };
   },
 });

@@ -1,23 +1,31 @@
 import mapboxgl from "mapbox-gl";
-import { onMounted } from "vue";
 
 const useMapbox = () => {
 
-  const createMap = () => {
+  const createMap = (
+    {
+      container = "map",
+      center = [0, 0],
+      zoom = 11,
+      markers = [],
+    }) => {
     mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
     const map = new mapboxgl.Map({
-      container: "map",
+      container,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [-74.5, 40],
-      zoom: 9,
+      center,
+      zoom,
     });
-    map.addControl(new mapboxgl.Navigation());
+
+    markers.map(m => {
+      new mapboxgl.Marker({
+        draggable: false,
+      })
+        .setLngLat(m.coordinates)
+        .setPopup(new mapboxgl.Popup().setHTML(m.title))
+        .addTo(map);
+    });
   };
-
-  onMounted(() => {
-    createMap();
-  });
-
 
   return {
     createMap,

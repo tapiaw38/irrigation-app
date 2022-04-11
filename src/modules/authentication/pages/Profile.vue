@@ -41,16 +41,16 @@
               <q-section class="q-pt-sm">
                 <q-item-label>
                   <q-icon name="las la-phone" />
-                  Telefono
+                  Teléfono
                 </q-item-label>
                 <q-item-label caption>3837439999</q-item-label>
               </q-section>
               <q-section class="q-pt-sm">
                 <q-item-label>
                   <q-icon name="las la-map-marker" />
-                  Direccion
+                  Dirección
                 </q-item-label>
-                <q-item-label caption>Direccion del usuario</q-item-label>
+                <q-item-label caption>Dirección del usuario</q-item-label>
               </q-section>
             </div>
           </div>
@@ -79,8 +79,8 @@
           <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
             <q-input filled type="text" label="Nnombre" />
             <q-input filled type="text" label="Apellido" />
-            <q-input filled type="number" label="Telefono" />
-            <q-input filled type="textarea" label="Direccion" />
+            <q-input filled type="number" label="Teléfono" />
+            <q-input filled type="textarea" label="Dirección" />
 
             <div>
               <q-btn

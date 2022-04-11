@@ -4,7 +4,7 @@
       <q-toolbar-title class="flex-column items-center content-center">
         <q-icon
           name="las la-users"
-          color="accent"
+          color="primary"
           size="2.2em"
           class="q-pa-md"
         />
@@ -14,19 +14,19 @@
         <div class="column col-6 items-left">
           <div>
             <div class="text-h6"></div>
-            <div class="text-subtitle2 text-accent q-pa-xs">Nombre</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">Apellido</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">DNI</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">Dirección</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">Teléfono</div>
-            <div class="text-subtitle2 text-accent q-pa-xs">
+            <div class="text-subtitle2 text-dark q-pa-xs">Nombre</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">Apellido</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">DNI</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">Dirección</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">Teléfono</div>
+            <div class="text-subtitle2 text-dark q-pa-xs">
               Fecha de Nacimiento
             </div>
           </div>
         </div>
         <div class="column col-6">
           <q-toolbar-title>
-            <span class="text-subtitle2 text-accent q-pa-xs">Producciones</span>
+            <span class="text-subtitle2 text-dark q-pa-xs">Producciones</span>
           </q-toolbar-title>
           <div class="map-production" id="map"></div>
         </div>

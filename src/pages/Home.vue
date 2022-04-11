@@ -6,7 +6,7 @@
         <h6>Buenos dias! Nombre Usuario</h6>
         <div class="alerts">
           <q-banner inline-actions rounded class="bg-primary text-white">
-            Tu dispositivo tiene una conexion estable a internet.
+            Tu dispositivo tiene una conexión estable a internet.
             <template v-slot:action>
               <q-btn flat label="Conectar" />
               <q-btn flat label="Outline" />

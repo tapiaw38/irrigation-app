@@ -14,7 +14,7 @@ const linksList = [
     is_home: true,
   },
   {
-    title: "Turnos de Riego",
+    title: "Turnos de riego",
     caption: "",
     icon: "las la-ticket-alt",
     link: "https://forum.quasar.dev",
@@ -28,10 +28,10 @@ const linksList = [
     is_home: true,
   },
   {
-    title: "Geolocalizacion",
+    title: "Geolocalización",
     caption: "",
     icon: "las la-map-marked",
-    link: "",
+    link: "geolocation",
     is_home: true,
   },
   {
