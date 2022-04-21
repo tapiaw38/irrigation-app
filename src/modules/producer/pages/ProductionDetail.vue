@@ -32,6 +32,11 @@
           <div class="map-production" id="map"></div>
         </div>
       </div>
+      <div class="flex">
+        <q-img
+          src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww2.agrositio.com.ar%2Fimagenes_contenidos%2Fv_187660_26501125.jpg&f=1&nofb=1"
+        />
+      </div>
     </div>
     <!--Dialog content-->
   </div>

@@ -17,7 +17,7 @@ const linksList = [
     title: "Turnos de riego",
     caption: "",
     icon: "las la-ticket-alt",
-    link: "https://forum.quasar.dev",
+    link: "shifts",
     is_home: true,
   },
   {
