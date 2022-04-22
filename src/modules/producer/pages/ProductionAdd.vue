@@ -12,7 +12,6 @@
       </q-toolbar-title>
       <div class="q-gutter-md text-center">
         <q-select
-          v-model="producer"
           :options="options"
           label="Productor"
           dropdown-icon="las la-angle-down"
@@ -21,66 +20,75 @@
             <q-icon name="las la-user" @click.stop />
           </template>
         </q-select>
-        <q-input
-          v-model="production_name"
-          label="Nombre de Producción"
-          type="text"
-          class="q-mr-sm"
-        />
-        <q-input
-          v-model="production_type"
-          label="Tipo de Producción"
-          type="text"
-          class="q-mr-sm"
-        />
-        <q-input
-          v-model="production_lng"
-          label="Longitud"
-          type="number"
-          class="q-mr-sm"
-        />
-        <q-input
-          v-model="production_lat"
-          label="Latitud"
-          type="number"
-          class="q-mr-sm"
-        />
-        GPS position:
-        <strong v-if="position.coords">
-          {{ position.coords.latitude }}
-          , {{ position.coords.longitude }}
-        </strong>
-        <strong>{{ positionLoader }}</strong>
-        <q-file
-          color="teal"
-          outlined
-          v-model="production_img"
-          label="Agregar imagen"
-        >
+        <q-input label="Nombre de Producción" type="text" class="q-mr-sm" />
+        <div class="row justify-start col-12">
+          <div class="col-9">
+            <q-input
+              v-model="production.coords.latitude"
+              label="Latitud"
+              type="number"
+              class="q-mr-sm"
+            />
+            <q-input
+              v-model="production.coords.longitude"
+              label="Longitud"
+              type="number"
+              class="q-mr-sm"
+            />
+          </div>
+          <div class="row justify-center content-center col-3 q-mt-lg q-pt-lg">
+            <q-btn color="primary" round @click="determinePosition()">
+              <q-icon name="las la-map-marker" />
+            </q-btn>
+          </div>
+          <div v-if="positionLoader" class="row justify-center col-12 q-mt-md">
+            GPS position:
+            <strong class="q-ml-sm">{{ positionLoader }}</strong>
+          </div>
+        </div>
+        <q-file color="teal" outlined label="Agregar imagen">
           <template v-slot:append>
             <q-avatar>
               <q-icon name="las la-image" />
             </q-avatar>
           </template>
         </q-file>
-        <q-btn
-          class="full-width"
-          color="primary"
-          label="Agregar"
-          @click="save"
-        />
+        <div>
+          <q-btn color="white" round @click="captureImage" class="q-mb-md">
+            <q-icon color="primary" name="las la-camera" />
+          </q-btn>
+          <div v-if="imageSrc" class="container-img">
+            <q-img :src="imageSrc" />
+            <div class="delete-image">
+              <q-btn
+                round
+                color="warning"
+                flat
+                icon="las la-trash"
+                @click="deleteImg"
+              />
+            </div>
+          </div>
+        </div>
+        <q-btn class="full-width" color="primary" label="Agregar" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, onBeforeUnmount } from "vue";
-import { Geolocation } from "@capacitor/geolocation";
+import { defineComponent, ref } from "vue";
+
+//composables
+import useGeoloaction from "../../../composables/useGeolocation";
+import useCamera from "../../../composables/useCamera";
 
 export default defineComponent({
   name: "ProductionAdd",
   setup() {
+    const { positionLoader, position } = useGeoloaction();
+    const { imageSrc, captureImage } = useCamera();
+
     let options = [
       "Juan Perez",
       "Pedro Perez",
@@ -89,39 +97,54 @@ export default defineComponent({
       "Juan Perez",
     ];
 
-    const position = ref("");
-    let positionLoader = ref("determinando...");
+    let production = ref({
+      coords: {
+        latitude: 0,
+        longitude: 0,
+      },
+    });
 
-    const getCurrentPosition = () => {
-      Geolocation.getCurrentPosition().then((newPosition) => {
-        position.value = newPosition;
-        console.log(newPosition);
-      });
+    const determinePosition = () => {
+      positionLoader.value = "determinando...";
+      production.value.coords.latitude = position.value.coords.latitude;
+      production.value.coords.longitude = position.value.coords.longitude;
+      positionLoader.value = "Posición actualizada";
     };
 
-    let geoId;
-
-    onMounted(() => {
-      getCurrentPosition();
-
-      // we start listening
-      geoId = Geolocation.watchPosition({}, (newPosition, err) => {
-        console.log("New GPS position");
-        position.value = newPosition;
-        positionLoader.value = "Posición actualizada";
-      });
-    });
-
-    onBeforeUnmount(() => {
-      // we do cleanup
-      Geolocation.clearWatch(geoId);
-    });
+    const deleteImg = () => {
+      imageSrc.value = "";
+    };
 
     return {
       options,
       position,
       positionLoader,
+      production,
+      determinePosition,
+      imageSrc,
+      captureImage,
+      deleteImg,
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.container-img {
+  position: relative;
+
+  &:hover {
+    .delete-image {
+      display: block;
+    }
+  }
+
+  .delete-image {
+    display: none;
+    position: absolute;
+    transition: 0.3s ease-in-out;
+    top: 0;
+    right: 0;
+  }
+}
+</style>
