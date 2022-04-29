@@ -1,8 +1,9 @@
 import producerRouter from "../modules/producer/router";
-import recordRouter from "../modules/record/router";
+import userRouter from "../modules/user/router";
 import shiftRouter from "../modules/shift/router";
-import authRouter from "../modules/authentication/router";
 
+// guards
+import isAuthenticatedGuard from "../modules/authentication/router/auth-guard";
 
 const routes = [
   {
@@ -11,30 +12,30 @@ const routes = [
     children: [
       {
         path: "",
+        name: "home",
+        beforeEnter: [isAuthenticatedGuard],
+        component: () => import("src/pages/Home.vue")
+      },
+      {
+        path: "/login",
         name: "login",
         component: () => import("src/pages/Login.vue")
       },
-      {
-        path: "/home",
-        name: "home",
-        component: () => import("src/pages/Home.vue")
-      }
     ],
   },
   {
     path: "/producer",
+    beforeEnter: [isAuthenticatedGuard],
     ...producerRouter,
   },
   {
-    path: "/record",
-    ...recordRouter,
-  },
-  {
-    path: "/auth",
-    ...authRouter,
+    path: "/user",
+    beforeEnter: [isAuthenticatedGuard],
+    ...userRouter,
   },
   {
     path: "/shift",
+    beforeEnter: [isAuthenticatedGuard],
     ...shiftRouter,
   },
   // Always leave this as last one,

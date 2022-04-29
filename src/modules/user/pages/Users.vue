@@ -18,7 +18,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(_, i) in 5" :key="i" :class="rowColor">
+        <tr
+          v-for="(user, i) in users"
+          :key="i"
+          :class="[user.is_active ? 'active' : 'deactivated']"
+        >
           <td class="text-left">
             <q-item-section avatar>
               <q-avatar>
@@ -26,21 +30,24 @@
               </q-avatar>
             </q-item-section>
           </td>
-          <td class="text-left">Nombre</td>
-          <td class="text-left">Apellido</td>
-          <td class="text-left">email@example.com</td>
-          <td class="text-left">Dirección del usuario</td>
-          <td class="text-left">3837435567</td>
+          <td class="text-left">{{ user.first_name }}</td>
+          <td class="text-left">{{ user.last_name }}</td>
+          <td class="text-left">{{ user.email }}</td>
+          <td class="text-left">
+            {{ user.phone_number ? user.phone_number : "Sin telefono" }}
+          </td>
           <td class="text-left">Encuestador</td>
           <td class="text-left">
+            {{ user.is_active ? "Activo" : "Inactivo" }}
+          </td>
+          <td class="text-left">
             <q-btn
-              v-if="!isActive"
+              v-if="!user.is_active"
               round
               color="positive"
               text-color="white"
               icon="las la-check-circle"
               class="q-mr-sm"
-              @click="isActive = true"
             />
             <q-btn
               v-else
@@ -49,7 +56,6 @@
               text-color="white"
               icon="las la-times-circle"
               class="q-mr-sm"
-              @click="isActive = false"
             />
           </td>
         </tr>
@@ -61,35 +67,28 @@
 <script>
 import { defineComponent, computed, ref } from "vue";
 
+// composables
+import useUser from "../composables/useUser";
+
 export default defineComponent({
   name: "Users",
   setup() {
-    let isActive = ref(false);
-
-    const rowColor = computed(() => {
-      return isActive.value ? "active" : "deactivated";
-    });
-
-    const toggleActive = () => {
-      isActive.value = !isActive.value;
-    };
+    const { users } = useUser();
 
     const producerItems = [
       "",
       "Nombre",
       "Apellido",
       "Email",
-      "Dirección",
       "Teléfono",
       "Tipo de usuario",
+      "Estado",
       "",
     ];
 
     return {
       producerItems,
-      rowColor,
-      isActive,
-      toggleActive,
+      users,
     };
   },
 });

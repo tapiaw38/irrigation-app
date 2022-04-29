@@ -18,6 +18,7 @@
       <div>
         <q-btn flat dense round icon="las la-bell" aria-label="Notifications" />
         <q-btn-dropdown
+          v-if="authStatus === 'authenticated'"
           split
           color="primary"
           push
@@ -25,14 +26,24 @@
           no-caps
           icon="las la-user"
           dropdown-icon="las la-angle-down"
-          label="Nombre"
-          @click="$router.push({ name: 'profile', params: { id: 1 } })"
+          :label="String(user.first_name)"
+          @click="
+            $router.push({
+              name: 'profile',
+              params: { username: user.username },
+            })
+          "
         >
           <q-list>
             <q-item
               clickable
               v-close-popup
-              @click="$router.push({ name: 'profile', params: { id: 1 } })"
+              @click="
+                $router.push({
+                  name: 'profile',
+                  params: { username: user.username },
+                })
+              "
             >
               <q-item-section avatar>
                 <q-avatar>
@@ -40,11 +51,11 @@
                 </q-avatar>
               </q-item-section>
               <q-item-section>
-                <q-item-label>Perfil</q-item-label>
+                <q-item-label>{{ user.first_name }}</q-item-label>
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-close-popup @click="onItemClick">
+            <q-item clickable v-close-popup @click="onLogout()">
               <q-item-section avatar>
                 <q-avatar>
                   <q-icon
@@ -78,12 +89,15 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 
 import EssentialLink from "../components/EssentialLink";
 
 import useUi from "../composables/useUi";
+import useAuth from "../modules/authentication/composables/useAuth";
+
 import linksList from "../helpers/linksList";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Header",
@@ -92,12 +106,20 @@ export default defineComponent({
   },
 
   setup() {
+    const router = useRouter();
     const { sideMenuOpen, toggleSideMenu } = useUi();
+    const { authStatus, user, handleLogout } = useAuth();
 
     return {
       essentialLinks: linksList,
       sideMenuOpen,
       toggleSideMenu,
+      authStatus,
+      user,
+      onLogout: () => {
+        router.push({ name: "login" });
+        handleLogout();
+      },
     };
   },
 });

@@ -1,17 +1,16 @@
 <template>
   <q-page class="row justify-center q-mt-lg content-profile">
     <div class="col-6 q-mt-lg">
-      <q-section>
+      <div>
         <q-card class="my-card">
           <div class="row content-card">
-            <div class="q-pa-sm content-profile">
-              <q-item-section avatar>
-                <div class="flex">
-                  <q-avatar size="100px" class="col-12">
-                    <q-img
-                      style="height: 120px; width: 120px"
-                      :src="'https://cdn.quasar.dev/img/avatar2.jpg'"
-                    />
+            <div
+              class="row q-pa-sm content-profile items-center justify-center text-center"
+            >
+              <div>
+                <div class="row justify-center text-center">
+                  <q-avatar class="avatar">
+                    <q-img :src="'https://cdn.quasar.dev/img/avatar2.jpg'" />
                     <div class="edit-image">
                       <q-btn
                         round
@@ -23,39 +22,49 @@
                     </div>
                   </q-avatar>
                 </div>
-                <div class="items-center justify-center text-center">
-                  <q-item-label>Nombre del usuario</q-item-label>
-                  <q-item-label caption>Administrador</q-item-label>
+                <div
+                  class="items-center justify-center text-center row q-mt-sm"
+                >
+                  <q-item-label class="full-width"
+                    >{{ user.first_name }} {{ user.last_name }}</q-item-label
+                  >
+                  <q-item-label class="full-width" caption
+                    >Administrador</q-item-label
+                  >
                 </div>
-              </q-item-section>
+              </div>
             </div>
 
             <div class="content-information">
-              <q-section class="q-pt-sm">
+              <div class="q-pt-sm">
                 <q-item-label>
                   <q-icon name="las la-envelope" />
                   Correo
                 </q-item-label>
-                <q-item-label caption>usuario@example.com</q-item-label>
-              </q-section>
-              <q-section class="q-pt-sm">
+                <q-item-label caption>{{ user.email }}</q-item-label>
+              </div>
+              <div class="q-pt-sm">
                 <q-item-label>
                   <q-icon name="las la-phone" />
                   Teléfono
                 </q-item-label>
-                <q-item-label caption>3837439999</q-item-label>
-              </q-section>
-              <q-section class="q-pt-sm">
+                <q-item-label caption>{{
+                  user.phone_number ? user.phone_number : "Sin Telefono"
+                }}</q-item-label>
+              </div>
+              <div class="q-pt-sm">
                 <q-item-label>
                   <q-icon name="las la-map-marker" />
                   Dirección
                 </q-item-label>
-                <q-item-label caption>Dirección del usuario</q-item-label>
-              </q-section>
+                <q-item-label caption>{{
+                  user.address ? user.address : "Sin Direccion"
+                }}</q-item-label>
+              </div>
             </div>
           </div>
         </q-card>
-      </q-section>
+      </div>
       <div>
         <q-btn
           @click="ToggleAlertEditProfile()"
@@ -76,18 +85,44 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-            <q-input filled type="text" label="Nnombre" />
-            <q-input filled type="text" label="Apellido" />
-            <q-input filled type="number" label="Teléfono" />
-            <q-input filled type="textarea" label="Dirección" />
+          <q-form @submit="onUpdatedUser()" class="q-gutter-md">
+            <q-input
+              filled
+              type="text"
+              label="Nombre"
+              v-model="userForm.first_name"
+            />
+            <q-input
+              filled
+              type="text"
+              label="Apellido"
+              v-model="userForm.last_name"
+            />
+            <q-input
+              filled
+              type="text"
+              label="Email"
+              v-model="userForm.email"
+            />
+            <q-input
+              filled
+              type="number"
+              label="Teléfono"
+              v-model="userForm.phone_number"
+            />
+            <q-input
+              filled
+              type="textarea"
+              label="Dirección"
+              v-model="userForm.address"
+            />
 
             <div>
               <q-btn
                 class="btn-block"
                 label="Submit"
-                type="submit"
                 color="primary"
+                type="submit"
               />
             </div>
           </q-form>
@@ -102,20 +137,45 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
+
+// composables
+import useAuth from "../../authentication/composables/useAuth";
+import useUser from "../composables/useUser";
 
 export default defineComponent({
   name: "Profile",
   setup() {
+    const { user } = useAuth();
+    const { editUser } = useUser();
+
+    let userForm = ref({
+      id: user.value.id,
+      first_name: user.value.first_name,
+      last_name: user.value.last_name,
+      email: user.value.email,
+      phone_number: user.value.phone_number,
+      address: user.value.address,
+      is_active: user.value.is_active,
+      is_admin: user.value.is_admin,
+    });
+
     let ShowEditProfile = ref(false);
 
     const ToggleAlertEditProfile = () => {
       ShowEditProfile.value = !ShowEditProfile.value;
     };
 
+    const onUpdatedUser = () => {
+      editUser(userForm.value);
+    };
+
     return {
       ShowEditProfile,
       ToggleAlertEditProfile,
+      user,
+      userForm,
+      onUpdatedUser,
     };
   },
 });
@@ -144,16 +204,17 @@ export default defineComponent({
       }
     }
 
+    .avatar {
+      height: 120px;
+      width: 120px;
+    }
+
     .edit-image {
       display: none;
       position: absolute;
       transition: 0.3s ease-in-out;
       top: 0;
       right: 0;
-    }
-
-    img {
-      margin-bottom: 10px;
     }
 
     @media screen and (max-width: 700px) {
