@@ -1,5 +1,5 @@
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 
 const useAuth = () => {
 

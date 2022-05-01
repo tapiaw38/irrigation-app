@@ -1,5 +1,5 @@
 export default () => ({
-  status: null,
-  user: null,
+  userSession: JSON.parse(localStorage.getItem("user")) || {},
+  status: localStorage.getItem("status") || null,
   idToken: null,
 })

@@ -6,8 +6,18 @@ import { useStore } from "vuex";
 const useUser = () => {
   const store = useStore();
 
+  const createUser = (user) => {
+    const resp = store.dispatch("user/addUser", user);
+    return resp;
+  };
+
   const editUser = (user) => {
-    store.dispatch("user/updateUser", user);
+    const resp = store.dispatch("user/updateUser", user);
+    return resp;
+  }
+
+  const deleteUser = (user) => {
+    store.dispatch("user/deleteUser", user);
   }
 
   onMounted(() => {
@@ -16,7 +26,9 @@ const useUser = () => {
 
   return {
     users: computed(() => store.getters["user/getUsers"]),
+    createUser,
     editUser,
+    deleteUser,
   };
 };
 

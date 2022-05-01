@@ -1,4 +1,5 @@
 import authApi from "../../../../api/authApi";
+import api from "../../../../api/api";
 
 export const login = async ({ commit }, userForm) => {
 
@@ -29,3 +30,15 @@ export const checkAuthentication = async ({ commit }) => {
   return { ok: true };
 
 }
+
+export const loadUser = async ({ commit }, id) => {
+  console.log("loadUser", id)
+  try {
+    const { data } = await api.get(`/users/${id}`);
+    console.log(data)
+    commit("setUser", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};

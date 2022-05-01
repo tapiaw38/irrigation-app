@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
 
 // composables
 import useAuth from "../../authentication/composables/useAuth";
@@ -168,6 +168,7 @@ export default defineComponent({
 
     const onUpdatedUser = () => {
       editUser(userForm.value);
+      ShowEditProfile.value = false;
     };
 
     return {
