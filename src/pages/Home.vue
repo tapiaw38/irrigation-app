@@ -3,7 +3,7 @@
     <div class="container-header">
       <div class="container-description">
         <q-img src="../assets/img/sun.png" />
-        <h6>Buenos dias! Nombre Usuario</h6>
+        <h6>Buenos dias! {{ user?.first_name }}</h6>
         <div class="alerts">
           <q-banner inline-actions rounded class="bg-primary text-white">
             Tu dispositivo tiene una conexión estable a internet.
@@ -37,13 +37,20 @@
 
 <script>
 import { defineComponent } from "vue";
+
+// composables
+import useAuth from "../modules/authentication/composables/useAuth";
+
+// helpers
 import linksList from "../helpers/linksList";
 
 export default defineComponent({
   name: "Home",
   setup() {
+    const { user } = useAuth();
     return {
       essentialLinks: linksList,
+      user,
     };
   },
 });

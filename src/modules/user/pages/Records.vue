@@ -18,11 +18,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(_, i) in 5" :key="i">
-          <td class="text-left">Nombre de usuario</td>
-          <td class="text-left">123</td>
-          <td class="text-left">Productor</td>
-          <td class="text-left">2</td>
+        <tr v-if="producersStorage.length > 0">
+          <td class="text-left">Guardado en dispositivo</td>
+          <td class="text-left">Productores</td>
+          <td class="text-left">{{ producersStorage.length }}</td>
           <td class="text-left">
             <q-btn
               round
@@ -46,13 +45,18 @@
 <script>
 import { defineComponent } from "vue";
 
+// composables
+import useProducer from "../../producer/composables/useProducer";
+
 export default defineComponent({
   name: "Records",
   setup() {
-    const producerItems = ["Usuario", "Registro", "Tipo", "Cantidad", ""];
+    const { producersStorage } = useProducer();
+    const producerItems = ["Estado", "Registro", "Cantidad", ""];
 
     return {
       producerItems,
+      producersStorage,
     };
   },
 });

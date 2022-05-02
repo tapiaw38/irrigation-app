@@ -12,7 +12,7 @@ export const loadUsers = async ({ commit }) => {
 
 export const updateUser = async ({ commit }, user) => {
   try {
-    const { data } = await api.put(`/users/update/${user.id}`, user);
+    const { data } = await api.put(`/users/partial/${user.id}`, user);
     commit('updateUser', data.response)
     return { ok: true };
   } catch (error) {

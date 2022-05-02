@@ -5,6 +5,7 @@ import { createStore } from "vuex";
 import ui from "./ui";
 import auth from "../modules/authentication/store/auth";
 import user from "../modules/user/store/user";
+import producer from "../modules/producer/store/producer";
 
 /*
  * If not building with SSR mode, you can
@@ -22,6 +23,7 @@ export default store(function (/* { ssrContext } */) {
       ui,
       auth,
       user,
+      producer,
     },
 
     // enable strict mode (adds overhead!)

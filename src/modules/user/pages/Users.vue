@@ -253,6 +253,7 @@ export default defineComponent({
       email: "",
       phone_number: "",
       address: "",
+      is_active: false,
     });
 
     const createForm = ref({
@@ -316,6 +317,7 @@ export default defineComponent({
         email: u.email,
         phone_number: u.phone_number,
         address: u.address,
+        is_active: u.is_active,
       };
       ShowEditProfile.value = !ShowEditProfile.value;
     };

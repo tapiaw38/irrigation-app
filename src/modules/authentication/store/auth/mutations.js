@@ -3,8 +3,9 @@ export const loginUser = (state, { user, access_token }) => {
     localStorage.setItem("access_token", access_token);
     state.access_token = access_token;
   }
-  state.userSession = user;
-  localStorage.setItem("user", JSON.stringify(user, null));
+
+  localStorage.setItem("user", JSON.stringify(user));
+  state.userSession = JSON.parse(localStorage.getItem("user"));
 
   state.status = "authenticated";
   localStorage.setItem("status", "authenticated");
@@ -12,17 +13,20 @@ export const loginUser = (state, { user, access_token }) => {
 
 
 export const logoutUser = (state) => {
-  state.user = null;
-  state.userSession = null;
-  state.access_token = null;
-  state.status = "not-authenticated";
 
-  localStorage.removeItem("access_token")
   localStorage.removeItem("user")
   localStorage.removeItem("status")
+  localStorage.removeItem("access_token")
+
+  state.userSession = JSON.parse(localStorage.getItem("user"));
+  state.status = null;
+  state.access_token = null;
+
+
 }
 
 export const setUser = (state, user) => {
-  state.userSession = user;
-  localStorage.setItem("user", JSON.stringify(user, null));
+  localStorage.removeItem("user")
+  localStorage.setItem("user", JSON.stringify(user));
+  state.userSession = JSON.parse(localStorage.getItem("user"));
 }

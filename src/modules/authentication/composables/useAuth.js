@@ -1,5 +1,5 @@
 import { useStore } from "vuex";
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 
 const useAuth = () => {
 
@@ -14,11 +14,17 @@ const useAuth = () => {
     store.dispatch("auth/logout");
   };
 
+  const updateUserSession = (user) => {
+    const resp = store.dispatch("auth/setUser", user);
+    return resp;
+  };
+
   return {
     handleLogin,
     handleLogout,
+    updateUserSession,
     authStatus: computed(() => store.getters["auth/currentState"]),
-    user: computed(() => store.getters["auth/userSession"])
+    user: computed(() => store.getters["auth/userSession"]),
   };
 
 }

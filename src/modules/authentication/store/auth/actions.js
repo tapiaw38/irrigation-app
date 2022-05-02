@@ -42,3 +42,13 @@ export const loadUser = async ({ commit }, id) => {
     return { ok: false, message: e.response.data };
   }
 };
+
+export const setUser = async ({ commit }, user) => {
+  try {
+    const { data } = await api.put(`/users/partial/${user.id}`, user);
+    commit('setUser', data.response)
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, message: error.response.data };
+  }
+}

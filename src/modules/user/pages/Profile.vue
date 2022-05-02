@@ -26,10 +26,12 @@
                   class="items-center justify-center text-center row q-mt-sm"
                 >
                   <q-item-label class="full-width"
-                    >{{ user.first_name }} {{ user.last_name }}</q-item-label
+                    >{{ user?.first_name }} {{ user?.last_name }}</q-item-label
                   >
-                  <q-item-label class="full-width" caption
-                    >Administrador</q-item-label
+                  <q-item-label class="full-width" caption>
+                    {{
+                      user?.is_admin ? "Administrador" : "Operativo"
+                    }}</q-item-label
                   >
                 </div>
               </div>
@@ -41,7 +43,7 @@
                   <q-icon name="las la-envelope" />
                   Correo
                 </q-item-label>
-                <q-item-label caption>{{ user.email }}</q-item-label>
+                <q-item-label caption>{{ user?.email }}</q-item-label>
               </div>
               <div class="q-pt-sm">
                 <q-item-label>
@@ -49,7 +51,7 @@
                   Teléfono
                 </q-item-label>
                 <q-item-label caption>{{
-                  user.phone_number ? user.phone_number : "Sin Telefono"
+                  user?.phone_number ? user?.phone_number : "Sin Telefono"
                 }}</q-item-label>
               </div>
               <div class="q-pt-sm">
@@ -58,7 +60,7 @@
                   Dirección
                 </q-item-label>
                 <q-item-label caption>{{
-                  user.address ? user.address : "Sin Direccion"
+                  user?.address ? user?.address : "Sin Direccion"
                 }}</q-item-label>
               </div>
             </div>
@@ -146,8 +148,7 @@ import useUser from "../composables/useUser";
 export default defineComponent({
   name: "Profile",
   setup() {
-    const { user } = useAuth();
-    const { editUser } = useUser();
+    const { user, updateUserSession } = useAuth();
 
     let userForm = ref({
       id: user.value.id,
@@ -166,9 +167,15 @@ export default defineComponent({
       ShowEditProfile.value = !ShowEditProfile.value;
     };
 
-    const onUpdatedUser = () => {
-      editUser(userForm.value);
-      ShowEditProfile.value = false;
+    const onUpdatedUser = async () => {
+      const { ok, message } = await updateUserSession(userForm.value);
+
+      if (ok) {
+        ShowEditProfile.value = false;
+        return;
+      }
+
+      console.log(message);
     };
 
     return {

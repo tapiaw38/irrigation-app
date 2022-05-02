@@ -4,57 +4,91 @@
       <q-toolbar-title class="flex-column items-center content-center">
         <q-icon
           name="las la-users"
-          color="accent"
+          color="primary"
           size="2.2em"
           class="q-pa-md"
         />
         <span>Agregar Productor</span>
       </q-toolbar-title>
       <div class="q-gutter-md text-center">
-        <q-input
-          v-model="first_name"
-          label="Nombre"
-          type="text"
-          class="q-mr-sm"
-        />
-        <q-input
-          v-model="last_name"
-          label="Apellido"
-          type="text"
-          class="q-mr-sm"
-        />
-        <q-input v-model="dni" label="DNI" type="text" class="q-mr-sm" />
-        <q-input
-          v-model="address"
-          label="Dirección"
-          type="text"
-          class="q-mr-sm"
-        />
-        <q-input v-model="phone" label="Teléfono" type="text" class="q-mr-sm" />
-        <q-input
-          v-model="birth_date"
-          label="Fecha de Nacimiento"
-          type="text"
-          class="q-mr-sm"
-        />
-        <q-btn
-          class="full-width"
-          color="primary"
-          label="Agregar"
-          @click="save"
-        />
+        <q-form @submit="onCreateProducer()">
+          <q-input
+            v-model="producerForm.first_name"
+            label="Nombre"
+            type="text"
+            class="q-mr-sm"
+          />
+          <q-input
+            v-model="producerForm.last_name"
+            label="Apellido"
+            type="text"
+            class="q-mr-sm"
+          />
+          <q-input
+            v-model="producerForm.document_number"
+            label="DNI"
+            type="number"
+            class="q-mr-sm"
+          />
+          <q-input
+            v-model="producerForm.birth_date"
+            label="Fecha de Nacimiento"
+            type="date"
+            class="q-mr-sm"
+          />
+          <q-input
+            v-model="producerForm.phone_number"
+            label="Teléfono"
+            type="number"
+            class="q-mr-sm"
+          />
+          <q-input
+            v-model="producerForm.address"
+            label="Dirección"
+            type="text"
+            class="q-mr-sm"
+          />
+          <q-btn
+            class="full-width"
+            color="primary"
+            label="Agregar"
+            type="submit"
+          />
+        </q-form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+
+// composables
+import useProducer from "../composables/useProducer";
 
 export default defineComponent({
   name: "ProducerAdd",
   setup() {
-    return {};
+    const { createProducerStorage, producersStorage } = useProducer();
+
+    const producerForm = ref({
+      first_name: "",
+      last_name: "",
+      document_number: "",
+      address: "",
+      phone: "",
+      birth_date: "",
+    });
+
+    const onCreateProducer = () => {
+      createProducerStorage(producerForm);
+    };
+
+    return {
+      producerForm,
+      onCreateProducer,
+      producersStorage,
+    };
   },
 });
 </script>

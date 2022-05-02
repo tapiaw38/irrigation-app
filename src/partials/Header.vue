@@ -26,11 +26,11 @@
           no-caps
           icon="las la-user"
           dropdown-icon="las la-angle-down"
-          :label="String(user.first_name)"
+          :label="String(user?.first_name)"
           @click="
             $router.push({
               name: 'profile',
-              params: { username: user.username },
+              params: { username: user?.username },
             })
           "
         >
@@ -41,7 +41,7 @@
               @click="
                 $router.push({
                   name: 'profile',
-                  params: { username: user.username },
+                  params: { username: user?.username },
                 })
               "
             >
@@ -51,7 +51,7 @@
                 </q-avatar>
               </q-item-section>
               <q-item-section>
-                <q-item-label>{{ user.first_name }}</q-item-label>
+                <q-item-label>{{ user?.first_name }}</q-item-label>
               </q-item-section>
             </q-item>
 
