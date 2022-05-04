@@ -15,3 +15,8 @@ export const addProducerStorage = (state, producer) => {
 export const setProducers = (state, producers) => {
   state.producers = producers;
 }
+
+export const deleteProducersStorage = (state) => {
+  localStorage.removeItem('producersStorage');
+  state.producersStorage = JSON.parse(localStorage.getItem('producersStorage'));
+}

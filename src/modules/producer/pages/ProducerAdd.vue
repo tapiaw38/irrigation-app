@@ -57,6 +57,12 @@
         </q-form>
       </div>
     </div>
+    <alert
+      :dialog="isAlertOpen"
+      :headerMessage="headerMessage"
+      :message="alertMessage"
+      @close="closeAlert()"
+    />
   </div>
 </template>
 
@@ -66,11 +72,27 @@ import { defineComponent, ref } from "vue";
 // composables
 import useProducer from "../composables/useProducer";
 
+// components
+import Alert from "../../../components/Alert.vue";
+
 export default defineComponent({
   name: "ProducerAdd",
+  components: {
+    Alert,
+  },
   setup() {
     const { createProducerStorage, producersStorage } = useProducer();
 
+    // alert
+    let headerMessage = ref("");
+    let alertMessage = ref("");
+    let isAlertOpen = ref(false);
+
+    const closeAlert = () => {
+      isAlertOpen.value = false;
+    };
+
+    // form
     const producerForm = ref({
       first_name: "",
       last_name: "",
@@ -80,14 +102,33 @@ export default defineComponent({
       birth_date: "",
     });
 
-    const onCreateProducer = () => {
-      createProducerStorage(producerForm);
+    const onCreateProducer = async () => {
+      const { ok, message } = await createProducerStorage(producerForm);
+      if (!ok) {
+        headerMessage.value = "Error";
+        alertMessage.value = message;
+        isAlertOpen.value = true;
+        return;
+      }
+
+      headerMessage.value = "Productor Agregado";
+      alertMessage.value = `
+        El productor ha sido guardado en el dispositivo,
+        ve a la sección de exportar para
+        enviar los datos al servidor,
+        de lo contrario podrias perder la información.
+      `;
+      isAlertOpen.value = true;
     };
 
     return {
       producerForm,
       onCreateProducer,
       producersStorage,
+      headerMessage,
+      alertMessage,
+      isAlertOpen,
+      closeAlert,
     };
   },
 });

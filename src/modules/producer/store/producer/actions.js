@@ -22,5 +22,19 @@ export const loadProducers = async ({ commit }) => {
 };
 
 export const addProducerStorage = async ({ commit }, producer) => {
-  commit("addProducerStorage", producer);
+  try {
+    commit("addProducerStorage", producer);
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, message: error.response.data };
+  }
+}
+
+export const deleteProducersStorage = async ({ commit }) => {
+  try {
+    commit("deleteProducersStorage");
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, message: error.response.data };
+  }
 }

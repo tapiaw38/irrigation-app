@@ -4,13 +4,19 @@ import { useStore } from "vuex";
 const useProducer = () => {
   const store = useStore();
 
-  const createProducer = (producer) => {
-    const resp = store.dispatch("producer/addProducer", producer);
+  const createProducers = async (producers) => {
+    const resp = await store.dispatch("producer/addProducers", producers);
     return resp;
   };
 
-  const createProducerStorage = (producer) => {
-    store.dispatch("producer/addProducerStorage", producer);
+  const createProducerStorage = async (producer) => {
+    const resp = store.dispatch("producer/addProducerStorage", producer);
+    return resp;
+  }
+
+  const deleteProducersStorage = async () => {
+    const resp = store.dispatch("producer/deleteProducersStorage");
+    return resp;
   }
 
   /*
@@ -32,8 +38,9 @@ const useProducer = () => {
   return {
     //producers: computed(() => store.getters["user/getUsers"]),
     producersStorage: computed(() => store.getters["producer/getProducersStorage"]),
-    createProducer,
+    createProducers,
     createProducerStorage,
+    deleteProducersStorage,
   };
 };
 

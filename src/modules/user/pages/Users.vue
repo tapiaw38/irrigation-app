@@ -44,7 +44,7 @@
               {{ user.phone_number ? user.phone_number : "Sin telefono" }}
             </td>
             <td class="text-left">
-              {{ user.is_admin ? "Administrador" : "Encuestador" }}
+              {{ user.is_admin ? "Administrador" : "Operativo" }}
             </td>
             <td class="text-left">
               {{ user.is_active ? "Activo" : "Bloqueado" }}

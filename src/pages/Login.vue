@@ -48,6 +48,7 @@ export default defineComponent({
       password: "",
     });
 
+    // alert message
     let headerMessage = ref("");
     let alertMessage = ref("");
     let isAlertOpen = ref(false);
