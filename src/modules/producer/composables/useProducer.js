@@ -28,15 +28,14 @@ const useProducer = () => {
   const deleteUser = (user) => {
     store.dispatch("user/deleteUser", user);
   }
-
-  onMounted(() => {
-    store.dispatch("user/loadUsers");
-  });
-
   */
 
+  onMounted(() => {
+    store.dispatch("producer/loadProducers");
+  });
+
   return {
-    //producers: computed(() => store.getters["user/getUsers"]),
+    producers: computed(() => store.getters["producer/getProducers"]),
     producersStorage: computed(() => store.getters["producer/getProducersStorage"]),
     createProducers,
     createProducerStorage,

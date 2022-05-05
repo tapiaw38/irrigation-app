@@ -15,7 +15,7 @@
         @click="$router.push({ name: 'producer_add' })"
       />
     </div>
-    <q-markup-table>
+    <q-markup-table class="q-mt-md">
       <thead>
         <tr>
           <template v-for="producer in producerItems" :key="producer">
@@ -24,13 +24,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(_, i) in 5" :key="i">
-          <td class="text-left">Nombre de productor</td>
-          <td class="text-left">Apellido</td>
-          <td class="text-left">36132663</td>
-          <td class="text-left">Dirección</td>
-          <td class="text-left">3837435567</td>
-          <td class="text-left">01/01/1982</td>
+        <tr v-for="(producer, i) in producers" :key="i">
+          <td class="text-left">{{ producer.first_name }}</td>
+          <td class="text-left">{{ producer.last_name }}</td>
+          <td class="text-left">{{ producer.document_number }}</td>
+          <td class="text-left">{{ producer.address }}</td>
+          <td class="text-left">{{ producer.phone_number }}</td>
+          <td class="text-left">{{ formatDate(producer.birth_date) }}</td>
           <td class="text-left">
             <q-btn
               round
@@ -63,9 +63,17 @@
 <script>
 import { defineComponent } from "vue";
 
+// composables
+import useProducer from "../composables/useProducer";
+
+// helpers
+import { formatDate } from "../../../helpers/formatDate";
+
 export default defineComponent({
   name: "Producers",
   setup() {
+    const { producers } = useProducer();
+
     const producerItems = [
       "Nombre",
       "Apellido",
@@ -78,6 +86,8 @@ export default defineComponent({
 
     return {
       producerItems,
+      producers,
+      formatDate,
     };
   },
 });

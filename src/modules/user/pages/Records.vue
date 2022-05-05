@@ -9,7 +9,7 @@
         @click="$router.push({ name: 'home' })"
       />
     </div>
-    <q-markup-table>
+    <q-markup-table class="q-mt-md">
       <thead>
         <tr>
           <template v-for="producer in producerItems" :key="producer">
@@ -33,7 +33,7 @@
             <q-btn
               round
               text-color="primary"
-              icon="las la-edit"
+              icon="las la-file"
               class="q-mr-sm"
               @click="onToggleModal()"
             />

@@ -2,14 +2,56 @@
   <q-page class="container">
     <div class="container-header">
       <div class="container-description">
-        <q-img src="../assets/img/sun.png" />
-        <h6>Buenos dias! {{ user?.first_name }}</h6>
+        <div class="container-img">
+          <q-img v-if="hours <= 20 && hours > 6" src="../assets/img/sun.png" />
+          <q-img v-else src="../assets/img/moon.png" />
+        </div>
+        <h6 v-if="hours <= 20 && hours > 6">
+          Buenos dias! {{ user.first_name }}
+        </h6>
+        <h6 v-else>Buenas noches! {{ user.first_name }}</h6>
         <div class="alerts">
           <q-banner inline-actions rounded class="bg-primary text-white">
-            Tu dispositivo tiene una conexión estable a internet.
+            Importar datos de la nube para trabajar offline.
             <template v-slot:action>
-              <q-btn flat label="Conectar" />
-              <q-btn flat label="Outline" />
+              <q-btn
+                round
+                text-color="primary"
+                color="white"
+                icon="las la-cloud-download-alt"
+                class="q-mr-sm"
+                @click="onImportData()"
+              />
+            </template>
+          </q-banner>
+          <q-banner
+            inline-actions
+            rounded
+            class="text-white q-mt-sm"
+            :class="workType ? 'bg-primary' : 'bg-warning'"
+          >
+            {{
+              workType
+                ? "Trabajando con datos de la nube"
+                : "Trabajando con datos locales"
+            }}
+            <template v-slot:action>
+              <q-btn
+                round
+                :text-color="workType ? 'primary' : 'warning'"
+                color="white"
+                icon="las la-wifi"
+                class="q-mr-sm"
+                @click="workType = true"
+              />
+              <q-btn
+                round
+                :text-color="workType ? 'primary' : 'warning'"
+                color="white"
+                icon="las la-sd-card"
+                class="q-mr-sm"
+                @click="workType = false"
+              />
             </template>
           </q-banner>
         </div>
@@ -32,11 +74,20 @@
         </div>
       </template>
     </div>
+    <!-- Alert -->
+    <alert
+      :dialog="isAlertOpen"
+      :headerMessage="headerMessage"
+      :message="alertMessage"
+      :icon="icon"
+      :iconColor="iconColor"
+      @close="closeAlert()"
+    ></alert>
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, computed, ref } from "vue";
 
 // composables
 import useAuth from "../modules/authentication/composables/useAuth";
@@ -44,13 +95,57 @@ import useAuth from "../modules/authentication/composables/useAuth";
 // helpers
 import linksList from "../helpers/linksList";
 
+// components
+import Alert from "../components/Alert";
+
 export default defineComponent({
   name: "Home",
+  components: {
+    Alert,
+  },
   setup() {
     const { user } = useAuth();
+
+    // alert
+    let headerMessage = ref("");
+    let alertMessage = ref("");
+    let isAlertOpen = ref(false);
+    let icon = ref(null);
+    let iconColor = ref(null);
+
+    const closeAlert = () => {
+      isAlertOpen.value = false;
+    };
+    // end alert
+
+    // workType
+    let workType = ref(true);
+
+    const onChangeWorkState = () => {
+      workType.value = !workType.value;
+    };
+
+    const onImportData = () => {
+      isAlertOpen.value = true;
+      headerMessage.value = "Importando datos";
+      alertMessage.value = "Se esta importando los datos correctamente";
+      icon.value = "las la-check-circle";
+      iconColor.value = "info";
+    };
+
     return {
       essentialLinks: linksList,
       user,
+      hours: computed(() => new Date().getHours()),
+      isAlertOpen,
+      headerMessage,
+      alertMessage,
+      closeAlert,
+      icon,
+      iconColor,
+      onImportData,
+      workType,
+      onChangeWorkState,
     };
   },
 });
@@ -100,7 +195,7 @@ export default defineComponent({
       margin: 0;
     }
 
-    img {
+    .container-img {
       width: 30px;
       height: 30px;
     }

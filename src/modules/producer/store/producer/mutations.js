@@ -7,7 +7,6 @@ export const addProducers = (state, producers) => {
 };
 
 export const addProducerStorage = (state, producer) => {
-  console.log(producer);
   localStorage.setItem('producersStorage', JSON.stringify([...state.producersStorage, producer.value]));
   state.producersStorage = JSON.parse(localStorage.getItem('producersStorage'));
 };

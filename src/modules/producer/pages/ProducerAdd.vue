@@ -34,6 +34,7 @@
             v-model="producerForm.birth_date"
             label="Fecha de Nacimiento"
             type="date"
+            stack-label
             class="q-mr-sm"
           />
           <q-input
@@ -49,7 +50,7 @@
             class="q-mr-sm"
           />
           <q-btn
-            class="full-width"
+            class="full-width q-mt-md"
             color="primary"
             label="Agregar"
             type="submit"
@@ -113,10 +114,7 @@ export default defineComponent({
 
       headerMessage.value = "Productor Agregado";
       alertMessage.value = `
-        El productor ha sido guardado en el dispositivo,
-        ve a la sección de exportar para
-        enviar los datos al servidor,
-        de lo contrario podrias perder la información.
+        Registro guardado correctamente, en memoria.
       `;
       isAlertOpen.value = true;
     };

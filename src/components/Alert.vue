@@ -5,8 +5,13 @@
         <div class="text-h6">{{ headerMessage }}</div>
       </q-card-section>
 
-      <q-card-section class="q-pt-none">
-        {{ message }}
+      <q-card-section
+        class="q-pt-none row justify-content-center content-center"
+      >
+        <q-icon :color="iconColor" size="md" :name="icon" class="q-mr-sm" />
+        <div class="subtitle-2 row justify-center items-center">
+          {{ message }}
+        </div>
       </q-card-section>
 
       <q-card-actions align="right">
@@ -32,6 +37,14 @@ export default {
     dialog: {
       type: Boolean,
       default: false,
+    },
+    icon: {
+      type: String,
+      default: "las la-info-circle",
+    },
+    iconColor: {
+      type: String,
+      default: "primary",
     },
   },
 
