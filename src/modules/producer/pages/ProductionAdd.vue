@@ -20,7 +20,10 @@
             <q-icon name="las la-user" @click.stop />
           </template>
         </q-select>
+        <q-input label="Numero de lote" type="text" class="q-mr-sm" />
+        <q-input label="Entrada" type="text" class="q-mr-sm" />
         <q-input label="Nombre de Producción" type="text" class="q-mr-sm" />
+        <q-input label="Tipo de Producción" type="text" class="q-mr-sm" />
         <div class="row justify-start col-12">
           <div class="col-9">
             <q-input
@@ -46,13 +49,7 @@
             <strong class="q-ml-sm">{{ positionLoader }}</strong>
           </div>
         </div>
-        <q-file color="teal" outlined label="Agregar imagen">
-          <template v-slot:append>
-            <q-avatar>
-              <q-icon name="las la-image" />
-            </q-avatar>
-          </template>
-        </q-file>
+
         <div>
           <q-btn color="white" round @click="captureImage" class="q-mb-md">
             <q-icon color="primary" name="las la-camera" />

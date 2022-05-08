@@ -21,6 +21,16 @@ export const loadProducers = async ({ commit }) => {
   }
 };
 
+export const loadProducerStorage = async ({ commit }) => {
+  try {
+    const { data } = await api.get("/producers/all");
+    commit("setProducerStorage", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+}
+
 export const addProducerStorage = async ({ commit }, producer) => {
   try {
     commit("addProducerStorage", producer);

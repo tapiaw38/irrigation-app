@@ -24,7 +24,30 @@
               />
             </template>
           </q-banner>
+
           <q-banner
+            inline-actions
+            rounded
+            class="text-white q-mt-sm"
+            :class="isDataUpdated ? 'bg-info' : 'bg-warning'"
+          >
+            La base de datos del dispositivo
+            {{ isDataUpdated ? "actualizada" : "no actualizada" }}.
+            <template v-slot:action>
+              <q-icon
+                color="white"
+                size="lg"
+                :name="
+                  !isDataUpdated
+                    ? 'las la-exclamation-circle'
+                    : 'las la-grin-beam'
+                "
+              />
+            </template>
+          </q-banner>
+
+          <q-banner
+            v-if="false"
             inline-actions
             rounded
             class="text-white q-mt-sm"
@@ -87,10 +110,12 @@
 </template>
 
 <script>
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, computed, ref, onMounted } from "vue";
+import { useStore } from "vuex";
 
 // composables
 import useAuth from "../modules/authentication/composables/useAuth";
+import useProducer from "../modules/producer/composables/useProducer";
 
 // helpers
 import linksList from "../helpers/linksList";
@@ -105,7 +130,9 @@ export default defineComponent({
   },
   setup() {
     const { user } = useAuth();
+    const { downloadProducers, allProducerStorage, producers } = useProducer();
 
+    const store = useStore();
     // alert
     let headerMessage = ref("");
     let alertMessage = ref("");
@@ -125,13 +152,44 @@ export default defineComponent({
       workType.value = !workType.value;
     };
 
-    const onImportData = () => {
+    const onImportData = async () => {
+      const { ok, message } = await downloadProducers();
+      updateData();
+
+      if (ok) {
+        isAlertOpen.value = true;
+        headerMessage.value = "Importando datos";
+        alertMessage.value = "Se esta importando los datos correctamente";
+        icon.value = "las la-check-circle";
+        iconColor.value = "info";
+        return;
+      }
       isAlertOpen.value = true;
-      headerMessage.value = "Importando datos";
-      alertMessage.value = "Se esta importando los datos correctamente";
-      icon.value = "las la-check-circle";
-      iconColor.value = "info";
+      headerMessage.value = "Error al importar datos";
+      alertMessage.value = message;
+      icon.value = "las la-times-circle";
+      iconColor.value = "danger";
     };
+
+    // check if the data is updated
+    let isDataUpdated = ref(false);
+
+    const onCheckDataUpdated = async () => {
+      if (producers.value.length !== allProducerStorage.value.length) {
+        isDataUpdated.value = false;
+        return;
+      }
+      isDataUpdated.value = true;
+    };
+
+    const updateData = async () => {
+      await store.dispatch("producer/loadProducers");
+      await onCheckDataUpdated();
+    };
+
+    onMounted(async () => {
+      updateData();
+    });
 
     return {
       essentialLinks: linksList,
@@ -146,6 +204,7 @@ export default defineComponent({
       onImportData,
       workType,
       onChangeWorkState,
+      isDataUpdated,
     };
   },
 });

@@ -19,6 +19,12 @@ const useProducer = () => {
     return resp;
   }
 
+  const downloadProducers = async () => {
+    localStorage.removeItem('allProducerStorage');
+    const resp = await store.dispatch("producer/loadProducerStorage");
+    return resp;
+  }
+
   /*
   const editUser = (user) => {
     const resp = store.dispatch("user/updateUser", user);
@@ -37,9 +43,11 @@ const useProducer = () => {
   return {
     producers: computed(() => store.getters["producer/getProducers"]),
     producersStorage: computed(() => store.getters["producer/getProducersStorage"]),
+    allProducerStorage: computed(() => store.getters["producer/getAllProducerStorage"]),
     createProducers,
     createProducerStorage,
     deleteProducersStorage,
+    downloadProducers,
   };
 };
 

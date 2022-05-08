@@ -15,6 +15,11 @@ export const setProducers = (state, producers) => {
   state.producers = producers;
 }
 
+export const setProducerStorage = (state, producers) => {
+  localStorage.setItem('allProducerStorage', JSON.stringify(producers));
+  state.allProducerStorage = JSON.parse(localStorage.getItem('allProducerStorage'));
+}
+
 export const deleteProducersStorage = (state) => {
   localStorage.removeItem('producersStorage');
   state.producersStorage = JSON.parse(localStorage.getItem('producersStorage'));
