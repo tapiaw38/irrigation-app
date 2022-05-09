@@ -24,15 +24,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(_, i) in 5" :key="i">
-          <td class="text-left">Nombre productor</td>
-          <td class="text-left">159</td>
-          <td class="text-left">Tinogasta</td>
-          <td class="text-left">24</td>
-          <td class="text-left">44523423423</td>
-          <td class="text-left">Vegetal</td>
-          <td class="text-left">Nombre</td>
-          <td class="text-left">Tipo</td>
+        <tr v-for="(production, i) in productions" :key="i">
+          <td class="text-left">
+            {{ production.producer.first_name }}
+            {{ production.producer.last_name }}
+          </td>
+          <td class="text-left">{{ production.lote_number }}</td>
+          <td class="text-left">{{ production.entry }}</td>
+          <td class="text-left">{{ production.name }}</td>
+          <td class="text-left">{{ production.production_type }}</td>
+          <td class="text-left">{{ production.area }}</td>
           <td class="text-left">
             <q-btn
               round
@@ -65,23 +66,31 @@
 <script>
 import { defineComponent } from "vue";
 
+// composables
+import useProducer from "../composables/useProducer";
+
+// helpers
+import { formatDate } from "../../../helpers/formatDate";
+
 export default defineComponent({
   name: "Producers",
   setup() {
+    const { productions } = useProducer();
+
     const productionItems = [
       "Productor",
-      "Distrito",
+      "Numerp de lote",
       "Partida",
-      "N de lote",
-      "M. Catastral",
       "Producción",
-      "Nombre",
-      "Tipo",
+      "Tipo de producción",
+      "Hectareas",
       "",
     ];
 
     return {
       productionItems,
+      formatDate,
+      productions,
     };
   },
 });

@@ -35,13 +35,42 @@
               text-color="primary"
               icon="las la-file"
               class="q-mr-sm"
-              @click="onToggleModal()"
+              @click="onToggleModal('producer')"
             />
             <q-btn
               round
               text-color="negative"
               icon="las la-trash-alt"
               class="q-mr-sm"
+              @click="deleteProducersStorage()"
+            />
+          </td>
+        </tr>
+        <tr v-if="productionsStorage?.length > 0">
+          <td class="text-left">Guardado en dispositivo</td>
+          <td class="text-left">Producciones</td>
+          <td class="text-left">{{ productionsStorage.length }}</td>
+          <td class="text-left">
+            <q-btn
+              round
+              color="secondary"
+              icon="las la-cloud-upload-alt"
+              class="q-mr-sm"
+              @click="onCreateProductions()"
+            />
+            <q-btn
+              round
+              text-color="primary"
+              icon="las la-file"
+              class="q-mr-sm"
+              @click="onToggleModal('production')"
+            />
+            <q-btn
+              round
+              text-color="negative"
+              icon="las la-trash-alt"
+              class="q-mr-sm"
+              @click="deleteProductionsStorage()"
             />
           </td>
         </tr>
@@ -65,8 +94,8 @@
         <!-- content for the body slot -->
         <div class="q-pa-md">
           <q-table
-            title="Datos en memoria del dispositivo"
-            :rows="producersStorage"
+            :title="`Datos en memoria de ${tableName}`"
+            :rows="rows"
             :columns="columns"
             row-key="name"
             hide-bottom
@@ -80,6 +109,10 @@
 
 <script>
 import { defineComponent, ref } from "vue";
+
+// helpers
+import columnsProducer from "../helpers/columnsProducer";
+import columnsProduction from "../helpers/columnsProduction";
 
 // composables
 import useProducer from "../../producer/composables/useProducer";
@@ -95,8 +128,14 @@ export default defineComponent({
     FullModal,
   },
   setup() {
-    const { producersStorage, createProducers, deleteProducersStorage } =
-      useProducer();
+    const {
+      producersStorage,
+      productionsStorage,
+      createProducers,
+      createProductions,
+      deleteProducersStorage,
+      deleteProductionsStorage,
+    } = useProducer();
     const producerItems = ["Estado", "Registro", "Cantidad", ""];
 
     // alert
@@ -117,7 +156,30 @@ export default defineComponent({
       isModalOpen.value = false;
     };
 
-    const onToggleModal = () => {
+    // on toggle modal
+    const onToggleModal = (value) => {
+      switch (value) {
+        case "producer":
+          tableName.value = "productores";
+          rows.value = producersStorage.value;
+          columns.value = columnsProducer;
+          break;
+        case "production":
+          tableName.value = "producciones";
+          let productions = productionsStorage.value.map((p) => {
+            return {
+              ...p,
+              producer: p.producer.label,
+              area: `${p.area} ha2`,
+            };
+          });
+          rows.value = productions;
+          columns.value = columnsProduction;
+          break;
+        default:
+          break;
+      }
+
       isModalOpen.value = !isModalOpen.value;
     };
 
@@ -147,60 +209,68 @@ export default defineComponent({
       isAlertOpen.value = true;
     };
 
+    // producer create
+    const onCreateProductions = async () => {
+      let productions = productionsStorage.value.map((p) => {
+        return {
+          ...p,
+          producer: p.producer.value,
+          area: Number(p.area),
+          latitude: Number(p.latitude),
+          longitude: Number(p.longitude),
+        };
+      });
+
+      console.log(productions);
+      const { ok, message } = await createProductions(productions);
+      if (!ok) {
+        headerMessage.value = "Error";
+        alertMessage.value = message;
+        isAlertOpen.value = true;
+        return;
+      }
+
+      headerMessage.value = "Conexión exitosa!";
+      alertMessage.value = `
+        Se ha conectado con el servidor.
+        Registros guardados correctamente.
+      `;
+      const data = await deleteProductionsStorage();
+      if (!data.ok) {
+        headerMessage.value = "Error";
+        alertMessage.value =
+          "No se pudo eliminar los productores," + data.message;
+        isAlertOpen.value = true;
+        return;
+      }
+      isAlertOpen.value = true;
+    };
+
     // data table
-    const columns = [
-      {
-        name: "first_name",
-        label: "Nombre",
-        field: "first_name",
-        sortable: false,
-      },
-      {
-        name: "last_name",
-        label: "Apellido",
-        field: "last_name",
-        sortable: false,
-      },
-      {
-        name: "birth_date",
-        label: "Fecha de nacimiento",
-        field: "birth_date",
-        sortable: false,
-      },
-      {
-        name: "document_number",
-        label: "Documento",
-        field: "document_number",
-        sortable: false,
-      },
-      {
-        name: "phone_number",
-        label: "Teléfono",
-        field: "phone_number",
-        sortable: false,
-      },
-      {
-        name: "address",
-        label: "Dirección",
-        field: "address",
-        sortable: false,
-      },
-    ];
+    let tableName = ref("");
+    const columns = ref([]);
+    const rows = ref([]);
 
     return {
       producerItems,
       producersStorage,
+      productionsStorage,
       headerMessage,
       alertMessage,
       isAlertOpen,
       closeAlert,
       onCreateProducers,
+      onCreateProductions,
       headerModalMessage,
       maximizedToggle,
       isModalOpen,
       closeModal,
       onToggleModal,
       columns,
+      rows,
+      tableName,
+      deleteProductionsStorage,
+      deleteProducersStorage,
     };
   },
 });

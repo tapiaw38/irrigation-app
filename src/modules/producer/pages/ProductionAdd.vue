@@ -11,65 +11,110 @@
         <span>Agregar Producción</span>
       </q-toolbar-title>
       <div class="q-gutter-md text-center">
-        <q-select
-          :options="options"
-          label="Productor"
-          dropdown-icon="las la-angle-down"
-        >
-          <template v-slot:prepend>
-            <q-icon name="las la-user" @click.stop />
-          </template>
-        </q-select>
-        <q-input label="Numero de lote" type="text" class="q-mr-sm" />
-        <q-input label="Entrada" type="text" class="q-mr-sm" />
-        <q-input label="Nombre de Producción" type="text" class="q-mr-sm" />
-        <q-input label="Tipo de Producción" type="text" class="q-mr-sm" />
-        <div class="row justify-start col-12">
-          <div class="col-9">
-            <q-input
-              v-model="production.coords.latitude"
-              label="Latitud"
-              type="number"
-              class="q-mr-sm"
-            />
-            <q-input
-              v-model="production.coords.longitude"
-              label="Longitud"
-              type="number"
-              class="q-mr-sm"
-            />
-          </div>
-          <div class="row justify-center content-center col-3 q-mt-lg q-pt-lg">
-            <q-btn color="primary" round @click="determinePosition()">
-              <q-icon name="las la-map-marker" />
-            </q-btn>
-          </div>
-          <div v-if="positionLoader" class="row justify-center col-12 q-mt-md">
-            GPS position:
-            <strong class="q-ml-sm">{{ positionLoader }}</strong>
-          </div>
-        </div>
-
-        <div>
-          <q-btn color="white" round @click="captureImage" class="q-mb-md">
-            <q-icon color="primary" name="las la-camera" />
-          </q-btn>
-          <div v-if="imageSrc" class="container-img">
-            <q-img :src="imageSrc" />
-            <div class="delete-image">
-              <q-btn
-                round
-                color="warning"
-                flat
-                icon="las la-trash"
-                @click="deleteImg"
+        <q-form @submit="onCreateProduction()">
+          <q-select
+            :options="options"
+            label="Productor"
+            dropdown-icon="las la-angle-down"
+            v-model="production.producer"
+          >
+            <template v-slot:prepend>
+              <q-icon name="las la-user" @click.stop />
+            </template>
+          </q-select>
+          <q-input
+            label="Numero de Lote"
+            v-model="production.lote_number"
+            type="text"
+            class="q-mr-sm"
+          />
+          <q-input
+            label="Numero de Partida"
+            v-model="production.entry"
+            type="text"
+            class="q-mr-sm"
+          />
+          <q-input
+            label="Nombre de Producción"
+            v-model="production.name"
+            type="text"
+            class="q-mr-sm"
+          />
+          <q-input
+            label="Tipo de Producción"
+            v-model="production.production_type"
+            type="text"
+            class="q-mr-sm"
+          />
+          <q-input
+            label="Superficie en hectareas"
+            v-model="production.area"
+            type="text"
+            class="q-mr-sm"
+          />
+          <div class="row justify-start col-12">
+            <div class="col-9">
+              <q-input
+                v-model="production.latitude"
+                label="Latitud"
+                type="text"
+                class="q-mr-sm"
+              />
+              <q-input
+                v-model="production.longitude"
+                label="Longitud"
+                type="text"
+                class="q-mr-sm"
               />
             </div>
+            <div
+              class="row justify-center content-center col-3 q-mt-lg q-pt-lg"
+            >
+              <q-btn color="primary" round @click="determinePosition()">
+                <q-icon name="las la-map-marker" />
+              </q-btn>
+            </div>
+            <div
+              v-if="positionLoader"
+              class="row justify-center col-12 q-mt-md"
+            >
+              GPS position:
+              <strong class="q-ml-sm">{{ positionLoader }}</strong>
+            </div>
           </div>
-        </div>
-        <q-btn class="full-width" color="primary" label="Agregar" />
+
+          <div>
+            <q-btn color="white" round @click="captureImage" class="q-mb-md">
+              <q-icon color="primary" name="las la-camera" />
+            </q-btn>
+            <div v-if="imageSrc" class="container-img">
+              <q-img :src="imageSrc" />
+              <div class="delete-image">
+                <q-btn
+                  round
+                  color="warning"
+                  flat
+                  icon="las la-trash"
+                  @click="deleteImg"
+                />
+              </div>
+            </div>
+          </div>
+          <q-btn
+            type="submit"
+            class="full-width"
+            color="primary"
+            label="Agregar"
+          />
+        </q-form>
       </div>
     </div>
+    <alert
+      :dialog="isAlertOpen"
+      :headerMessage="headerMessage"
+      :message="alertMessage"
+      @close="closeAlert()"
+    />
   </div>
 </template>
 
@@ -79,37 +124,79 @@ import { defineComponent, ref } from "vue";
 //composables
 import useGeoloaction from "../../../composables/useGeolocation";
 import useCamera from "../../../composables/useCamera";
+import useProducer from "../composables/useProducer";
+
+// components
+import Alert from "../../../components/Alert.vue";
 
 export default defineComponent({
   name: "ProductionAdd",
+  components: {
+    Alert,
+  },
   setup() {
     const { positionLoader, position } = useGeoloaction();
     const { imageSrc, captureImage } = useCamera();
+    const { allProducerStorage, createProductionStorage } = useProducer();
 
-    let options = [
-      "Juan Perez",
-      "Pedro Perez",
-      "Juan Perez",
-      "Pedro Perez",
-      "Juan Perez",
-    ];
-
-    let production = ref({
-      coords: {
-        latitude: 0,
-        longitude: 0,
-      },
+    // producers option for select
+    let options = allProducerStorage.value.map((producer) => {
+      return {
+        label: `${producer.first_name} ${producer.last_name}`,
+        value: producer.id,
+      };
     });
 
+    // alert
+    let headerMessage = ref("");
+    let alertMessage = ref("");
+    let isAlertOpen = ref(false);
+
+    const closeAlert = () => {
+      isAlertOpen.value = false;
+    };
+
+    // form production
+    let production = ref({
+      producer: null,
+      lote_number: "",
+      entry: "",
+      name: "",
+      production_type: "",
+      area: 0,
+      latitude: 0,
+      longitude: 0,
+      picture: "",
+    });
+
+    // determine position
     const determinePosition = () => {
       positionLoader.value = "determinando...";
-      production.value.coords.latitude = position.value.coords.latitude;
-      production.value.coords.longitude = position.value.coords.longitude;
+      production.value.latitude = position.value.coords.latitude;
+      production.value.longitude = position.value.coords.longitude;
       positionLoader.value = "Posición actualizada";
     };
 
+    // delete image
     const deleteImg = () => {
       imageSrc.value = "";
+    };
+
+    // create production
+    const onCreateProduction = async () => {
+      const { ok, message } = await createProductionStorage(production);
+      if (!ok) {
+        headerMessage.value = "Error";
+        alertMessage.value = message;
+        isAlertOpen.value = true;
+        return;
+      }
+
+      headerMessage.value = "Producion Agregada";
+      alertMessage.value = `
+        Registro guardado correctamente, en memoria.
+      `;
+      isAlertOpen.value = true;
     };
 
     return {
@@ -121,6 +208,11 @@ export default defineComponent({
       imageSrc,
       captureImage,
       deleteImg,
+      onCreateProduction,
+      headerMessage,
+      alertMessage,
+      isAlertOpen,
+      closeAlert,
     };
   },
 });

@@ -15,24 +15,34 @@
 
 <script>
 import { defineComponent, onMounted } from "vue";
+
+//composables
 import useMapbox from "../composables/useMapbox";
+import useProducer from "../../producer/composables/useProducer";
 
 export default defineComponent({
   name: "Geoloaction",
   components: {},
   setup() {
     const { createMap } = useMapbox();
+    const { productions } = useProducer();
 
     let map = {
       container: "map",
       center: [-67.564368, -28.065752],
       zoom: 13,
-      markers: [
-        {
-          coordinates: [-67.560005, -28.057496],
-          title: `<div class="text-h6">Producción</div>`,
-        },
-      ],
+      markers: productions.value.map((production) => {
+        return {
+          coordinates: [production.longitude, production.latitude],
+          title: `<div class="col">
+                    <div class="text-h6">Produccion</div>
+                    <div class="text-subtitle2">${production.producer.first_name} ${production.producer.last_name}</div>
+                    <div class="text-subtitle2">${production.name}</div>
+                    <div class="text-subtitle2">${production.production_type}</div>
+                  </div>
+                  `,
+        };
+      }),
     };
 
     onMounted(async () => {

@@ -33,7 +33,7 @@
             <td class="text-left">
               <q-item-section avatar>
                 <q-avatar>
-                  <q-img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+                  <q-img src="https://cdn.quasar.dev/img/avatar1.jpg" />
                 </q-avatar>
               </q-item-section>
             </td>

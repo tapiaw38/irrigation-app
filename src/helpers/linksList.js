@@ -13,6 +13,7 @@ const linksList = [
     link: "producer",
     is_home: true,
   },
+  /*
   {
     title: "Turnos de riego",
     caption: "",
@@ -20,6 +21,7 @@ const linksList = [
     link: "shifts",
     is_home: true,
   },
+  */
   {
     title: "Producciones",
     caption: "",

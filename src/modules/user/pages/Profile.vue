@@ -10,7 +10,7 @@
               <div>
                 <div class="row justify-center text-center">
                   <q-avatar class="avatar">
-                    <q-img :src="'https://cdn.quasar.dev/img/avatar2.jpg'" />
+                    <q-img :src="'https://cdn.quasar.dev/img/avatar1.jpg'" />
                     <div class="edit-image">
                       <q-btn
                         round
