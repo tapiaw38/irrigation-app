@@ -19,7 +19,11 @@ export default {
       path: ":id/producer",
       name: "producer_detail",
       component: () =>
-        import(/* webpackChunkName: "producerDetail" */ "../pages/ProducerDetail")
+        import(/* webpackChunkName: "producerDetail" */ "../pages/ProducerDetail"),
+      props: (route) => {
+        const id = Number(route.params.id);
+        return isNaN(id) ? { id: 1 } : { id };
+      },
     },
     {
       path: "/production",

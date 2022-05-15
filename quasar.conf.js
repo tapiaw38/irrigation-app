@@ -140,8 +140,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: `Quasar App`,
-        short_name: `Quasar App`,
+        name: `RegAr App`,
+        short_name: `RegAr`,
         description: `A Quasar Framework app`,
         display: "standalone",
         orientation: "portrait",
@@ -221,6 +221,9 @@ module.exports = configure(function (ctx) {
           .plugin("eslint-webpack-plugin")
           .use(ESLintPlugin, [{ extensions: ["js"] }]);
       },
+    },
+    bin: {
+      linuxAndroidStudio: "/snap/android-studio/current/android-studio/bin/studio.sh"
     },
   };
 });

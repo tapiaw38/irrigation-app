@@ -29,6 +29,20 @@ export const setProductions = (state, productions) => {
   state.productions = productions;
 }
 
+export const setProducerById = (state, producer) => {
+  state.producer = producer;
+}
+
+export const updateProducer = (state, producer) => {
+  const idx = state.producers.map(p => p.id).indexOf(producer.id);
+  state.producers[idx] = producer;
+}
+
+export const deleteProducer = (state, producer) => {
+  const idx = state.producers.map(p => p.id).indexOf(producer.id);
+  state.producers.splice(idx, 1);
+}
+
 export const setProducerStorage = (state, producers) => {
   localStorage.setItem('allProducerStorage', JSON.stringify(producers));
   state.allProducerStorage = JSON.parse(localStorage.getItem('allProducerStorage'));

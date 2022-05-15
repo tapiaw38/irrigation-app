@@ -340,7 +340,7 @@ export default defineComponent({
     }
     p {
       margin-top: 0.2rem;
-      font-size: 1.2rem;
+      font-size: 0.9rem;
       font-weight: 600;
     }
   }

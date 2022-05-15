@@ -18,7 +18,7 @@
           :disable="!maximizedToggle"
         >
           <q-tooltip v-if="maximizedToggle" class="bg-white text-primary"
-            >Minimize</q-tooltip
+            >Minimizar</q-tooltip
           >
         </q-btn>
         <q-btn
@@ -29,11 +29,11 @@
           :disable="maximizedToggle"
         >
           <q-tooltip v-if="!maximizedToggle" class="bg-white text-primary"
-            >Maximize</q-tooltip
+            >Maximizar</q-tooltip
           >
         </q-btn>
         <q-btn dense flat icon="las la-window-close " @click="close()">
-          <q-tooltip class="bg-white text-primary">Close</q-tooltip>
+          <q-tooltip class="bg-white text-primary">Cerrar</q-tooltip>
         </q-btn>
       </q-bar>
 

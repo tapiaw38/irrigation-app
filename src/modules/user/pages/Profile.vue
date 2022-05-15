@@ -122,7 +122,7 @@
             <div>
               <q-btn
                 class="btn-block"
-                label="Submit"
+                label="Aplicar"
                 color="primary"
                 type="submit"
               />

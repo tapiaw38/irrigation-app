@@ -1,50 +1,48 @@
 const linksList = [
   {
-    title: "Inicio",
+    title: "INICIO",
     caption: "",
     icon: "las la-home",
     link: "home",
     is_home: false,
   },
   {
-    title: "Productores",
+    title: "PRODUCTORES",
     caption: "",
     icon: "las la-users",
     link: "producer",
     is_home: true,
   },
-  /*
   {
-    title: "Turnos de riego",
+    title: "TURNOS DE RIEGO",
     caption: "",
     icon: "las la-ticket-alt",
     link: "shifts",
     is_home: true,
   },
-  */
   {
-    title: "Producciones",
+    title: "PRODUCCIONES",
     caption: "",
     icon: "las la-seedling",
     link: "production",
     is_home: true,
   },
   {
-    title: "Geolocalización",
+    title: "GEOLOCALIZACIÓN",
     caption: "",
     icon: "las la-map-marked",
     link: "geolocation",
     is_home: true,
   },
   {
-    title: "Exportar",
+    title: "EXPORTAR",
     caption: "",
     icon: "las la-cloud-upload-alt",
     link: "record",
     is_home: true,
   },
   {
-    title: "Usuarios",
+    title: "USUARIOS",
     caption: "",
     icon: "las la-user",
     link: "users",

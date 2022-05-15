@@ -14,8 +14,12 @@
         </div>
       </q-card-section>
 
+      <q-card-section class="q-pt-none">
+        <slot name="body"></slot>
+      </q-card-section>
+
       <q-card-actions align="right">
-        <q-btn flat label="OK" color="primary" @click="close()" />
+        <q-btn flat label="CERRAR" color="primary" @click="close()" />
       </q-card-actions>
     </q-card>
   </q-dialog>

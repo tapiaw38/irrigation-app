@@ -40,7 +40,37 @@ export const loadProductions = async ({ commit }) => {
   } catch (e) {
     return { ok: false, message: e.response.data };
   }
-}
+};
+
+export const loadProducerById = async ({ commit }, id) => {
+  try {
+    const { data } = await api.get(`/producers/${id}`);
+    commit("setProducerById", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
+export const updateProducer = async ({ commit }, producer) => {
+  try {
+    const { data } = await api.put(`/producers/update/${producer.id}`, producer);
+    commit("updateProducer", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
+export const deleteProducer = async ({ commit }, producer) => {
+  try {
+    const { data } = await api.put(`/producers/delete/${producer.id}`);
+    commit("deleteProducer", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
 
 export const loadProducerStorage = async ({ commit }) => {
   try {
