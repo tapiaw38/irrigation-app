@@ -1,7 +1,8 @@
 {
-  "appId": "com.regar.app",
-  "appName": "Quasar App",
-  "bundledWebRuntime": false,
-  "npmClient": "yarn",
-  "webDir": "www"
+	"appId": "com.regar.app",
+	"appName": "RegAr",
+	"bundledWebRuntime": false,
+	"npmClient": "yarn",
+	"webDir": "www",
+	"flavor": "qa"
 }

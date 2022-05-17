@@ -1,11 +1,15 @@
 {
-  "name": "irrigation-app",
-  "version": "0.0.1",
-  "description": "A Quasar Framework app",
+  "name": "RegAr",
+  "version": "1.1.0",
+  "description": "A RegAr App",
   "author": "walter <tapiaw38@gmail.com>",
   "private": true,
   "dependencies": {
-    "@capacitor/cli": "^2.0.0",
-    "@capacitor/core": "^2.0.0"
+    "@capacitor/android": "^3.0.0-beta.0",
+    "@capacitor/app": "^1.1.1",
+    "@capacitor/camera": "^1.3.1",
+    "@capacitor/cli": "^3.5.1",
+    "@capacitor/core": "^3.4.3",
+    "@capacitor/geolocation": "^1.3.1"
   }
 }

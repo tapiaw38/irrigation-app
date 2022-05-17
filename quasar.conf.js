@@ -185,6 +185,23 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true,
+
+      // (Optional!)
+      capacitorCliPreparationParams: ['sync', ctx.targetName],
+
+      // (Optional) If not present, will look for package.json > name
+      appName: 'RegAr', // string
+      // (Optional) If not present, will look for package.json > version
+      version: '1.1.0', // string
+      // (Optional) If not present, will look for package.json > description
+      description: 'A RegAr App', // string
+
+      // Quasar handles app exit on mobile phone back button.
+      backButtonExit: false,
+
+      // On the other hand, the following completely
+      // disables Quasar's back button management.
+      backButton: false
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
