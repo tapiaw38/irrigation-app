@@ -18,6 +18,12 @@ const columnsProduction = [
     sortable: false,
   },
   {
+    name: "cadastral_registration",
+    label: "Matricula catastral",
+    field: "cadastral_registration",
+    sortable: false,
+  },
+  {
     name: "name",
     label: "Producción",
     field: "name",
@@ -33,6 +39,12 @@ const columnsProduction = [
     name: "area",
     label: "Hectáreas",
     field: "area",
+    sortable: false,
+  },
+  {
+    name: "district",
+    label: "Distrito",
+    field: "district",
     sortable: false,
   },
   {

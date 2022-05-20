@@ -45,6 +45,11 @@ const useProducer = () => {
     return res;
   }
 
+  const getProductionById = async (id) => {
+    const res = store.dispatch("producer/loadProductionById", id);
+    return res;
+  }
+
   const editProducer = (producer) => {
     const resp = store.dispatch("producer/updateProducer", producer);
     return resp;
@@ -64,6 +69,7 @@ const useProducer = () => {
     producers: computed(() => store.getters["producer/getProducers"]),
     producer: computed(() => store.getters["producer/getProducer"]),
     productions: computed(() => store.getters["producer/getProductions"]),
+    production: computed(() => store.getters["producer/getProduction"]),
     producersStorage: computed(() => store.getters["producer/getProducersStorage"]),
     productionsStorage: computed(() => store.getters["producer/getProductionsStorage"]),
     allProducerStorage: computed(() => store.getters["producer/getAllProducerStorage"]),
@@ -77,6 +83,7 @@ const useProducer = () => {
     getProducerById,
     editProducer,
     deleteProducer,
+    getProductionById,
   };
 };
 

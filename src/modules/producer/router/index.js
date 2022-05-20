@@ -41,7 +41,11 @@ export default {
       path: ":id/production",
       name: "production_detail",
       component: () =>
-        import(/* webpackChunkName: "producerDetail" */ "../pages/ProductionDetail")
+        import(/* webpackChunkName: "producerDetail" */ "../pages/ProductionDetail"),
+      props: (route) => {
+        const id = Number(route.params.id);
+        return isNaN(id) ? { id: 1 } : { id };
+      },
     },
     {
       path: "/geolocation",

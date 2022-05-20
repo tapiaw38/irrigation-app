@@ -3,13 +3,6 @@
     <div class="q-pb-sm q-gutter-sm">
       <q-btn
         round
-        color="white"
-        icon="las la-arrow-alt-circle-left"
-        text-color="primary"
-        @click="$router.push({ name: 'home' })"
-      />
-      <q-btn
-        round
         color="primary"
         icon="las la-users"
         @click="$router.push({ name: 'producer_add' })"

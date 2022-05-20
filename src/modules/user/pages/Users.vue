@@ -4,13 +4,6 @@
       <q-btn
         round
         color="white"
-        icon="las la-arrow-alt-circle-left"
-        text-color="primary"
-        @click="$router.push({ name: 'home' })"
-      />
-      <q-btn
-        round
-        color="white"
         icon="las la-user-plus"
         text-color="primary"
         @click="toggleAlertCreateProfile()"

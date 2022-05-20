@@ -33,6 +33,10 @@ export const setProducerById = (state, producer) => {
   state.producer = producer;
 }
 
+export const setProductionById = (state, production) => {
+  state.production = production;
+}
+
 export const updateProducer = (state, producer) => {
   const idx = state.producers.map(p => p.id).indexOf(producer.id);
   state.producers[idx] = producer;

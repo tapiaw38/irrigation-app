@@ -3,19 +3,12 @@
     <div class="q-pb-sm q-gutter-sm">
       <q-btn
         round
-        color="white"
-        icon="las la-arrow-alt-circle-left"
-        text-color="primary"
-        @click="$router.push({ name: 'home' })"
-      />
-      <q-btn
-        round
         color="primary"
         icon="las la-ticket-alt"
         @click="$router.push({ name: 'shift_add' })"
       />
     </div>
-    <q-markup-table>
+    <q-markup-table class="q-mt-md">
       <thead>
         <tr>
           <template v-for="shift in shiftsItems" :key="shift">

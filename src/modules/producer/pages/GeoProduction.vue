@@ -33,7 +33,7 @@ export default defineComponent({
       zoom: 13,
       markers: productions.value.map((production) => {
         return {
-          coordinates: [production.longitude, production.latitude],
+          coordinates: [production.longitude || 0, production.latitude || 0],
           title: `<div class="col">
                     <div class="text-h6">Produccion</div>
                     <div class="text-subtitle2">${production.producer.first_name} ${production.producer.last_name}</div>
@@ -45,8 +45,8 @@ export default defineComponent({
       }),
     };
 
-    onMounted(async () => {
-      await createMap(map);
+    onMounted(() => {
+      createMap(map);
     });
 
     return {};

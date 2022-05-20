@@ -8,19 +8,64 @@
           size="2.2em"
           class="q-pa-md"
         />
-        <span>Nombre Productor</span>
+        <span
+          >{{ production?.producer.first_name }}
+          {{ production?.producer.last_name }}</span
+        >
       </q-toolbar-title>
       <div class="container-detail">
         <div class="items-left">
           <div>
-            <div class="text-h6">Producción</div>
-            <div class="text-subtitle2 text-dark q-pa-xs">Distrito</div>
-            <div class="text-subtitle2 text-dark q-pa-xs">Partida</div>
-            <div class="text-subtitle2 text-dark q-pa-xs">N Lote</div>
-            <div class="text-subtitle2 text-dark q-pa-xs">M. Catastral</div>
-            <div class="text-subtitle2 text-dark q-pa-xs">Producción</div>
-            <div class="text-subtitle2 text-dark q-pa-xs">Nombre</div>
-            <div class="text-subtitle2 text-dark q-pa-xs">Tipo</div>
+            <div class="q-mt-sm">
+              <div class="text-subtitle3 text-secondary q-pa-xs">
+                Numero de lote
+              </div>
+              <div class="text-subtitle2 q-pa-xs">
+                {{ production?.lote_number }}
+              </div>
+            </div>
+            <div class="q-mt-sm">
+              <div class="text-subtitle3 text-secondary q-pa-xs">
+                Numero de partida
+              </div>
+              <div class="text-subtitle2 q-pa-xs">{{ production?.entry }}</div>
+            </div>
+            <div class="q-mt-sm">
+              <div class="text-subtitle3 text-secondary q-pa-xs">
+                Matricuala catastral
+              </div>
+              <div class="text-subtitle2 q-pa-xs">
+                {{ production?.cadastral_registration }}
+              </div>
+            </div>
+            <div class="q-mt-sm">
+              <div class="text-subtitle3 text-secondary q-pa-xs">
+                Producción
+              </div>
+              <div class="text-subtitle2 q-pa-xs">
+                {{ production?.name }}
+              </div>
+            </div>
+            <div class="q-mt-sm">
+              <div class="text-subtitle3 text-secondary q-pa-xs">
+                Tipo de producción
+              </div>
+              <div class="text-subtitle2 q-pa-xs">
+                {{ production?.production_type }}
+              </div>
+            </div>
+            <div class="q-mt-sm">
+              <div class="text-subtitle3 text-secondary q-pa-xs">Distrito</div>
+              <div class="text-subtitle2 q-pa-xs">
+                {{ production?.district }}
+              </div>
+            </div>
+            <div class="q-mt-sm">
+              <div class="text-subtitle3 text-secondary q-pa-xs">Hectáreas</div>
+              <div class="text-subtitle2 q-pa-xs">
+                {{ production?.area }} ha2
+              </div>
+            </div>
           </div>
         </div>
         <div class="items-left">
@@ -44,31 +89,54 @@
 
 <script>
 import { defineComponent, onMounted } from "vue";
+
+// composables
 import useMapbox from "../composables/useMapbox";
+import useProducer from "../composables/useProducer";
 
 export default defineComponent({
   name: "ProductionDetail",
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
   components: {},
-  setup() {
+  setup(props) {
     const { createMap } = useMapbox();
-
-    let map = {
-      container: "map",
-      center: [-67.564368, -28.065752],
-      zoom: 13,
-      markers: [
-        {
-          coordinates: [-67.560005, -28.057496],
-          title: `<div class="text-h6">Producción</div>`,
-        },
-      ],
-    };
+    const { getProductionById, production } = useProducer();
 
     onMounted(async () => {
-      await createMap(map);
+      const { ok } = await getProductionById(props.id);
+      if (ok) {
+        let map = {
+          container: "map",
+          center: [-67.564368, -28.065752],
+          zoom: 13,
+          markers: [
+            {
+              coordinates: [
+                production?.value.longitude || 0,
+                production?.value.latitude || 0,
+              ],
+              title: `<div class="col">
+                    <div class="text-h6">Produccion</div>
+                    <div class="text-subtitle2">${production?.value.producer.first_name} ${production?.value.producer.last_name}</div>
+                    <div class="text-subtitle2">${production?.value.name}</div>
+                    <div class="text-subtitle2">${production?.value.production_type}</div>
+                  </div>
+                  `,
+            },
+          ],
+        };
+        createMap(map);
+      }
     });
 
-    return {};
+    return {
+      production,
+    };
   },
 });
 </script>
@@ -76,7 +144,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .map-production {
   width: 100%;
-  height: 60vh;
+  height: 70vh;
 }
 
 .container-detail {

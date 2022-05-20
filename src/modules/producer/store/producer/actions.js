@@ -52,6 +52,16 @@ export const loadProducerById = async ({ commit }, id) => {
   }
 };
 
+export const loadProductionById = async ({ commit }, id) => {
+  try {
+    const { data } = await api.get(`/productions/${id}`);
+    commit("setProductionById", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
 export const updateProducer = async ({ commit }, producer) => {
   try {
     const { data } = await api.put(`/producers/update/${producer.id}`, producer);

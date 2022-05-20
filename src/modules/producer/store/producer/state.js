@@ -4,6 +4,7 @@ export default function () {
     producers: [],
     producer: null,
     productions: [],
+    production: null,
     producersStorage: localStorage.getItem('producersStorage')
       ? JSON.parse(localStorage.getItem('producersStorage'))
       : [],

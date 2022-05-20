@@ -1,6 +1,7 @@
 export const getProducers = (state) => state.producers;
 export const getProducer = (state) => state.producer;
 export const getProductions = (state) => state.productions;
+export const getProduction = (state) => state.production;
 
 export const getProducerById =
   (state) =>

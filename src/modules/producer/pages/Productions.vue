@@ -3,19 +3,12 @@
     <div class="q-pb-sm q-gutter-sm">
       <q-btn
         round
-        color="white"
-        icon="las la-arrow-alt-circle-left"
-        text-color="primary"
-        @click="$router.push({ name: 'home' })"
-      />
-      <q-btn
-        round
         color="primary"
         icon="las la-seedling"
         @click="$router.push({ name: 'production_add' })"
       />
     </div>
-    <q-markup-table>
+    <q-markup-table class="q-mt-md">
       <thead>
         <tr>
           <template v-for="production in productionItems" :key="production">
@@ -31,8 +24,10 @@
           </td>
           <td class="text-left">{{ production.lote_number }}</td>
           <td class="text-left">{{ production.entry }}</td>
+          <td class="text-left">{{ production.cadastral_registration }}</td>
           <td class="text-left">{{ production.name }}</td>
           <td class="text-left">{{ production.production_type }}</td>
+          <td class="text-left">{{ production.district }}</td>
           <td class="text-left">{{ production.area }}</td>
           <td class="text-left">
             <q-btn
@@ -41,7 +36,10 @@
               icon="las la-file"
               class="q-mr-sm"
               @click="
-                $router.push({ name: 'production_detail', params: { id: 1 } })
+                $router.push({
+                  name: 'production_detail',
+                  params: { id: production.id },
+                })
               "
             />
             <q-btn
@@ -81,8 +79,10 @@ export default defineComponent({
       "Productor",
       "Numerp de lote",
       "Partida",
+      "Matricula catastral",
       "Producción",
       "Tipo de producción",
+      "Distrito",
       "Hectareas",
       "",
     ];

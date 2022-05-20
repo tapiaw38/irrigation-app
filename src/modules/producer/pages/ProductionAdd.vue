@@ -35,6 +35,12 @@
             class="q-mr-sm"
           />
           <q-input
+            label="Matricula Catastral"
+            v-model="production.cadastral_registration"
+            type="text"
+            class="q-mr-sm"
+          />
+          <q-input
             label="Nombre de Producción"
             v-model="production.name"
             type="text"
@@ -46,6 +52,16 @@
             type="text"
             class="q-mr-sm"
           />
+          <q-select
+            :options="optionsDistrict"
+            label="Distrito"
+            dropdown-icon="las la-angle-down"
+            v-model="production.district"
+          >
+            <template v-slot:prepend>
+              <q-icon name="las la-street-view" @click.stop />
+            </template>
+          </q-select>
           <q-input
             label="Superficie en hectareas"
             v-model="production.area"
@@ -82,7 +98,6 @@
               <strong class="q-ml-sm">{{ positionLoader }}</strong>
             </div>
           </div>
-
           <div>
             <q-btn color="white" round @click="captureImage" class="q-mb-md">
               <q-icon color="primary" name="las la-camera" />
@@ -129,6 +144,9 @@ import useProducer from "../composables/useProducer";
 // components
 import Alert from "../../../components/Alert.vue";
 
+// helpers
+import districtList from "../../../helpers/districtList";
+
 export default defineComponent({
   name: "ProductionAdd",
   components: {
@@ -147,6 +165,14 @@ export default defineComponent({
       };
     });
 
+    // districts option for select
+    let optionsDistrict = districtList.map((district) => {
+      return {
+        label: district,
+        value: district,
+      };
+    });
+
     // alert
     let headerMessage = ref("");
     let alertMessage = ref("");
@@ -161,8 +187,10 @@ export default defineComponent({
       producer: null,
       lote_number: "",
       entry: "",
+      cadastral_registration: "",
       name: "",
       production_type: "",
+      district: null,
       area: 0,
       latitude: 0,
       longitude: 0,
@@ -201,6 +229,7 @@ export default defineComponent({
 
     return {
       options,
+      optionsDistrict,
       position,
       positionLoader,
       production,

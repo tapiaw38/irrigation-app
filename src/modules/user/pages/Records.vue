@@ -1,14 +1,5 @@
 <template>
   <div class="q-pa-md">
-    <div class="q-pb-sm q-gutter-sm">
-      <q-btn
-        round
-        color="white"
-        icon="las la-arrow-alt-circle-left"
-        text-color="primary"
-        @click="$router.push({ name: 'home' })"
-      />
-    </div>
     <q-markup-table class="q-mt-md">
       <thead>
         <tr>
@@ -171,6 +162,7 @@ export default defineComponent({
               ...p,
               producer: p.producer.label,
               area: `${p.area} ha2`,
+              district: p.district.label,
             };
           });
           rows.value = productions;
@@ -216,6 +208,7 @@ export default defineComponent({
           ...p,
           producer: p.producer.value,
           area: Number(p.area),
+          district: p.district.value,
           latitude: Number(p.latitude),
           longitude: Number(p.longitude),
         };

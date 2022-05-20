@@ -2,14 +2,6 @@
   <div class="q-pa-md">
     <div class="q-gutter-md" style="max-width: 700px">
       <q-toolbar-title class="flex-column items-center content-center">
-        <q-btn
-          round
-          color="white"
-          icon="las la-arrow-alt-circle-left"
-          text-color="primary"
-          class="q-ml-sm"
-          @click="$router.push({ name: 'producer' })"
-        />
         <q-icon
           name="las la-users"
           color="primary"
@@ -64,7 +56,17 @@
                   {{ production.name }}: {{ production?.production_type }}
                 </div>
                 <div class="q-ml-sm">
-                  <q-btn color="primary" flat label="Ver" />
+                  <q-btn
+                    color="primary"
+                    flat
+                    label="Ver"
+                    @click="
+                      $router.push({
+                        name: 'production_detail',
+                        params: { id: production.id },
+                      })
+                    "
+                  />
                 </div>
               </div>
             </template>
