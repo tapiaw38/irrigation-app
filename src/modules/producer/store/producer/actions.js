@@ -72,10 +72,30 @@ export const updateProducer = async ({ commit }, producer) => {
   }
 };
 
+export const updateProduction = async ({ commit }, production) => {
+  try {
+    const { data } = await api.put(`/productions/update/${production.id}`, production);
+    commit("updateProduction", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
 export const deleteProducer = async ({ commit }, producer) => {
   try {
-    const { data } = await api.put(`/producers/delete/${producer.id}`);
+    const { data } = await api.delete(`/producers/delete/${producer.id}`);
     commit("deleteProducer", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
+export const deleteProduction = async ({ commit }, production) => {
+  try {
+    const { data } = await api.delete(`/productions/delete/${production.id}`);
+    commit("deleteProduction", data.response);
     return { ok: true };
   } catch (e) {
     return { ok: false, message: e.response.data };

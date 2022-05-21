@@ -42,9 +42,19 @@ export const updateProducer = (state, producer) => {
   state.producers[idx] = producer;
 }
 
+export const updateProduction = (state, production) => {
+  const idx = state.productions.map(p => p.id).indexOf(production.id);
+  state.productions[idx] = production;
+}
+
 export const deleteProducer = (state, producer) => {
   const idx = state.producers.map(p => p.id).indexOf(producer.id);
   state.producers.splice(idx, 1);
+}
+
+export const deleteProduction = (state, production) => {
+  const idx = state.productions.map(p => p.id).indexOf(production.id);
+  state.productions.splice(idx, 1);
 }
 
 export const setProducerStorage = (state, producers) => {

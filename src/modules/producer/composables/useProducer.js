@@ -55,8 +55,18 @@ const useProducer = () => {
     return resp;
   }
 
+  const editProduction = (production) => {
+    const resp = store.dispatch("producer/updateProduction", production);
+    return resp;
+  }
+
   const deleteProducer = (producer) => {
     const resp = store.dispatch("producer/deleteProducer", producer);
+    return resp;
+  }
+
+  const deleteProduction = (production) => {
+    const resp = store.dispatch("producer/deleteProduction", production);
     return resp;
   }
 
@@ -81,9 +91,11 @@ const useProducer = () => {
     downloadProducers,
     createProductionStorage,
     getProducerById,
-    editProducer,
-    deleteProducer,
     getProductionById,
+    editProducer,
+    editProduction,
+    deleteProducer,
+    deleteProduction
   };
 };
 

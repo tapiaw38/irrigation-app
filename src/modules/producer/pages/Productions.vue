@@ -47,22 +47,75 @@
               text-color="secondary"
               icon="las la-edit"
               class="q-mr-sm"
+              @click="onToggleModal(production)"
             />
             <q-btn
               round
               text-color="negative"
               icon="las la-trash-alt"
               class="q-mr-sm"
+              @click="openAlert(production)"
             />
           </td>
         </tr>
       </tbody>
     </q-markup-table>
+    <!-- Full Modal -->
+    <full-modal
+      :dialog="isModalOpen"
+      :headerMessage="headerModalMessage"
+      :maximizedToggle="maximizedToggle"
+      @close="closeModal()"
+    >
+      <template v-slot:body>
+        <!-- content for the body slot -->
+        <div class="q-pa-md">
+          <production-form
+            :productionData="productionData"
+            @submit-form-production="submitFormProduction"
+          />
+        </div>
+      </template>
+    </full-modal>
+    <!-- Alert -->
+    <alert
+      :dialog="isAlertOpen"
+      :headerMessage="headerMessage"
+      :message="alertMessage"
+      @close="closeAlert()"
+    >
+      <template v-slot:body>
+        <!-- content for the body slot -->
+        <div class="q-pa-md row justify-center">
+          <q-btn
+            round
+            color="warning"
+            text-color="white"
+            label="Si"
+            class="q-mx-sm"
+            @click="onDeleteProduction()"
+          />
+          <q-btn
+            round
+            color="primary"
+            text-color="white"
+            label="No"
+            class="q-mx-sm"
+            @click="closeAlert()"
+          />
+        </div>
+      </template>
+    </alert>
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+
+// components
+import ProductionForm from "../components/ProductionForm.vue";
+import Alert from "../../../components/Alert.vue";
+import FullModal from "../../../components/FullModal.vue";
 
 // composables
 import useProducer from "../composables/useProducer";
@@ -72,8 +125,13 @@ import { formatDate } from "../../../helpers/formatDate";
 
 export default defineComponent({
   name: "Producers",
+  components: {
+    ProductionForm,
+    Alert,
+    FullModal,
+  },
   setup() {
-    const { productions } = useProducer();
+    const { productions, editProduction, deleteProduction } = useProducer();
 
     const productionItems = [
       "Productor",
@@ -87,10 +145,81 @@ export default defineComponent({
       "",
     ];
 
+    // modal
+    let headerModalMessage = ref("");
+    let maximizedToggle = ref(true);
+    let isModalOpen = ref(false);
+
+    const closeModal = () => {
+      isModalOpen.value = false;
+    };
+
+    const productionData = ref(null);
+
+    const onToggleModal = (production) => {
+      productionData.value = production;
+      isModalOpen.value = !isModalOpen.value;
+    };
+
+    // submit form producer update
+    const submitFormProduction = async (form) => {
+      form.value.producer = form.value.producer.value;
+      form.value.district = form.value.district?.value || null;
+      const { ok, message } = await editProduction(form.value);
+      if (ok) {
+        closeModal();
+      } else {
+        headerModalMessage.value = message;
+        maximizedToggle.value = false;
+      }
+    };
+
+    // alert
+    let headerMessage = ref("");
+    let alertMessage = ref("");
+    let isAlertOpen = ref(false);
+
+    const closeAlert = () => {
+      isAlertOpen.value = false;
+    };
+
+    let productionDeleted = ref(null);
+
+    const openAlert = (p) => {
+      productionDeleted.value = p;
+      headerMessage.value = "Eliminar";
+      alertMessage.value = "¿Está seguro que desea eliminar la producción?";
+      isAlertOpen.value = true;
+    };
+
+    const onDeleteProduction = async () => {
+      const { ok } = await deleteProduction(productionDeleted.value);
+      if (ok) {
+        closeAlert();
+      } else {
+        headerMessage.value = "Error";
+        alertMessage.value = "No se pudo eliminar la producción";
+      }
+    };
+
     return {
       productionItems,
       formatDate,
       productions,
+      headerModalMessage,
+      maximizedToggle,
+      isModalOpen,
+      closeModal,
+      productionData,
+      onToggleModal,
+      submitFormProduction,
+      // alert
+      headerMessage,
+      alertMessage,
+      isAlertOpen,
+      openAlert,
+      closeAlert,
+      onDeleteProduction,
     };
   },
 });
