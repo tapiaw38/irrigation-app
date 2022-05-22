@@ -11,7 +11,7 @@
         <span>Agregar Producción</span>
       </q-toolbar-title>
       <div class="q-gutter-md text-center">
-        <q-form @submit="onCreateProduction()">
+        <q-form @submit="onCreateProduction()" @reset="onResetProduction">
           <q-select
             :options="options"
             label="Productor"
@@ -63,7 +63,7 @@
             </template>
           </q-select>
           <q-input
-            label="Superficie en hectareas"
+            label="Superficie en hectareas cuadradas"
             v-model="production.area"
             type="text"
             class="q-mr-sm"
@@ -99,11 +99,11 @@
             </div>
           </div>
           <div>
-            <q-btn color="white" round @click="captureImage" class="q-mb-md">
+            <q-btn color="white" round @click="captureImage" class="q-ma-md">
               <q-icon color="primary" name="las la-camera" />
             </q-btn>
             <div v-if="imageSrc" class="container-img">
-              <q-img :src="imageSrc" />
+              <q-img :src="imageSrc" class="q-mb-md" />
               <div class="delete-image">
                 <q-btn
                   round
@@ -197,6 +197,23 @@ export default defineComponent({
       picture: "",
     });
 
+    // on reset form
+    const onResetProduction = () => {
+      production.value = {
+        producer: null,
+        lote_number: "",
+        entry: "",
+        cadastral_registration: "",
+        name: "",
+        production_type: "",
+        district: null,
+        area: 0,
+        latitude: 0,
+        longitude: 0,
+        picture: "",
+      };
+    };
+
     // determine position
     const determinePosition = () => {
       positionLoader.value = "determinando...";
@@ -225,6 +242,7 @@ export default defineComponent({
         Registro guardado correctamente, en memoria.
       `;
       isAlertOpen.value = true;
+      onResetProduction();
     };
 
     return {

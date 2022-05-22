@@ -11,7 +11,7 @@
         <span>Agregar Productor</span>
       </q-toolbar-title>
       <div class="q-gutter-md text-center">
-        <q-form @submit="onCreateProducer()">
+        <q-form @submit="onCreateProducer()" @reset="onResetProducer">
           <q-input
             v-model="producerForm.first_name"
             label="Nombre"
@@ -103,6 +103,18 @@ export default defineComponent({
       birth_date: "",
     });
 
+    // on reset form
+    const onResetProducer = () => {
+      producerForm.value = {
+        first_name: "",
+        last_name: "",
+        document_number: "",
+        address: "",
+        phone: "",
+        birth_date: "",
+      };
+    };
+
     const onCreateProducer = async () => {
       const { ok, message } = await createProducerStorage(producerForm);
       if (!ok) {
@@ -117,6 +129,7 @@ export default defineComponent({
         Registro guardado correctamente, en memoria.
       `;
       isAlertOpen.value = true;
+      onResetProducer();
     };
 
     return {

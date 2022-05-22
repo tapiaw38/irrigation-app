@@ -1,5 +1,6 @@
 import producerRouter from "../modules/producer/router";
 import userRouter from "../modules/user/router";
+import sectionRouter from "../modules/section/router";
 import shiftRouter from "../modules/shift/router";
 
 // guards
@@ -32,6 +33,11 @@ const routes = [
     path: "/user",
     beforeEnter: [isAuthenticatedGuard],
     ...userRouter,
+  },
+  {
+    path: "/section",
+    beforeEnter: [isAuthenticatedGuard],
+    ...sectionRouter,
   },
   {
     path: "/shift",

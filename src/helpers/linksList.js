@@ -13,6 +13,7 @@ const linksList = [
     link: "producer",
     is_home: true,
   },
+  /*
   {
     title: "TURNOS DE RIEGO",
     caption: "",
@@ -20,11 +21,19 @@ const linksList = [
     link: "shifts",
     is_home: true,
   },
+  */
   {
     title: "PRODUCCIONES",
     caption: "",
     icon: "las la-seedling",
     link: "production",
+    is_home: true,
+  },
+  {
+    title: "SECCIONES",
+    caption: "",
+    icon: "las la-object-ungroup",
+    link: "sections",
     is_home: true,
   },
   {
