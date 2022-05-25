@@ -1,73 +1,38 @@
-export const addProducers = (state, producers) => {
-  producers.map(producer => {
-    state.producers = [{ ...producer }, ...state.producers];
+export const addSections = (state, sections) => {
+  sections.map(section => {
+    state.sections = [{ ...section }, ...state.sections];
   });
 };
 
-export const addProductions = (state, productions) => {
-  productions.map(production => {
-    state.productions = [{ ...production }, ...state.productions];
-  }
-  );
+export const addSectionsStorage = (state, section) => {
+  localStorage.setItem('sectionsStorage', JSON.stringify([...state.sectionsStorage, section.value]));
+  state.sectionsStorage = JSON.parse(localStorage.getItem('sectionsStorage'));
 };
 
-export const addProducerStorage = (state, producer) => {
-  localStorage.setItem('producersStorage', JSON.stringify([...state.producersStorage, producer.value]));
-  state.producersStorage = JSON.parse(localStorage.getItem('producersStorage'));
+export const setSections = (state, sections) => {
+  state.sections = sections;
 };
 
-export const addProductionStorage = (state, production) => {
-  localStorage.setItem('productionsStorage', JSON.stringify([...state.productionsStorage, production.value]));
-  state.productionsStorage = JSON.parse(localStorage.getItem('productionsStorage'));
-}
+export const setSectionById = (state, section) => {
+  state.section = section;
+};
 
-export const setProducers = (state, producers) => {
-  state.producers = producers;
-}
+export const updateSection = (state, section) => {
+  const idx = state.sections.map(s => s.id).indexOf(section.id);
+  state.sections[idx] = section;
+};
 
-export const setProductions = (state, productions) => {
-  state.productions = productions;
-}
+export const deleteSection = (state, section) => {
+  const idx = state.sections.map(s => s.id).indexOf(section.id);
+  state.sections.splice(idx, 1);
+};
 
-export const setProducerById = (state, producer) => {
-  state.producer = producer;
-}
+export const setSectionsStorage = (state, sections) => {
+  localStorage.setItem('allSectionsStorage', JSON.stringify(sections));
+  state.allSectionsStorage = JSON.parse(localStorage.getItem('allSectionsStorage'));
+};
 
-export const setProductionById = (state, production) => {
-  state.production = production;
-}
-
-export const updateProducer = (state, producer) => {
-  const idx = state.producers.map(p => p.id).indexOf(producer.id);
-  state.producers[idx] = producer;
-}
-
-export const updateProduction = (state, production) => {
-  const idx = state.productions.map(p => p.id).indexOf(production.id);
-  state.productions[idx] = production;
-}
-
-export const deleteProducer = (state, producer) => {
-  const idx = state.producers.map(p => p.id).indexOf(producer.id);
-  state.producers.splice(idx, 1);
-}
-
-export const deleteProduction = (state, production) => {
-  const idx = state.productions.map(p => p.id).indexOf(production.id);
-  state.productions.splice(idx, 1);
-}
-
-export const setProducerStorage = (state, producers) => {
-  localStorage.setItem('allProducerStorage', JSON.stringify(producers));
-  state.allProducerStorage = JSON.parse(localStorage.getItem('allProducerStorage'));
-}
-
-export const deleteProducersStorage = (state) => {
-  localStorage.removeItem('producersStorage');
-  state.producersStorage = JSON.parse(localStorage.getItem('producersStorage'));
-}
-
-export const deleteProductionsStorage = (state) => {
-  localStorage.removeItem('productionsStorage');
-  state.productionsStorage = JSON.parse(localStorage.getItem('productionsStorage'));
-}
+export const deleteSectionsStorage = (state) => {
+  localStorage.removeItem('sectionsStorage');
+  state.sectionsStorage = JSON.parse(localStorage.getItem('sectionsStorage'));
+};

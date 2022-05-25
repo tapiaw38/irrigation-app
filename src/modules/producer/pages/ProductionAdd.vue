@@ -11,7 +11,7 @@
         <span>Agregar Producción</span>
       </q-toolbar-title>
       <div class="q-gutter-md text-center">
-        <q-form @submit="onCreateProduction()" @reset="onResetProduction">
+        <q-form @submit="onCreateProduction()">
           <q-select
             :options="options"
             label="Productor"

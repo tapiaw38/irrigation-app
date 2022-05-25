@@ -9,5 +9,11 @@ export default {
       component: () =>
         import(/* webpackChunkName: "sections" */ "../pages/Sections")
     },
+    {
+      path: "section/add",
+      name: "section_add",
+      component: () =>
+        import(/* webpackChunkName: "sectionAdd" */ "../pages/SectionAdd")
+    },
   ],
 };

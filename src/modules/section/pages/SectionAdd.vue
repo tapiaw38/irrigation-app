@@ -3,49 +3,24 @@
     <div class="q-gutter-md" style="max-width: 700px">
       <q-toolbar-title class="flex-column items-center content-center">
         <q-icon
-          name="las la-users"
+          name="las la-object-ungroup"
           color="primary"
           size="2.2em"
           class="q-pa-md"
         />
-        <span>Agregar Productor</span>
+        <span>Agregar Sección</span>
       </q-toolbar-title>
       <div class="q-gutter-md text-center">
-        <q-form @submit="onCreateProducer()">
+        <q-form @submit="onCreateSection()">
           <q-input
-            v-model="producerForm.first_name"
-            label="Nombre"
+            v-model="sectionForm.section_number"
+            label="Número de Sección"
             type="text"
             class="q-mr-sm"
           />
           <q-input
-            v-model="producerForm.last_name"
-            label="Apellido"
-            type="text"
-            class="q-mr-sm"
-          />
-          <q-input
-            v-model="producerForm.document_number"
-            label="DNI"
-            type="number"
-            class="q-mr-sm"
-          />
-          <q-input
-            v-model="producerForm.birth_date"
-            label="Fecha de Nacimiento"
-            type="date"
-            stack-label
-            class="q-mr-sm"
-          />
-          <q-input
-            v-model="producerForm.phone_number"
-            label="Teléfono"
-            type="number"
-            class="q-mr-sm"
-          />
-          <q-input
-            v-model="producerForm.address"
-            label="Dirección"
+            v-model="sectionForm.name"
+            label="Descripción"
             type="text"
             class="q-mr-sm"
           />
@@ -71,7 +46,7 @@
 import { defineComponent, ref } from "vue";
 
 // composables
-import useProducer from "../composables/useProducer";
+import useSection from "../composables/useSection";
 
 // components
 import Alert from "../../../components/Alert.vue";
@@ -82,7 +57,7 @@ export default defineComponent({
     Alert,
   },
   setup() {
-    const { createProducerStorage, producersStorage } = useProducer();
+    const { createSectionStorage } = useSection();
 
     // alert
     let headerMessage = ref("");
@@ -94,29 +69,21 @@ export default defineComponent({
     };
 
     // form
-    const producerForm = ref({
-      first_name: "",
-      last_name: "",
-      document_number: "",
-      address: "",
-      phone: "",
-      birth_date: "",
+    const sectionForm = ref({
+      section_number: "",
+      name: "",
     });
 
     // on reset form
-    const onResetProducer = () => {
-      producerForm.value = {
-        first_name: "",
-        last_name: "",
-        document_number: "",
-        address: "",
-        phone: "",
-        birth_date: "",
+    const onResetSection = () => {
+      sectionForm.value = {
+        section_number: "",
+        name: "",
       };
     };
 
-    const onCreateProducer = async () => {
-      const { ok, message } = await createProducerStorage(producerForm);
+    const onCreateSection = async () => {
+      const { ok, message } = await createSectionStorage(sectionForm);
       if (!ok) {
         headerMessage.value = "Error";
         alertMessage.value = message;
@@ -124,18 +91,17 @@ export default defineComponent({
         return;
       }
 
-      headerMessage.value = "Productor Agregado";
+      headerMessage.value = "Seccion Agregada";
       alertMessage.value = `
         Registro guardado correctamente, en memoria.
       `;
       isAlertOpen.value = true;
-      onResetProducer();
+      onResetSection();
     };
 
     return {
-      producerForm,
-      onCreateProducer,
-      producersStorage,
+      sectionForm,
+      onCreateSection,
       headerMessage,
       alertMessage,
       isAlertOpen,

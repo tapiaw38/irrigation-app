@@ -135,7 +135,7 @@ export default defineComponent({
 
     const productionItems = [
       "Productor",
-      "Numerp de lote",
+      "Número de lote",
       "Partida",
       "Matricula catastral",
       "Producción",

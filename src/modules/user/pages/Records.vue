@@ -65,6 +65,34 @@
             />
           </td>
         </tr>
+        <tr v-if="sectionsStorage?.length > 0">
+          <td class="text-left">Guardado en dispositivo</td>
+          <td class="text-left">Secciones</td>
+          <td class="text-left">{{ sectionsStorage.length }}</td>
+          <td class="text-left">
+            <q-btn
+              round
+              color="secondary"
+              icon="las la-cloud-upload-alt"
+              class="q-mr-sm"
+              @click="onCreateSections()"
+            />
+            <q-btn
+              round
+              text-color="primary"
+              icon="las la-file"
+              class="q-mr-sm"
+              @click="onToggleModal('section')"
+            />
+            <q-btn
+              round
+              text-color="negative"
+              icon="las la-trash-alt"
+              class="q-mr-sm"
+              @click="deleteSectionStorage()"
+            />
+          </td>
+        </tr>
       </tbody>
     </q-markup-table>
     <!-- alert -->
@@ -104,10 +132,11 @@ import { defineComponent, ref } from "vue";
 // helpers
 import columnsProducer from "../helpers/columnsProducer";
 import columnsProduction from "../helpers/columnsProduction";
+import columnsSection from "../helpers/columnsSection";
 
 // composables
 import useProducer from "../../producer/composables/useProducer";
-
+import useSection from "../../section/composables/useSection";
 // components
 import Alert from "../../../components/Alert.vue";
 import FullModal from "../../../components/FullModal.vue";
@@ -127,6 +156,8 @@ export default defineComponent({
       deleteProducersStorage,
       deleteProductionsStorage,
     } = useProducer();
+    const { sectionsStorage, createSection, deleteSectionStorage } =
+      useSection();
     const producerItems = ["Estado", "Registro", "Cantidad", ""];
 
     // alert
@@ -168,6 +199,11 @@ export default defineComponent({
           rows.value = productions;
           columns.value = columnsProduction;
           break;
+        case "section":
+          tableName.value = "secciones";
+          rows.value = sectionsStorage.value;
+          columns.value = columnsSection;
+          break;
         default:
           break;
       }
@@ -201,7 +237,7 @@ export default defineComponent({
       isAlertOpen.value = true;
     };
 
-    // producer create
+    // production create
     const onCreateProductions = async () => {
       let productions = productionsStorage.value.map((p) => {
         return {
@@ -239,6 +275,32 @@ export default defineComponent({
       isAlertOpen.value = true;
     };
 
+    // section create
+    const onCreateSections = async () => {
+      const { ok, message } = await createSection(sectionsStorage.value);
+      if (!ok) {
+        headerMessage.value = "Error";
+        alertMessage.value = message;
+        isAlertOpen.value = true;
+        return;
+      }
+
+      headerMessage.value = "Conexión exitosa!";
+      alertMessage.value = `
+        Se ha conectado con el servidor.
+        Registros guardados correctamente.
+      `;
+      const data = await deleteSectionStorage();
+      if (!data.ok) {
+        headerMessage.value = "Error";
+        alertMessage.value =
+          "No se pudo eliminar las secciones," + data.message;
+        isAlertOpen.value = true;
+        return;
+      }
+      isAlertOpen.value = true;
+    };
+
     // data table
     let tableName = ref("");
     const columns = ref([]);
@@ -248,12 +310,14 @@ export default defineComponent({
       producerItems,
       producersStorage,
       productionsStorage,
+      sectionsStorage,
       headerMessage,
       alertMessage,
       isAlertOpen,
       closeAlert,
       onCreateProducers,
       onCreateProductions,
+      onCreateSections,
       headerModalMessage,
       maximizedToggle,
       isModalOpen,
@@ -264,6 +328,7 @@ export default defineComponent({
       tableName,
       deleteProductionsStorage,
       deleteProducersStorage,
+      deleteSectionStorage,
     };
   },
 });

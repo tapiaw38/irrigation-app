@@ -6,6 +6,7 @@ import ui from "./ui";
 import auth from "../modules/authentication/store/auth";
 import user from "../modules/user/store/user";
 import producer from "../modules/producer/store/producer";
+import section from "src/modules/section/store/section";
 
 /*
  * If not building with SSR mode, you can
@@ -24,6 +25,7 @@ export default store(function (/* { ssrContext } */) {
       auth,
       user,
       producer,
+      section,
     },
 
     // enable strict mode (adds overhead!)

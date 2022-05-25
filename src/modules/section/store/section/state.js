@@ -1,18 +1,13 @@
 export default function () {
   return {
     isLoading: true,
-    producers: [],
-    producer: null,
-    productions: [],
-    production: null,
-    producersStorage: localStorage.getItem('producersStorage')
-      ? JSON.parse(localStorage.getItem('producersStorage'))
+    sections: [],
+    section: null,
+    sectionsStorage: localStorage.getItem('sectionsStorage')
+      ? JSON.parse(localStorage.getItem('sectionsStorage'))
       : [],
-    allProducerStorage: localStorage.getItem('allProducerStorage')
-      ? JSON.parse(localStorage.getItem('allProducerStorage'))
-      : [],
-    productionsStorage: localStorage.getItem('productionsStorage')
-      ? JSON.parse(localStorage.getItem('productionsStorage'))
+    allSectionsStorage: localStorage.getItem('allSectionsStorage')
+      ? JSON.parse(localStorage.getItem('allSectionsStorage'))
       : [],
   };
 }

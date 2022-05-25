@@ -3,6 +3,5 @@
 	"appName": "RegAr",
 	"bundledWebRuntime": false,
 	"npmClient": "yarn",
-	"webDir": "www",
-	"flavor": "qa"
+	"webDir": "www"
 }
