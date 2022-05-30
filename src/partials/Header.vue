@@ -24,9 +24,7 @@
           push
           glossy
           no-caps
-          icon="las la-user"
           dropdown-icon="las la-angle-down"
-          :label="String(user?.first_name)"
           @click="
             $router.push({
               name: 'profile',
@@ -34,6 +32,17 @@
             })
           "
         >
+          <template v-slot:label>
+            <div class="row items-center no-wrap">
+              <div class="subtitle2 gary">{{ user?.first_name }}</div>
+              <div class="text-center">
+                <q-avatar size="2em" class="q-ml-sm">
+                  <q-img v-if="user.picture" :src="user?.picture" />
+                  <q-img v-else src="../assets/img/user.png" />
+                </q-avatar>
+              </div>
+            </div>
+          </template>
           <q-list>
             <q-item
               clickable
@@ -47,11 +56,11 @@
             >
               <q-item-section avatar>
                 <q-avatar>
-                  <q-img src="https://cdn.quasar.dev/img/avatar1.jpg" />
+                  <q-icon name="las la-user" class="text-primary" size="2em" />
                 </q-avatar>
               </q-item-section>
               <q-item-section>
-                <q-item-label>{{ user?.first_name }}</q-item-label>
+                <q-item-label>Mi perfil</q-item-label>
               </q-item-section>
             </q-item>
 

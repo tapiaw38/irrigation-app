@@ -32,6 +32,12 @@
           <td class="text-left">
             <q-btn
               round
+              text-color="info"
+              icon="las la-image"
+              class="q-mr-sm"
+            />
+            <q-btn
+              round
               text-color="secondary"
               icon="las la-file"
               class="q-mr-sm"
@@ -42,6 +48,7 @@
                 })
               "
             />
+
             <q-btn
               round
               text-color="secondary"
@@ -164,7 +171,8 @@ export default defineComponent({
     // submit form producer update
     const submitFormProduction = async (form) => {
       form.value.producer = form.value.producer.value;
-      form.value.district = form.value.district?.value || null;
+      form.value.area = Number(form.value.area);
+      form.value.district = form.value.district.value || null;
       const { ok, message } = await editProduction(form.value);
       if (ok) {
         closeModal();

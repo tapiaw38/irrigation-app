@@ -19,10 +19,16 @@ const useAuth = () => {
     return resp;
   };
 
+  const updateUserAvatar = (profile) => {
+    const resp = store.dispatch("auth/setUserAvatar", profile);
+    return resp;
+  };
+
   return {
     handleLogin,
     handleLogout,
     updateUserSession,
+    updateUserAvatar,
     authStatus: computed(() => store.getters["auth/currentState"]),
     user: computed(() => store.getters["auth/userSession"]),
   };

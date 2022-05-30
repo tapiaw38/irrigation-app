@@ -12,11 +12,11 @@ const useUser = () => {
   const editUser = (user) => {
     const resp = store.dispatch("user/updateUser", user);
     return resp;
-  }
+  };
 
   const deleteUser = (user) => {
     store.dispatch("user/deleteUser", user);
-  }
+  };
 
   onMounted(() => {
     store.dispatch("user/loadUsers");

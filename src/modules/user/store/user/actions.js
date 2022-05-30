@@ -13,12 +13,12 @@ export const loadUsers = async ({ commit }) => {
 export const updateUser = async ({ commit }, user) => {
   try {
     const { data } = await api.put(`/users/partial/${user.id}`, user);
-    commit('updateUser', data.response)
+    commit("updateUser", data.response);
     return { ok: true };
   } catch (error) {
     return { ok: false, message: error.response.data };
   }
-}
+};
 
 export const addUser = async ({ commit }, user) => {
   try {
@@ -31,11 +31,9 @@ export const addUser = async ({ commit }, user) => {
 };
 
 export const deleteUser = async ({ commit }, user) => {
-
   const userDeactivated = { ...user };
   userDeactivated.is_active = userDeactivated.is_active ? false : true;
 
   const { data } = await api.put(`/users/partial/${user.id}`, userDeactivated);
-  commit('deleteUser', data.response)
-}
-
+  commit("deleteUser", data.response);
+};

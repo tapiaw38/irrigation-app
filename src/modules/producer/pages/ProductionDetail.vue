@@ -77,10 +77,25 @@
           <div class="map-production" id="map"></div>
         </div>
       </div>
-      <div class="flex">
-        <q-img
-          src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww2.agrositio.com.ar%2Fimagenes_contenidos%2Fv_187660_26501125.jpg&f=1&nofb=1"
-        />
+      <div class="flex container-image">
+        <div class="image-icon">
+          <q-img src="../../../assets/img/undraw_images.svg" />
+        </div>
+        <div
+          v-if="!production?.picture"
+          class="flex justify-center content-center"
+        >
+          <div class="title2 gray justify-center flex items-center q-mr-sm">
+            No hay imagen de la producción
+          </div>
+          <q-img
+            src="../../../assets/img/undraw_zoom.svg"
+            style="width: 300px"
+          />
+        </div>
+        <div v-else class="flex justify-center content-center">
+          <q-img :src="production?.picture" style="width: 300px" />
+        </div>
       </div>
     </div>
     <!--Dialog content-->
@@ -153,6 +168,19 @@ export default defineComponent({
   grid-gap: 1em;
 
   @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.container-image {
+  padding-top: 3%;
+  display: grid;
+  grid-template-columns: 30% 70%;
+
+  @media (max-width: 600px) {
+    .image-icon {
+      display: none;
+    }
     grid-template-columns: 1fr;
   }
 }

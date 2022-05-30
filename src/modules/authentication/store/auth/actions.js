@@ -52,3 +52,19 @@ export const setUser = async ({ commit }, user) => {
     return { ok: false, message: error.response.data };
   }
 }
+
+export const setUserAvatar = async ({ commit }, profile) => {
+  if (!profile) return { ok: false, message: "Profile is required" };
+  try {
+    const formData = new FormData();
+    formData.append('picture', profile.picture);
+    formData.append('is_active', profile.is_active);
+    formData
+
+    const { data } = await api.put(`/users/update/avatar/${profile.id}`, formData);
+    commit('setUserProfile', data.response)
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, message: error.response.data };
+  }
+}

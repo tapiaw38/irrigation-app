@@ -1,13 +1,10 @@
-//import store from '../../../../store/index'
-
 export const setUsers = (state, users) => {
   state.users = users;
   state.isLoading = false;
 };
 
 export const updateUser = (state, user) => {
-  //store().commit("auth/setUser", user);
-  const idx = state.users.map(u => u.id).indexOf(user.id);
+  const idx = state.users.map((u) => u.id).indexOf(user.id);
   state.users[idx] = user;
   state.isLoading = false;
 };
@@ -18,7 +15,7 @@ export const addUser = (state, user) => {
 };
 
 export const deleteUser = (state, user) => {
-  const idx = state.users.map(u => u.id).indexOf(user.id);
+  const idx = state.users.map((u) => u.id).indexOf(user.id);
   state.users[idx] = user;
   state.isLoading = false;
-}
+};

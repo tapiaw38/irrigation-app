@@ -8,7 +8,13 @@
       <q-card-section
         class="q-pt-none row justify-content-center content-center"
       >
-        <q-icon :color="iconColor" size="md" :name="icon" class="q-mr-sm" />
+        <q-icon
+          v-if="showIcon"
+          :color="iconColor"
+          size="md"
+          :name="icon"
+          class="q-mr-sm"
+        />
         <div class="subtitle-2 row justify-center items-center">
           {{ message }}
         </div>
@@ -49,6 +55,10 @@ export default {
     iconColor: {
       type: String,
       default: "primary",
+    },
+    showIcon: {
+      type: Boolean,
+      default: true,
     },
   },
 

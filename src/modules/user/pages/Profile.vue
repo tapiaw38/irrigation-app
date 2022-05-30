@@ -10,14 +10,15 @@
               <div>
                 <div class="row justify-center text-center">
                   <q-avatar class="avatar">
-                    <q-img :src="'https://cdn.quasar.dev/img/avatar1.jpg'" />
+                    <q-img v-if="user.picture" :src="user?.picture" />
+                    <q-img v-else src="../../../assets/img/user.png" />
                     <div class="edit-image">
                       <q-btn
                         round
                         color="primary"
                         flat
                         icon="las la-camera"
-                        @click="$emit('edit-image')"
+                        @click="openAlert"
                       />
                     </div>
                   </q-avatar>
@@ -79,6 +80,54 @@
     <div class="col-3 q-ml-lg q-mt-sm profile-icon">
       <q-img src="../../../assets/img/undraw_profile_details.svg" />
     </div>
+    <!-- change avatar-->
+    <alert
+      :dialog="isAlertOpen"
+      :headerMessage="headerMessage"
+      :message="alertMessage"
+      :showIcon="false"
+      @close="closeAlert()"
+    >
+      <template v-slot:body>
+        <div class="flex justify-center q-mb-sm" style="width: 300px">
+          <q-avatar class="avatar" size="6rem">
+            <q-img
+              v-if="user.picture && imageSelected === null"
+              :src="user?.picture"
+            />
+            <q-img
+              v-else-if="!user.picture && imageSelected === null"
+              src="../../../assets/img/user.png"
+            />
+            <q-img v-else :src="imageSelected" />
+          </q-avatar>
+        </div>
+        <div class="flex justify-center">
+          <q-input
+            @update:model-value="
+              (val) => {
+                onSelectedImage(val[0]);
+              }
+            "
+            filled
+            type="file"
+            class="hidden image-input"
+          />
+          <q-btn
+            round
+            icon="las la-arrow-circle-up"
+            color="primary"
+            @click="onSelectImage"
+          />
+          <q-btn
+            label="Aplicar"
+            color="primary"
+            class="btn-block"
+            @click="onEditAvatar"
+          />
+        </div>
+      </template>
+    </alert>
     <!--alert message-->
     <q-dialog v-model="ShowEditProfile">
       <q-card class="q-pa-lg">
@@ -141,14 +190,21 @@
 <script>
 import { defineComponent, ref } from "vue";
 
+// components
+import Alert from "../../../components/Alert";
+
 // composables
 import useAuth from "../../authentication/composables/useAuth";
-import useUser from "../composables/useUser";
+import useImageSelected from "../../../composables/useImageSelected";
 
 export default defineComponent({
   name: "Profile",
+  components: {
+    Alert,
+  },
   setup() {
-    const { user, updateUserSession } = useAuth();
+    const { user, updateUserSession, updateUserAvatar } = useAuth();
+    const { imageSelected, image, onSelectedImage } = useImageSelected();
 
     let userForm = ref({
       id: user.value.id,
@@ -178,12 +234,52 @@ export default defineComponent({
       console.log(message);
     };
 
+    // alert
+    let headerMessage = ref("");
+    let alertMessage = ref("");
+    let isAlertOpen = ref(false);
+
+    const openAlert = (header, message) => {
+      headerMessage.value = "Editar Perfil";
+      isAlertOpen.value = true;
+    };
+
+    const closeAlert = () => {
+      isAlertOpen.value = false;
+    };
+
+    const onSelectImage = () => {
+      document.querySelector(".image-input").click();
+    };
+
+    const onEditAvatar = async () => {
+      let profile = {
+        id: user.value.id,
+        picture: image.value,
+      };
+      const { ok } = await updateUserAvatar(profile);
+      if (ok) {
+        closeAlert();
+        return;
+      }
+    };
+
     return {
       ShowEditProfile,
       ToggleAlertEditProfile,
       user,
       userForm,
       onUpdatedUser,
+      // alert
+      headerMessage,
+      alertMessage,
+      isAlertOpen,
+      closeAlert,
+      openAlert,
+      imageSelected,
+      onEditAvatar,
+      onSelectedImage,
+      onSelectImage,
     };
   },
 });

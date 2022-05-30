@@ -26,7 +26,8 @@
             <td class="text-left">
               <q-item-section avatar>
                 <q-avatar>
-                  <q-img src="https://cdn.quasar.dev/img/avatar1.jpg" />
+                  <q-img v-if="user.picture" :src="user?.picture" />
+                  <q-img v-else src="../../../assets/img/user.png" />
                 </q-avatar>
               </q-item-section>
             </td>

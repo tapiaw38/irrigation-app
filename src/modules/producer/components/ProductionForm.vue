@@ -53,7 +53,8 @@
     <q-input
       label="Superficie en hectareas"
       v-model="productionForm.area"
-      type="text"
+      type="number"
+      step="any"
       class="q-mr-sm"
     />
     <q-input
@@ -82,7 +83,6 @@ import { onMounted, ref } from "vue";
 import useProducer from "../composables/useProducer";
 
 // helpers
-import { formatDateDatabase } from "../../../helpers/formatDate";
 import districtList from "../../../helpers/districtList";
 
 export default {
@@ -145,7 +145,10 @@ export default {
         productionForm.value.name = props.productionData.name;
         productionForm.value.production_type =
           props.productionData.production_type;
-        productionForm.value.district = props.productionData.district;
+        productionForm.value.district = {
+          label: props.productionData?.district,
+          value: props.productionData?.district,
+        };
         productionForm.value.area = props.productionData.area;
         productionForm.value.latitude = props.productionData.latitude;
         productionForm.value.longitude = props.productionData.longitude;

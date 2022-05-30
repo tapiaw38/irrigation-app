@@ -30,3 +30,9 @@ export const setUser = (state, user) => {
   localStorage.setItem("user", JSON.stringify(user));
   state.userSession = JSON.parse(localStorage.getItem("user"));
 }
+
+export const setUserProfile = (state, user) => {
+  localStorage.removeItem("user")
+  localStorage.setItem("user", JSON.stringify(user));
+  state.userSession = JSON.parse(localStorage.getItem("user"));
+};

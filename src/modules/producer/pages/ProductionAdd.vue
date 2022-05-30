@@ -98,7 +98,7 @@
               <strong class="q-ml-sm">{{ positionLoader }}</strong>
             </div>
           </div>
-          <div>
+          <div class="hidden">
             <q-btn color="white" round @click="captureImage" class="q-ma-md">
               <q-icon color="primary" name="las la-camera" />
             </q-btn>
@@ -117,7 +117,7 @@
           </div>
           <q-btn
             type="submit"
-            class="full-width"
+            class="full-width q-mt-md"
             color="primary"
             label="Agregar"
           />
@@ -229,6 +229,7 @@ export default defineComponent({
 
     // create production
     const onCreateProduction = async () => {
+      production.value.picture = imageSrc.value;
       const { ok, message } = await createProductionStorage(production);
       if (!ok) {
         headerMessage.value = "Error";
