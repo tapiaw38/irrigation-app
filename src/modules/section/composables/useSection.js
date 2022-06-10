@@ -14,6 +14,11 @@ const useSection = () => {
     return resp;
   };
 
+  const createIntakeStorage = async (intake) => {
+    const resp = store.dispatch("section/addIntakesStorage", intake);
+    return resp;
+  };
+
   const deleteSectionStorage = async (section) => {
     const resp = store.dispatch("section/deleteSectionsStorage", section);
     return resp;
@@ -51,6 +56,7 @@ const useSection = () => {
     allSectionsStorage: computed(() => store.getters["section/getAllSectionsStorage"]),
     createSection,
     createSectionStorage,
+    createIntakeStorage,
     deleteSectionStorage,
     downloadSections,
     getSectionById,

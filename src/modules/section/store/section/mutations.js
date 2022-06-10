@@ -9,6 +9,12 @@ export const addSectionsStorage = (state, section) => {
   state.sectionsStorage = JSON.parse(localStorage.getItem('sectionsStorage'));
 };
 
+export const addIntakesStorage = (state, intake) => {
+  if (!intake) return new Error('intake not saved');
+  localStorage.setItem('intakesStorage', JSON.stringify([...state.intakesStorage, intake.value]));
+  state.intakesStorage = JSON.parse(localStorage.getItem('intakesStorage'));
+};
+
 export const setSections = (state, sections) => {
   state.sections = sections;
 };

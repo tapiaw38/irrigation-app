@@ -70,6 +70,15 @@ export const addSectionsStorage = async ({ commit }, section) => {
   }
 };
 
+export const addIntakesStorage = async ({ commit }, intake) => {
+  try {
+    commit("addIntakesStorage", intake);
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, message: new Error('intake not saved') };
+  }
+};
+
 export const deleteSectionsStorage = async ({ commit }) => {
   try {
     commit("deleteSectionsStorage");

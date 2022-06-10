@@ -9,5 +9,8 @@ export default function () {
     allSectionsStorage: localStorage.getItem('allSectionsStorage')
       ? JSON.parse(localStorage.getItem('allSectionsStorage'))
       : [],
+    intakesStorage: localStorage.getItem('intakesStorage')
+      ? JSON.parse(localStorage.getItem('intakesStorage'))
+      : [],
   };
 }

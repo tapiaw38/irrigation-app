@@ -217,8 +217,8 @@ export default defineComponent({
     // determine position
     const determinePosition = () => {
       positionLoader.value = "determinando...";
-      production.value.latitude = position.value.coords.latitude;
-      production.value.longitude = position.value.coords.longitude;
+      production.value.latitude = position.value.coords?.latitude;
+      production.value.longitude = position.value.coords?.longitude;
       positionLoader.value = "Posición actualizada";
     };
 

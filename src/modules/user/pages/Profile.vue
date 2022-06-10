@@ -1,6 +1,6 @@
 <template>
   <q-page class="row justify-center q-mt-lg content-profile">
-    <div class="col-6 q-mt-lg">
+    <div class="card col-6 q-mt-lg">
       <div>
         <q-card class="my-card">
           <div class="row content-card">
@@ -286,6 +286,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.card {
+  max-width: 400px;
+  @media screen and (max-width: 700px) {
+    width: 80%;
+  }
+}
 .content-profile {
   .content-card {
     display: grid;
