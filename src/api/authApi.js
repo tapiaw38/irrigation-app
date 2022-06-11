@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const authApi = axios.create({
-  baseURL: "http://localhost:8000",//"https://irrigation-api-tinogasta.herokuapp.com",
+  baseURL: process.env.VUE_APP_APIBASEURL,
 });
 
 export default authApi;
