@@ -96,7 +96,7 @@ export default defineComponent({
     const { createIntakeStorage, allSectionStorage } = useSection();
     const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
 
-    // producers option for select
+    // intakes option for select
     let options = allSectionStorage.value.map((section) => {
       return {
         label: `${section.section_number}`,

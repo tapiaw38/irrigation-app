@@ -93,6 +93,34 @@
             />
           </td>
         </tr>
+        <tr v-if="intakesStorage?.length > 0">
+          <td class="text-left">Guardado en dispositivo</td>
+          <td class="text-left">Tomas de Agua</td>
+          <td class="text-left">{{ intakesStorage.length }}</td>
+          <td class="text-left">
+            <q-btn
+              round
+              color="secondary"
+              icon="las la-cloud-upload-alt"
+              class="q-mr-sm"
+              @click="onCreateIntakes()"
+            />
+            <q-btn
+              round
+              text-color="primary"
+              icon="las la-file"
+              class="q-mr-sm"
+              @click="onToggleModal('intake')"
+            />
+            <q-btn
+              round
+              text-color="negative"
+              icon="las la-trash-alt"
+              class="q-mr-sm"
+              @click="deleteIntakeStorage()"
+            />
+          </td>
+        </tr>
       </tbody>
     </q-markup-table>
     <!-- alert -->
@@ -133,10 +161,14 @@ import { defineComponent, ref } from "vue";
 import columnsProducer from "../helpers/columnsProducer";
 import columnsProduction from "../helpers/columnsProduction";
 import columnsSection from "../helpers/columnsSection";
+import columnsIntake from "../helpers/columnsIntake";
 
 // composables
 import useProducer from "../../producer/composables/useProducer";
 import useSection from "../../section/composables/useSection";
+import useAlert from "../../../composables/useAlert";
+import useModal from "../../../composables/useModal";
+
 // components
 import Alert from "../../../components/Alert.vue";
 import FullModal from "../../../components/FullModal.vue";
@@ -156,27 +188,19 @@ export default defineComponent({
       deleteProducersStorage,
       deleteProductionsStorage,
     } = useProducer();
-    const { sectionsStorage, createSection, deleteSectionStorage } =
-      useSection();
+    const {
+      sectionsStorage,
+      createSection,
+      createIntake,
+      deleteSectionStorage,
+      intakesStorage,
+      deleteIntakeStorage,
+    } = useSection();
+    const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
+    const { headerModalMessage, maximizedToggle, isModalOpen, closeModal } =
+      useModal();
+
     const producerItems = ["Estado", "Registro", "Cantidad", ""];
-
-    // alert
-    let headerMessage = ref("");
-    let alertMessage = ref("");
-    let isAlertOpen = ref(false);
-
-    const closeAlert = () => {
-      isAlertOpen.value = false;
-    };
-
-    // modal
-    let headerModalMessage = ref("");
-    let maximizedToggle = ref(true);
-    let isModalOpen = ref(false);
-
-    const closeModal = () => {
-      isModalOpen.value = false;
-    };
 
     // on toggle modal
     const onToggleModal = (value) => {
@@ -203,6 +227,17 @@ export default defineComponent({
           tableName.value = "secciones";
           rows.value = sectionsStorage.value;
           columns.value = columnsSection;
+          break;
+        case "intake":
+          tableName.value = "tomas de agua";
+          let intakes = intakesStorage.value.map((i) => {
+            return {
+              ...i,
+              section: i.section.label,
+            };
+          });
+          rows.value = intakes;
+          columns.value = columnsIntake;
           break;
         default:
           break;
@@ -250,7 +285,6 @@ export default defineComponent({
         };
       });
 
-      console.log(productions);
       const { ok, message } = await createProductions(productions);
       if (!ok) {
         headerMessage.value = "Error";
@@ -301,6 +335,39 @@ export default defineComponent({
       isAlertOpen.value = true;
     };
 
+    const onCreateIntakes = async () => {
+      let intakes = intakesStorage.value.map((i) => {
+        return {
+          ...i,
+          section: i.section.value,
+        };
+      });
+
+      const { ok, message } = await createIntake(intakes);
+
+      if (!ok) {
+        headerMessage.value = "Error";
+        alertMessage.value = message;
+        isAlertOpen.value = true;
+        return;
+      }
+
+      headerMessage.value = "Conexión exitosa!";
+      alertMessage.value = `
+        Se ha conectado con el servidor.
+        Registros guardados correctamente.
+      `;
+      const data = await deleteIntakeStorage();
+      if (!data.ok) {
+        headerMessage.value = "Error";
+        alertMessage.value =
+          "No se pudo eliminar las tomas de agua," + data.message;
+        isAlertOpen.value = true;
+        return;
+      }
+      isAlertOpen.value = true;
+    };
+
     // data table
     let tableName = ref("");
     const columns = ref([]);
@@ -311,6 +378,7 @@ export default defineComponent({
       producersStorage,
       productionsStorage,
       sectionsStorage,
+      intakesStorage,
       headerMessage,
       alertMessage,
       isAlertOpen,
@@ -318,6 +386,7 @@ export default defineComponent({
       onCreateProducers,
       onCreateProductions,
       onCreateSections,
+      onCreateIntakes,
       headerModalMessage,
       maximizedToggle,
       isModalOpen,
@@ -329,6 +398,7 @@ export default defineComponent({
       deleteProductionsStorage,
       deleteProducersStorage,
       deleteSectionStorage,
+      deleteIntakeStorage,
     };
   },
 });

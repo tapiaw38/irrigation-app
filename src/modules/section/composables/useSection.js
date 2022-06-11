@@ -29,6 +29,11 @@ const useSection = () => {
     return resp;
   };
 
+  const deleteIntakeStorage = async (intake) => {
+    const resp = store.dispatch("section/deleteIntakesStorage", intake);
+    return resp;
+  };
+
   const downloadSections = async () => {
     localStorage.removeItem("allSectionsStorage");
     const resp = await store.dispatch("section/loadSectionsStorage");
@@ -62,22 +67,34 @@ const useSection = () => {
 
   onMounted(() => {
     store.dispatch("section/loadSections");
+    store.dispatch("section/loadIntakes");
   });
 
   return {
     sections: computed(() => store.getters["section/getSections"]),
+    intakes: computed(() => store.getters["section/getIntakes"]),
     section: computed(() => store.getters["section/getSection"]),
-    sectionsStorage: computed(() => store.getters["section/getSectionsStorage"]),
-    allSectionStorage: computed(() => store.getters["section/getAllSectionsStorage"]),
+    intake: computed(() => store.getters["section/getIntake"]),
+    sectionsStorage: computed(
+      () => store.getters["section/getSectionsStorage"]
+    ),
+    intakesStorage: computed(() => store.getters["section/getIntakesStorage"]),
+    allSectionStorage: computed(
+      () => store.getters["section/getAllSectionsStorage"]
+    ),
     createSection,
+    createIntake,
     createSectionStorage,
     createIntakeStorage,
     deleteSectionStorage,
+    deleteIntakeStorage,
     downloadSections,
     getSectionById,
     editSection,
-    deleteSection
+    editIntake,
+    deleteSection,
+    deleteIntake,
   };
-}
+};
 
 export default useSection;

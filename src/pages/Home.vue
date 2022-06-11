@@ -116,6 +116,7 @@ import { useStore } from "vuex";
 // composables
 import useAuth from "../modules/authentication/composables/useAuth";
 import useProducer from "../modules/producer/composables/useProducer";
+import useSection from "../modules/section/composables/useSection";
 
 // helpers
 import linksList from "../helpers/linksList";
@@ -131,6 +132,7 @@ export default defineComponent({
   setup() {
     const { user } = useAuth();
     const { downloadProducers, allProducerStorage, producers } = useProducer();
+    const { downloadSections, allSectionStorage, sections } = useSection();
 
     const store = useStore();
     // alert
@@ -153,10 +155,11 @@ export default defineComponent({
     };
 
     const onImportData = async () => {
-      const { ok, message } = await downloadProducers();
+      const resProducer = await downloadProducers();
+      const resSection = await downloadSections();
       updateData();
 
-      if (ok) {
+      if (resProducer.ok && resSection.ok) {
         isAlertOpen.value = true;
         headerMessage.value = "Importando datos";
         alertMessage.value = "Se esta importando los datos correctamente";
@@ -166,7 +169,7 @@ export default defineComponent({
       }
       isAlertOpen.value = true;
       headerMessage.value = "Error al importar datos";
-      alertMessage.value = message;
+      alertMessage.value = "No se pudieron importar los datos";
       icon.value = "las la-times-circle";
       iconColor.value = "danger";
     };
@@ -179,11 +182,17 @@ export default defineComponent({
         isDataUpdated.value = false;
         return;
       }
+      if (sections.value.length !== allSectionStorage.value.length) {
+        isDataUpdated.value = false;
+        return;
+      }
+
       isDataUpdated.value = true;
     };
 
     const updateData = async () => {
       await store.dispatch("producer/loadProducers");
+      await store.dispatch("section/loadSections");
       await onCheckDataUpdated();
     };
 

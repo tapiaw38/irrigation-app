@@ -19,8 +19,9 @@
       <tbody>
         <template v-for="(intake, i) in intakes" :key="i">
           <tr>
-            <td class="text-left">{{ intakes.section_number }}</td>
-            <td class="text-left">{{ intakes.name }}</td>
+            <td class="text-left">{{ intake.section.section_number }}</td>
+            <td class="text-left">{{ intake.intake_number }}</td>
+            <td class="text-left">{{ intake.name }}</td>
             <td class="text-left">{{ formatDate(intake.updated_at) }}</td>
             <td class="text-left">
               <q-btn
@@ -59,9 +60,9 @@
       <template v-slot:body>
         <!-- content for the body slot -->
         <div class="q-pa-md">
-          <section-form
-            :sectionData="intakeData"
-            @submit-form-section="submitFormIntake"
+          <intake-form
+            :intakeData="intakeData"
+            @submit-form-intake="submitFormIntake"
           />
         </div>
       </template>
@@ -103,7 +104,7 @@ import { defineComponent, ref } from "vue";
 
 // components
 import FullModal from "../../../components/FullModal";
-import SectionForm from "../components/SectionForm";
+import IntakeForm from "../components/IntakeForm";
 import Alert from "../../../components/Alert.vue";
 
 // helpers
@@ -118,7 +119,7 @@ export default defineComponent({
   name: "Producers",
   components: {
     FullModal,
-    SectionForm,
+    IntakeForm,
     Alert,
   },
   setup() {
@@ -133,6 +134,7 @@ export default defineComponent({
       openModal,
     } = useModal();
     const intakeItems = [
+      "Seccion",
       "Número de Toma",
       "Descripción",
       "Fecha de modificación",

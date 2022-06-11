@@ -1,8 +1,5 @@
 <template>
   <form @submit="onSubmitIntake" class="q-gutter-md">
-    <div class="text-weight-bold text-subtitle1 text-primary">
-      Sección {{ sectionNumber }}
-    </div>
     <q-input
       v-model="intakeForm.intake_number"
       label="Número de Toma"
@@ -15,27 +12,18 @@
       type="text"
       class="q-mr-sm"
     />
-    <div class="row justify-start col-12">
-      <div class="col-9">
-        <q-input
-          v-model="intakeForm.latitude"
-          label="Latitud"
-          type="text"
-          class="q-mr-sm"
-        />
-        <q-input
-          v-model="intakeForm.longitude"
-          label="Longitud"
-          type="text"
-          class="q-mr-sm"
-        />
-      </div>
-      <div class="row justify-center content-center col-3 q-mt-lg q-pt-lg">
-        <q-btn color="primary" round @click="determinePosition()">
-          <q-icon name="las la-map-marker" />
-        </q-btn>
-      </div>
-    </div>
+    <q-input
+      v-model="intakeForm.latitude"
+      label="Latitud"
+      type="text"
+      class="q-mr-sm"
+    />
+    <q-input
+      v-model="intakeForm.longitude"
+      label="Longitud"
+      type="text"
+      class="q-mr-sm"
+    />
     <q-btn
       class="full-width q-mt-md"
       color="primary"
@@ -46,11 +34,7 @@
 </template>
 
 <script>
-import { onMounted, ref, computed } from "vue";
-
-//composables
-import useGeoloaction from "../../../composables/useGeolocation";
-import useAlert from "../../../composables/useAlert";
+import { onMounted, ref } from "vue";
 
 export default {
   name: "intakeForm",
@@ -61,9 +45,6 @@ export default {
     },
   },
   setup(props, { emit }) {
-    const { positionLoader, position } = useGeoloaction();
-    const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
-
     // form
     const intakeForm = ref({
       intake_number: "",
@@ -78,34 +59,20 @@ export default {
       emit("submit-form-intake", intakeForm);
     };
 
-    // determine position
-    const determinePosition = () => {
-      positionLoader.value = "determinando...";
-      intakeForm.value.latitude = position.value.coords?.latitude;
-      intakeForm.value.longitude = position.value.coords?.longitude;
-      positionLoader.value = "Posición actualizada";
-    };
-
     onMounted(() => {
       if (props.intakeData) {
+        intakeForm.value.id = props.intakeData.id;
+        intakeForm.value.section = props.intakeData.section.id;
         intakeForm.value.intake_number = props.intakeData.intake_number;
         intakeForm.value.name = props.intakeData.name;
-        intakeForm.value.section = props.intakeData?.section?.value.id;
+        intakeForm.value.latitude = props.intakeData.latitude;
+        intakeForm.value.longitude = props.intakeData.longitude;
       }
     });
 
     return {
-      headerMessage,
-      alertMessage,
-      isAlertOpen,
-      closeAlert,
       intakeForm,
       onSubmitIntake,
-      determinePosition,
-      positionLoader,
-      sectionNumber: computed(
-        () => props.intakeData?.section?.value.section_number
-      ),
     };
   },
 };
