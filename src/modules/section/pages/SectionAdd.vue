@@ -47,6 +47,7 @@ import { defineComponent, ref } from "vue";
 
 // composables
 import useSection from "../composables/useSection";
+import useAlert from "../../../composables/useAlert";
 
 // components
 import Alert from "../../../components/Alert.vue";
@@ -58,15 +59,7 @@ export default defineComponent({
   },
   setup() {
     const { createSectionStorage } = useSection();
-
-    // alert
-    let headerMessage = ref("");
-    let alertMessage = ref("");
-    let isAlertOpen = ref(false);
-
-    const closeAlert = () => {
-      isAlertOpen.value = false;
-    };
+    const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
 
     // form
     const sectionForm = ref({
@@ -82,6 +75,7 @@ export default defineComponent({
       };
     };
 
+    // on create section
     const onCreateSection = async () => {
       const { ok, message } = await createSectionStorage(sectionForm);
       if (!ok) {

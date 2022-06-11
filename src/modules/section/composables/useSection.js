@@ -9,6 +9,11 @@ const useSection = () => {
     return resp;
   };
 
+  const createIntake = async (intake) => {
+    const resp = await store.dispatch("section/addIntakes", intake);
+    return resp;
+  };
+
   const createSectionStorage = async (section) => {
     const resp = store.dispatch("section/addSectionsStorage", section);
     return resp;
@@ -40,8 +45,18 @@ const useSection = () => {
     return resp;
   };
 
+  const editIntake = (intake) => {
+    const resp = store.dispatch("section/updateIntake", intake);
+    return resp;
+  };
+
   const deleteSection = (section) => {
     const resp = store.dispatch("section/deleteSection", section);
+    return resp;
+  };
+
+  const deleteIntake = (intake) => {
+    const resp = store.dispatch("section/deleteIntake", intake);
     return resp;
   };
 
@@ -53,7 +68,7 @@ const useSection = () => {
     sections: computed(() => store.getters["section/getSections"]),
     section: computed(() => store.getters["section/getSection"]),
     sectionsStorage: computed(() => store.getters["section/getSectionsStorage"]),
-    allSectionsStorage: computed(() => store.getters["section/getAllSectionsStorage"]),
+    allSectionStorage: computed(() => store.getters["section/getAllSectionsStorage"]),
     createSection,
     createSectionStorage,
     createIntakeStorage,

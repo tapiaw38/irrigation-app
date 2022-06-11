@@ -4,45 +4,45 @@
       <q-btn
         round
         color="primary"
-        icon="las la-object-ungroup"
-        @click="$router.push({ name: 'section_add' })"
+        icon="las la-water"
+        @click="$router.push({ name: 'intake_add' })"
       />
     </div>
     <q-markup-table class="q-mt-md">
       <thead>
         <tr>
-          <template v-for="section in sectionItems" :key="section">
-            <th class="text-left">{{ section }}</th>
+          <template v-for="intake in intakeItems" :key="intake">
+            <th class="text-left">{{ intake }}</th>
           </template>
         </tr>
       </thead>
       <tbody>
-        <template v-for="(section, i) in sections" :key="i">
+        <template v-for="(intake, i) in intakes" :key="i">
           <tr>
-            <td class="text-left">{{ section.section_number }}</td>
-            <td class="text-left">{{ section.name }}</td>
-            <td class="text-left">{{ formatDate(section.updated_at) }}</td>
+            <td class="text-left">{{ intakes.section_number }}</td>
+            <td class="text-left">{{ intakes.name }}</td>
+            <td class="text-left">{{ formatDate(intake.updated_at) }}</td>
             <td class="text-left">
               <q-btn
                 round
                 text-color="secondary"
                 icon="las la-file"
                 class="q-mr-sm"
-                @click="onToggleModal(section)"
+                @click="onToggleModal(intake)"
               />
               <q-btn
                 round
                 text-color="secondary"
                 icon="las la-edit"
                 class="q-mr-sm"
-                @click="onToggleModal(section)"
+                @click="onToggleModal(intake)"
               />
               <q-btn
                 round
                 text-color="negative"
                 icon="las la-trash-alt"
                 class="q-mr-sm"
-                @click="openAlertHandler(section)"
+                @click="openAlertHandler(intake)"
               />
             </td>
           </tr>
@@ -60,8 +60,8 @@
         <!-- content for the body slot -->
         <div class="q-pa-md">
           <section-form
-            :sectionData="sectionData"
-            @submit-form-section="submitFormSection"
+            :sectionData="intakeData"
+            @submit-form-section="submitFormIntake"
           />
         </div>
       </template>
@@ -82,7 +82,7 @@
             text-color="white"
             label="Si"
             class="q-mx-sm"
-            @click="onDeleteSection()"
+            @click="onDeleteIntake()"
           />
           <q-btn
             round
@@ -122,7 +122,7 @@ export default defineComponent({
     Alert,
   },
   setup() {
-    const { sections, editSection, deleteSection } = useSection();
+    const { intakes, editIntake, deleteIntake } = useSection();
     const { headerMessage, alertMessage, isAlertOpen, closeAlert, openAlert } =
       useAlert();
     const {
@@ -132,58 +132,58 @@ export default defineComponent({
       closeModal,
       openModal,
     } = useModal();
-    const sectionItems = [
-      "Numero de Sección",
+    const intakeItems = [
+      "Número de Toma",
       "Descripción",
       "Fecha de modificación",
       "",
     ];
 
     // modal
-    const sectionData = ref(null);
+    const intakeData = ref(null);
 
-    const onToggleModal = (section) => {
-      sectionData.value = section;
+    const onToggleModal = (intake) => {
+      intakeData.value = intake;
       isModalOpen.value = !isModalOpen.value;
     };
 
     // submit form producer update
-    const submitFormSection = async (form) => {
-      const { ok, message } = await editSection(form.value);
+    const submitFormIntake = async (form) => {
+      const { ok, message } = await editIntake(form.value);
       if (!ok) {
-        openModal("Error, no se pudo editar la sección " + message);
+        openModal("Error, no se pudo editar la toma " + message);
         return;
       }
       closeModal();
     };
 
     // alert
-    let sectionDeleted = ref(null);
+    let intakeDeleted = ref(null);
 
     const openAlertHandler = (p) => {
-      sectionDeleted.value = p;
-      openAlert("Eliminar Sección", "¿Está seguro de eliminar la sección?");
+      intakeDeleted.value = p;
+      openAlert("Eliminar Toma", "¿Está seguro de eliminar la toma?");
     };
 
     // delete section
-    const onDeleteSection = async () => {
-      const { ok } = await deleteSection(sectionDeleted.value);
+    const onDeleteIntake = async () => {
+      const { ok } = await deleteIntake(intakeDeleted.value);
       if (ok) {
         closeAlert();
       } else {
-        openAlert("Error", "No se pudo eliminar la sección");
+        openAlert("Error", "No se pudo eliminar la toma");
       }
     };
 
     return {
-      sectionItems,
+      intakeItems,
       formatDate,
-      sections,
+      intakes,
       isModalOpen,
       closeModal,
       onToggleModal,
-      submitFormSection,
-      sectionData,
+      submitFormIntake,
+      intakeData,
       headerModalMessage,
       maximizedToggle,
       // alert
@@ -192,7 +192,7 @@ export default defineComponent({
       isAlertOpen,
       closeAlert,
       openAlertHandler,
-      onDeleteSection,
+      onDeleteIntake,
     };
   },
 });

@@ -140,6 +140,7 @@ import { defineComponent, ref } from "vue";
 import useGeoloaction from "../../../composables/useGeolocation";
 import useCamera from "../../../composables/useCamera";
 import useProducer from "../composables/useProducer";
+import useAlert from "../../../composables/useAlert";
 
 // components
 import Alert from "../../../components/Alert.vue";
@@ -156,6 +157,7 @@ export default defineComponent({
     const { positionLoader, position } = useGeoloaction();
     const { imageSrc, captureImage } = useCamera();
     const { allProducerStorage, createProductionStorage } = useProducer();
+    const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
 
     // producers option for select
     let options = allProducerStorage.value.map((producer) => {
@@ -172,15 +174,6 @@ export default defineComponent({
         value: district,
       };
     });
-
-    // alert
-    let headerMessage = ref("");
-    let alertMessage = ref("");
-    let isAlertOpen = ref(false);
-
-    const closeAlert = () => {
-      isAlertOpen.value = false;
-    };
 
     // form production
     let production = ref({

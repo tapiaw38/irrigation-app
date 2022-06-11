@@ -1,3 +1,6 @@
+// guards
+import isAdminGuard from "../../authentication/router/admin-guard";
+
 export default {
 
   component: () =>
@@ -7,7 +10,8 @@ export default {
       path: "all",
       name: "users",
       component: () =>
-        import(/* webpackChunkName: "users" */ "../pages/Users")
+        import(/* webpackChunkName: "users" */ "../pages/Users"),
+      beforeEnter: [isAdminGuard]
     },
     {
       path: ":username/profile",

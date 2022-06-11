@@ -37,6 +37,13 @@ const linksList = [
     is_home: true,
   },
   {
+    title: "TOMAS",
+    caption: "",
+    icon: "las la-water",
+    link: "intakes",
+    is_home: true,
+  },
+  {
     title: "GEOLOCALIZACIÓN",
     caption: "",
     icon: "las la-map-marked",
@@ -55,7 +62,7 @@ const linksList = [
     caption: "",
     icon: "las la-user",
     link: "users",
-    is_home: true,
+    is_home: false,
   },
 ];
 

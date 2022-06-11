@@ -15,5 +15,17 @@ export default {
       component: () =>
         import(/* webpackChunkName: "sectionAdd" */ "../pages/SectionAdd")
     },
+    {
+      path: "intakes",
+      name: "intakes",
+      component: () =>
+        import(/* webpackChunkName: "intakes" */ "../pages/Intakes")
+    },
+    {
+      path: "intake/add",
+      name: "intake_add",
+      component: () =>
+        import(/* webpackChunkName: "intakeAdd" */ "../pages/IntakeAdd")
+    },
   ],
 };
