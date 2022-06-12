@@ -340,6 +340,8 @@ export default defineComponent({
         return {
           ...i,
           section: i.section.value,
+          latitude: Number(i.latitude),
+          longitude: Number(i.longitude),
         };
       });
 

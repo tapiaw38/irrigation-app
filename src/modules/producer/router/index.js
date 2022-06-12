@@ -59,5 +59,11 @@ export default {
       component: () =>
         import(/* webpackChunkName: "geoProduction" */ "../pages/GeoProduction")
     },
+    {
+      path: "/geolocation/intake",
+      name: "geo-water",
+      component: () =>
+        import(/* webpackChunkName: "geoIntake" */ "../pages/GeoIntake")
+    },
   ],
 };

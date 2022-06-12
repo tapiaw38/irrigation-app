@@ -330,8 +330,8 @@ export default defineComponent({
     @media screen and (max-width: 700px) {
       justify-content: center;
       .avatar {
-        height: 100%;
-        width: 100%;
+        height: 230px;
+        width: 230px;
       }
     }
   }

@@ -6,8 +6,11 @@
           <q-img v-if="hours <= 20 && hours > 6" src="../assets/img/sun.png" />
           <q-img v-else src="../assets/img/moon.png" />
         </div>
-        <h6 v-if="hours <= 20 && hours > 6">
+        <h6 v-if="hours <= 13 && hours > 6">
           Buenos dias! {{ user.first_name }}
+        </h6>
+        <h6 v-else-if="hours <= 20 && hours > 13">
+          Buenas Tardes! {{ user.first_name }}
         </h6>
         <h6 v-else>Buenas noches! {{ user.first_name }}</h6>
         <div class="alerts">

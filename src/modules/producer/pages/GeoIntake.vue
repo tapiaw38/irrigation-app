@@ -4,10 +4,10 @@
       <div class="items-center">
         <q-toolbar-title>
           <span class="text-subtitle2 text-grey q-pa-xs"
-            >Geolocalización de producciones</span
+            >Geolocalización de Tomas de agua</span
           >
         </q-toolbar-title>
-        <div class="map-production" id="map"></div>
+        <div class="map-intake" id="map"></div>
       </div>
     </div>
   </div>
@@ -18,27 +18,27 @@ import { defineComponent, onMounted } from "vue";
 
 //composables
 import useMapbox from "../composables/useMapbox";
-import useProducer from "../../producer/composables/useProducer";
+import useSection from "../../section/composables/useSection";
 
 export default defineComponent({
-  name: "GeoProduction",
+  name: "GeoIntake",
   components: {},
   setup() {
     const { createMap } = useMapbox();
-    const { productions } = useProducer();
+    const { intakes } = useSection();
 
     let map = {
       container: "map",
       center: [-67.564368, -28.065752],
       zoom: 13,
-      markers: productions.value.map((production) => {
+      markers: intakes.value.map((intake) => {
         return {
-          coordinates: [production.longitude || 0, production.latitude || 0],
+          coordinates: [intake.longitude || 0, intake.latitude || 0],
           title: `<div class="col">
                     <div class="text-h6">Produccion</div>
-                    <div class="text-subtitle2">${production.producer.first_name} ${production.producer.last_name}</div>
-                    <div class="text-subtitle2">${production.name}</div>
-                    <div class="text-subtitle2">${production.production_type}</div>
+                    <div class="text-subtitle2">Sección: ${intake.section?.section_number}</div>
+                    <div class="text-subtitle2">Toma N°${intake.intake_number}</div>
+                    <div class="text-subtitle2">${intake.name}</div>
                   </div>
                   `,
         };
@@ -55,7 +55,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.map-production {
+.map-intake {
   width: 100%;
   height: 80vh;
 }
