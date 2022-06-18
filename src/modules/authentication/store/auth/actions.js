@@ -32,10 +32,8 @@ export const checkAuthentication = async ({ commit }) => {
 }
 
 export const loadUser = async ({ commit }, id) => {
-  console.log("loadUser", id)
   try {
     const { data } = await api.get(`/users/${id}`);
-    console.log(data)
     commit("setUser", data.response);
     return { ok: true };
   } catch (e) {

@@ -55,6 +55,12 @@
                       })
                     "
                   />
+                  <q-btn
+                    color="negative"
+                    flat
+                    label="Quitar de Toma"
+                    @click="deleteIntakeProductionById(production.id)"
+                  />
                 </div>
               </div>
             </template>
@@ -69,7 +75,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 
 // composables
 import useSection from "../composables/useSection";
@@ -83,14 +89,26 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { intake, getIntakeById } = useSection();
+    const { intake, getIntakeById, deleteIntakeProduction } = useSection();
 
     onMounted(() => {
       getIntakeById(props.id);
     });
 
+    let intakeProductions = ref({
+      intake_id: null,
+      production_id: null,
+    });
+
+    const deleteIntakeProductionById = (idProduction) => {
+      intakeProductions.value.intake_id = String(props.id);
+      intakeProductions.value.production_id = String(idProduction);
+      deleteIntakeProduction(intakeProductions.value);
+    };
+
     return {
       intake,
+      deleteIntakeProductionById,
     };
   },
 });

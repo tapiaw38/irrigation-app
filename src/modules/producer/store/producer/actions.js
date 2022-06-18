@@ -15,7 +15,6 @@ export const addProductions = async ({ commit }, productions) => {
   try {
     const { data } = await api.post("/productions/create", productions);
     commit("addProductions", data.response);
-    console.log("addProductions", data.response);
     return { ok: true };
   } catch (error) {
     return { ok: false, message: error.response.data };

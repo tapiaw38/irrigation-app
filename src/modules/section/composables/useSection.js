@@ -75,6 +75,11 @@ const useSection = () => {
     return resp;
   };
 
+  const deleteIntakeProduction = (intakeProduction) => {
+    const resp = store.dispatch("section/deleteIntakeProduction", intakeProduction);
+    return resp;
+  }
+
   onMounted(() => {
     store.dispatch("section/loadSections");
     store.dispatch("section/loadIntakes");
@@ -106,6 +111,7 @@ const useSection = () => {
     deleteSection,
     deleteIntake,
     createIntakeProduction,
+    deleteIntakeProduction,
   };
 };
 

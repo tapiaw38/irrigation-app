@@ -230,8 +230,6 @@ export default defineComponent({
         ShowEditProfile.value = false;
         return;
       }
-
-      console.log(message);
     };
 
     // alert

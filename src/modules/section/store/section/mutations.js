@@ -61,6 +61,12 @@ export const deleteIntake = (state, intake) => {
   state.intakes.splice(idx, 1);
 };
 
+export const deleteIntakeProduction = (state, intake) => {
+  const idx = state.intakes.map(i => i.id).indexOf(intake.id);
+  state.intakes.splice(idx, 1);
+  state.intake = intake;
+};
+
 export const setSectionsStorage = (state, sections) => {
   localStorage.setItem('allSectionsStorage', JSON.stringify(sections));
   state.allSectionsStorage = JSON.parse(localStorage.getItem('allSectionsStorage'));

@@ -119,7 +119,7 @@
       @close="createCloseAlert()"
     >
       <template v-slot:body>
-        <q-form @submit="onSubmitCreateIntakeProduction" class="q-gutter-md">
+        <q-form @submit="onSubmitCreateIntakeProduction" class="q-pa-sm">
           <q-select
             :options="optionsProduction"
             label="Producción"
@@ -130,7 +130,12 @@
               <q-icon name="las la-seedling" @click.stop />
             </template>
           </q-select>
-          <q-btn class="block" label="Aplicar" type="submit" color="primary" />
+          <q-btn
+            class="full-width q-mt-md"
+            label="Aplicar"
+            type="submit"
+            color="primary"
+          />
         </q-form>
       </template>
     </alert>
@@ -138,7 +143,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 
 // components
 import FullModal from "../../../components/FullModal";
@@ -229,11 +234,21 @@ export default defineComponent({
     };
 
     // productions option for select
-    let optionsProduction = productions.value.map((production) => {
-      return {
-        label: `${production.producer.first_name} ${production.name}`,
-        value: production.id,
-      };
+    let optionsProduction = computed(() => {
+      let productionOptions = [...productions.value];
+      return productionOptions.map((production) => {
+        // intakes.value.map((intake) => {
+        //   let prodSelect = intake.productions?.find(
+        //     (p) => p.id === production.id
+        //   );
+        //   let idx = productionOptions.map(p => p.id).indexOf((p) => p.id === prodSelect?.id);
+        //   productionOptions.splice(idx, 1);
+        // });
+        return {
+          label: `${production.producer.first_name} ${production.name}`,
+          value: production.id,
+        };
+      });
     });
 
     let intakeProduction = ref({
@@ -257,9 +272,12 @@ export default defineComponent({
         intakeProduction.value
       );
       if (!ok) {
-        createOpenAlert("Error", message);
+        createOpenAlert("Error", "La producción ya existe en la Toma");
+        intakeProduction.value.production_id = null;
         return;
       }
+      intakeProduction.value.production_id = null;
+      intakeProduction.value.intake_id = null;
       createCloseAlert();
     };
 

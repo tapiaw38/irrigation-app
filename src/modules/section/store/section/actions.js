@@ -111,6 +111,16 @@ export const deleteIntake = async ({ commit }, intake) => {
   }
 };
 
+export const deleteIntakeProduction = async ({ commit }, intakeProduction) => {
+  try {
+    const { data } = await api.post(`/intakes/production/delete/${intakeProduction.intake_id}`, intakeProduction);
+    commit("deleteIntakeProduction", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
 export const loadSectionsStorage = async ({ commit }) => {
   try {
     const { data } = await api.get("/sections/all");

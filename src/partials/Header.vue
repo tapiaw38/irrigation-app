@@ -16,7 +16,14 @@
       </q-toolbar-title>
 
       <div>
-        <q-btn flat dense round icon="las la-bell" aria-label="Notifications" />
+        <q-btn
+          v-if="false"
+          flat
+          dense
+          round
+          icon="las la-bell"
+          aria-label="Notifications"
+        />
         <q-btn-dropdown
           v-if="authStatus === 'authenticated'"
           split
