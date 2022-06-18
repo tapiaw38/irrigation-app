@@ -21,6 +21,16 @@ export const addIntakes = async ({ commit }, intakes) => {
   }
 };
 
+export const addIntakeProduction = async ({ commit }, intakeProduction) => {
+  try {
+    const { data } = await api.post(`/intakes/production/${intakeProduction.intake_id}`, intakeProduction);
+    commit("addIntakeProduction", data.response);
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, message: error.response.data };
+  }
+};
+
 export const loadSections = async ({ commit }) => {
   try {
     const { data } = await api.get("/sections/all");
@@ -45,6 +55,16 @@ export const loadSectionById = async ({ commit }, id) => {
   try {
     const { data } = await api.get(`/sections/${id}`);
     commit("setSectionById", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
+export const loadIntakeById = async ({ commit }, id) => {
+  try {
+    const { data } = await api.get(`/intakes/${id}`);
+    commit("setIntakeById", data.response);
     return { ok: true };
   } catch (e) {
     return { ok: false, message: e.response.data };

@@ -45,6 +45,11 @@ const useSection = () => {
     return res;
   };
 
+  const getIntakeById = async (id) => {
+    const res = store.dispatch("section/loadIntakeById", id);
+    return res;
+  };
+
   const editSection = (section) => {
     const resp = store.dispatch("section/updateSection", section);
     return resp;
@@ -62,6 +67,11 @@ const useSection = () => {
 
   const deleteIntake = (intake) => {
     const resp = store.dispatch("section/deleteIntake", intake);
+    return resp;
+  };
+
+  const createIntakeProduction = (intakeProduction) => {
+    const resp = store.dispatch("section/addIntakeProduction", intakeProduction);
     return resp;
   };
 
@@ -90,10 +100,12 @@ const useSection = () => {
     deleteIntakeStorage,
     downloadSections,
     getSectionById,
+    getIntakeById,
     editSection,
     editIntake,
     deleteSection,
     deleteIntake,
+    createIntakeProduction,
   };
 };
 

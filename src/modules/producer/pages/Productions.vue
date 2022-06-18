@@ -173,6 +173,8 @@ export default defineComponent({
       form.value.producer = form.value.producer.value;
       form.value.area = Number(form.value.area);
       form.value.district = form.value.district.value || null;
+      form.value.latitude = Number(form.value.latitude);
+      form.value.longitude = Number(form.value.longitude);
       const { ok, message } = await editProduction(form.value);
       if (ok) {
         closeModal();

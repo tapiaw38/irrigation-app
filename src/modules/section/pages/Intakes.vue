@@ -24,12 +24,20 @@
             <td class="text-left">{{ intake.name }}</td>
             <td class="text-left">{{ formatDate(intake.updated_at) }}</td>
             <td class="text-left">
+              {{ intake.productions ? intake.productions.length : 0 }}
+            </td>
+            <td class="text-left">
               <q-btn
                 round
                 text-color="secondary"
                 icon="las la-file"
                 class="q-mr-sm"
-                @click="onToggleModal(intake)"
+                @click="
+                  $router.push({
+                    name: 'intake_detail',
+                    params: { id: intake.id },
+                  })
+                "
               />
               <q-btn
                 round
@@ -37,6 +45,13 @@
                 icon="las la-edit"
                 class="q-mr-sm"
                 @click="onToggleModal(intake)"
+              />
+              <q-btn
+                round
+                text-color="secondary"
+                icon="las la-seedling"
+                class="q-mr-sm"
+                @click="createOpenAlertHandler(intake)"
               />
               <q-btn
                 round
@@ -96,6 +111,29 @@
         </div>
       </template>
     </alert>
+    <alert
+      :dialog="createIsAlertOpen"
+      :headerMessage="createHeaderMessage"
+      :message="createAlertMessage"
+      :showIcon="false"
+      @close="createCloseAlert()"
+    >
+      <template v-slot:body>
+        <q-form @submit="onSubmitCreateIntakeProduction" class="q-gutter-md">
+          <q-select
+            :options="optionsProduction"
+            label="Producción"
+            dropdown-icon="las la-angle-down"
+            v-model="intakeProduction.production_id"
+          >
+            <template v-slot:prepend>
+              <q-icon name="las la-seedling" @click.stop />
+            </template>
+          </q-select>
+          <q-btn class="block" label="Aplicar" type="submit" color="primary" />
+        </q-form>
+      </template>
+    </alert>
   </div>
 </template>
 
@@ -112,6 +150,7 @@ import { formatDate } from "../../../helpers/formatDate";
 
 // composables
 import useSection from "../composables/useSection";
+import useProducer from "../../producer/composables/useProducer";
 import useAlert from "../../../composables/useAlert";
 import useModal from "../../../composables/useModal";
 
@@ -123,9 +162,18 @@ export default defineComponent({
     Alert,
   },
   setup() {
-    const { intakes, editIntake, deleteIntake } = useSection();
+    const { intakes, editIntake, deleteIntake, createIntakeProduction } =
+      useSection();
     const { headerMessage, alertMessage, isAlertOpen, closeAlert, openAlert } =
       useAlert();
+    const {
+      headerMessage: createHeaderMessage,
+      alertMessage: createAlertMessage,
+      isAlertOpen: createIsAlertOpen,
+      closeAlert: createCloseAlert,
+      openAlert: createOpenAlert,
+    } = useAlert();
+    const { productions } = useProducer();
     const {
       headerModalMessage,
       maximizedToggle,
@@ -138,6 +186,7 @@ export default defineComponent({
       "Número de Toma",
       "Descripción",
       "Fecha de modificación",
+      "Producciones",
       "",
     ];
 
@@ -151,6 +200,8 @@ export default defineComponent({
 
     // submit form producer update
     const submitFormIntake = async (form) => {
+      form.value.latitude = Number(form.value.latitude);
+      form.value.longitude = Number(form.value.longitude);
       const { ok, message } = await editIntake(form.value);
       if (!ok) {
         openModal("Error, no se pudo editar la toma " + message);
@@ -177,6 +228,41 @@ export default defineComponent({
       }
     };
 
+    // productions option for select
+    let optionsProduction = productions.value.map((production) => {
+      return {
+        label: `${production.producer.first_name} ${production.name}`,
+        value: production.id,
+      };
+    });
+
+    let intakeProduction = ref({
+      intake_id: null,
+      production_id: null,
+    });
+
+    const createOpenAlertHandler = (i) => {
+      intakeProduction.value.intake_id = i.id;
+      createOpenAlert("Agregar Producción", "Seleccione la producción");
+    };
+
+    const onSubmitCreateIntakeProduction = async () => {
+      intakeProduction.value.production_id = String(
+        intakeProduction.value.production_id.value
+      );
+      intakeProduction.value.intake_id = String(
+        intakeProduction.value.intake_id
+      );
+      const { ok, message } = await createIntakeProduction(
+        intakeProduction.value
+      );
+      if (!ok) {
+        createOpenAlert("Error", message);
+        return;
+      }
+      createCloseAlert();
+    };
+
     return {
       intakeItems,
       formatDate,
@@ -195,6 +281,17 @@ export default defineComponent({
       closeAlert,
       openAlertHandler,
       onDeleteIntake,
+      // create
+      createHeaderMessage,
+      createAlertMessage,
+      createIsAlertOpen,
+      createCloseAlert,
+      createOpenAlert,
+      // productions
+      optionsProduction,
+      intakeProduction,
+      createOpenAlertHandler,
+      onSubmitCreateIntakeProduction,
     };
   },
 });

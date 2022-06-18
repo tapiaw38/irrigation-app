@@ -32,12 +32,21 @@ export const setSectionById = (state, section) => {
   state.section = section;
 };
 
+export const setIntakeById = (state, intake) => {
+  state.intake = intake;
+};
+
 export const updateSection = (state, section) => {
   const idx = state.sections.map(s => s.id).indexOf(section.id);
   state.sections[idx] = section;
 };
 
 export const updateIntake = (state, intake) => {
+  const idx = state.intakes.map(i => i.id).indexOf(intake.id);
+  state.intakes[idx] = intake;
+};
+
+export const addIntakeProduction = (state, intake) => {
   const idx = state.intakes.map(i => i.id).indexOf(intake.id);
   state.intakes[idx] = intake;
 };

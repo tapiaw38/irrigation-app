@@ -27,5 +27,15 @@ export default {
       component: () =>
         import(/* webpackChunkName: "intakeAdd" */ "../pages/IntakeAdd")
     },
+    {
+      path: ":id/intake",
+      name: "intake_detail",
+      component: () =>
+        import(/* webpackChunkName: "producerDetail" */ "../pages/IntakeDetail"),
+      props: (route) => {
+        const id = Number(route.params.id);
+        return isNaN(id) ? { id: 1 } : { id };
+      },
+    },
   ],
 };
