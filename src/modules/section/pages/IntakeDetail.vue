@@ -10,8 +10,8 @@
         />
         <span>Detalle Tomas de Agua</span>
       </q-toolbar-title>
-      <div class="row col-12">
-        <div class="column col-6 items-left">
+      <div class="row">
+        <div class="col-md-6 col-sm-12 items-left q-mb-lg">
           <div>
             <div class="q-mt-sm">
               <div class="text-subtitle2 text-secondary q-pa-xs">
@@ -27,7 +27,7 @@
             </div>
           </div>
         </div>
-        <div class="column col-6">
+        <div class="col-md-6 col-sm-12">
           <q-toolbar-title>
             <span class="text-subtitle2 text-secondary q-pa-xs"
               >Producciones en Toma</span
@@ -69,16 +69,25 @@
             </template>
           </q-toolbar-title>
         </div>
+        <div class="col-12 q-mt-md">
+          <q-toolbar-title>
+            <span class="text-subtitle2 text-grey q-pa-xs"
+              >Geolocalizacion</span
+            >
+          </q-toolbar-title>
+          <div class="map-production" id="map"></div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, computed, onMounted, ref } from "vue";
 
 // composables
 import useSection from "../composables/useSection";
+import useMapbox from "../../producer/composables/useMapbox";
 
 export default defineComponent({
   name: "IntakeDetail",
@@ -90,9 +99,36 @@ export default defineComponent({
   },
   setup(props) {
     const { intake, getIntakeById, deleteIntakeProduction } = useSection();
+    const { createMap } = useMapbox();
 
-    onMounted(() => {
-      getIntakeById(props.id);
+    const map = ref({
+      container: "map",
+      center: [-67.564368, -28.065752],
+      zoom: 13,
+      markers: [],
+    });
+
+    const createMarkers = computed(() => {
+      return intake?.value.productions?.map((production) => {
+        return {
+          coordinates: [production.longitude || 0, production.latitude || 0],
+          title: `<div class="col">
+                    <div class="text-h6">Produccion</div>
+                    <div class="text-subtitle2">${production.producer.first_name} ${production.producer.last_name}</div>
+                    <div class="text-subtitle2">${production.name}</div>
+                    <div class="text-subtitle2">${production.production_type}</div>
+                  </div>
+                  `,
+        };
+      });
+    });
+
+    onMounted(async () => {
+      const { ok } = await getIntakeById(props.id);
+      if (ok) {
+        map.value.markers = createMarkers.value;
+        createMap(map.value);
+      }
     });
 
     let intakeProductions = ref({
@@ -100,10 +136,15 @@ export default defineComponent({
       production_id: null,
     });
 
-    const deleteIntakeProductionById = (idProduction) => {
+    const deleteIntakeProductionById = async (idProduction) => {
       intakeProductions.value.intake_id = String(props.id);
       intakeProductions.value.production_id = String(idProduction);
-      deleteIntakeProduction(intakeProductions.value);
+      const { ok } = await deleteIntakeProduction(intakeProductions.value);
+      if (ok) {
+        console.log("ok");
+        map.value.markers = createMarkers.value;
+        createMap(map.value);
+      }
     };
 
     return {

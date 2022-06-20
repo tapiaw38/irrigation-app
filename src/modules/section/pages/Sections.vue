@@ -23,13 +23,15 @@
             <td class="text-left">{{ section.name }}</td>
             <td class="text-left">{{ formatDate(section.updated_at) }}</td>
             <td class="text-left">
-              <q-btn
+              <!--
+                <q-btn
                 round
                 text-color="secondary"
                 icon="las la-file"
                 class="q-mr-sm"
                 @click="onToggleModal(section)"
               />
+              -->
               <q-btn
                 round
                 text-color="secondary"

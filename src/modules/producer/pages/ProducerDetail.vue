@@ -10,8 +10,8 @@
         />
         <span>Detalle Productor</span>
       </q-toolbar-title>
-      <div class="row col-12">
-        <div class="column col-6 items-left">
+      <div class="row">
+        <div class="col-md-6 col-sm-12 q-mb-lg items-left">
           <div>
             <div class="q-mt-sm">
               <div class="text-subtitle2 text-secondary q-pa-xs">Nombre</div>
@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <div class="column col-6">
+        <div class="col-md-6 col-sm-12">
           <q-toolbar-title>
             <span class="text-subtitle2 text-secondary q-pa-xs"
               >Producciones</span

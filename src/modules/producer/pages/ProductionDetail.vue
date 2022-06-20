@@ -66,6 +66,14 @@
                 {{ production?.area }} ha2
               </div>
             </div>
+            <div class="q-mt-sm">
+              <div class="text-subtitle3 text-secondary q-pa-xs">
+                Hectáreas cultivadas
+              </div>
+              <div class="text-subtitle2 q-pa-xs">
+                {{ production?.cultivated_area }} ha2
+              </div>
+            </div>
           </div>
         </div>
         <div class="items-left">
@@ -103,7 +111,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, ref, computed } from "vue";
 
 // composables
 import useMapbox from "../composables/useMapbox";
@@ -122,30 +130,36 @@ export default defineComponent({
     const { createMap } = useMapbox();
     const { getProductionById, production } = useProducer();
 
-    onMounted(async () => {
-      const { ok } = await getProductionById(props.id);
-      if (ok) {
-        let map = {
-          container: "map",
-          center: [-67.564368, -28.065752],
-          zoom: 13,
-          markers: [
-            {
-              coordinates: [
-                production?.value.longitude || 0,
-                production?.value.latitude || 0,
-              ],
-              title: `<div class="col">
+    const map = ref({
+      container: "map",
+      center: [-67.564368, -28.065752],
+      zoom: 13,
+      markers: [],
+    });
+
+    const createMarkers = computed(() => {
+      return [
+        {
+          coordinates: [
+            production?.value.longitude || 0,
+            production?.value.latitude || 0,
+          ],
+          title: `<div class="col">
                     <div class="text-h6">Produccion</div>
                     <div class="text-subtitle2">${production?.value.producer.first_name} ${production?.value.producer.last_name}</div>
                     <div class="text-subtitle2">${production?.value.name}</div>
                     <div class="text-subtitle2">${production?.value.production_type}</div>
                   </div>
                   `,
-            },
-          ],
-        };
-        createMap(map);
+        },
+      ];
+    });
+
+    onMounted(async () => {
+      const { ok } = await getProductionById(props.id);
+      if (ok) {
+        map.value.markers = createMarkers.value;
+        createMap(map.value);
       }
     });
 

@@ -279,6 +279,7 @@ export default defineComponent({
           ...p,
           producer: p.producer.value,
           area: Number(p.area),
+          cultivated_area: Number(p.cultivated_area),
           district: p.district.value,
           latitude: Number(p.latitude),
           longitude: Number(p.longitude),

@@ -29,6 +29,7 @@
           <td class="text-left">{{ production.production_type }}</td>
           <td class="text-left">{{ production.district }}</td>
           <td class="text-left">{{ production.area }}</td>
+          <td class="text-left">{{ production.cultivated_area }}</td>
           <td class="text-left">
             <q-btn
               round
@@ -149,6 +150,7 @@ export default defineComponent({
       "Tipo de producción",
       "Distrito",
       "Hectareas",
+      "Hectareas cultivadas",
       "",
     ];
 
@@ -172,6 +174,7 @@ export default defineComponent({
     const submitFormProduction = async (form) => {
       form.value.producer = form.value.producer.value;
       form.value.area = Number(form.value.area);
+      form.value.cultivated_area = Number(form.value.cultivated_area);
       form.value.district = form.value.district.value || null;
       form.value.latitude = Number(form.value.latitude);
       form.value.longitude = Number(form.value.longitude);

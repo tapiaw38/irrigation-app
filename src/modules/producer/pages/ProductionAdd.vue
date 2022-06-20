@@ -68,6 +68,12 @@
             type="text"
             class="q-mr-sm"
           />
+          <q-input
+            label="Superficie en hectareas cuadradas cultivadas"
+            v-model="production.cultivated_area"
+            type="text"
+            class="q-mr-sm"
+          />
           <div class="row justify-start col-12">
             <div class="col-9">
               <q-input
@@ -185,6 +191,7 @@ export default defineComponent({
       production_type: "",
       district: null,
       area: 0,
+      cultivated_area: 0,
       latitude: 0,
       longitude: 0,
       picture: "",
@@ -201,6 +208,7 @@ export default defineComponent({
         production_type: "",
         district: null,
         area: 0,
+        cultivated_area: 0,
         latitude: 0,
         longitude: 0,
         picture: "",

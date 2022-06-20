@@ -51,8 +51,15 @@
       </template>
     </q-select>
     <q-input
-      label="Superficie en hectareas"
+      label="Hectareas"
       v-model="productionForm.area"
+      type="number"
+      step="any"
+      class="q-mr-sm"
+    />
+    <q-input
+      label="Hectareas cultivadas"
+      v-model="productionForm.cultivated_area"
       type="number"
       step="any"
       class="q-mr-sm"
@@ -105,6 +112,7 @@ export default {
       production_type: "",
       district: null,
       area: 0,
+      cultivated_area: 0,
       latitude: 0,
       longitude: 0,
       picture: "",
@@ -150,6 +158,8 @@ export default {
           value: props.productionData?.district,
         };
         productionForm.value.area = props.productionData.area;
+        productionForm.value.cultivated_area =
+          props.productionData.cultivated_area;
         productionForm.value.latitude = props.productionData.latitude;
         productionForm.value.longitude = props.productionData.longitude;
         productionForm.value.picture = props.productionData.picture;

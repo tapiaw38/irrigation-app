@@ -42,6 +42,12 @@ const columnsProduction = [
     sortable: false,
   },
   {
+    name: "cultivated_area",
+    label: "Hectáreas cultivadas",
+    field: "cultivated_area",
+    sortable: false,
+  },
+  {
     name: "district",
     label: "Distrito",
     field: "district",
