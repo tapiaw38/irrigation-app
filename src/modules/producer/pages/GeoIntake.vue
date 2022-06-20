@@ -35,7 +35,7 @@ export default defineComponent({
         return {
           coordinates: [intake.longitude || 0, intake.latitude || 0],
           title: `<div class="col">
-                    <div class="text-h6">Produccion</div>
+                    <div class="text-h6">Toma</div>
                     <div class="text-subtitle2">Sección: ${intake.section?.section_number}</div>
                     <div class="text-subtitle2">Toma N°${intake.intake_number}</div>
                     <div class="text-subtitle2">${intake.name}</div>

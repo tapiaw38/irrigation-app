@@ -123,10 +123,31 @@ export default defineComponent({
       });
     });
 
+    const createIntakeMarker = computed(() => {
+      return [
+        {
+          coordinates: [
+            intake?.value.longitude || 0,
+            intake?.value.latitude || 0,
+          ],
+          title: `<div class="col">
+                    <div class="text-h6">Toma</div>
+                    <div class="text-subtitle2">Sección: ${intake?.value.section?.section_number}</div>
+                    <div class="text-subtitle2">Toma N°${intake?.value.intake_number}</div>
+                    <div class="text-subtitle2">${intake?.value.name}</div>
+                  </div>
+                  `,
+        },
+      ];
+    });
+
     onMounted(async () => {
       const { ok } = await getIntakeById(props.id);
       if (ok) {
-        map.value.markers = createMarkers.value;
+        map.value.markers = createMarkers.value
+          ? [...createMarkers.value, ...createIntakeMarker.value]
+          : createIntakeMarker.value;
+
         createMap(map.value);
       }
     });
@@ -141,8 +162,10 @@ export default defineComponent({
       intakeProductions.value.production_id = String(idProduction);
       const { ok } = await deleteIntakeProduction(intakeProductions.value);
       if (ok) {
-        console.log("ok");
-        map.value.markers = createMarkers.value;
+        map.value.markers = createMarkers.value
+          ? [...createMarkers.value, ...createIntakeMarker.value]
+          : createIntakeMarker.value;
+
         createMap(map.value);
       }
     };
