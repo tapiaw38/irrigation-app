@@ -18,7 +18,7 @@
                         color="primary"
                         flat
                         icon="las la-camera"
-                        @click="openAlert"
+                        @click="openAlertHandler"
                       />
                     </div>
                   </q-avatar>
@@ -196,6 +196,7 @@ import Alert from "../../../components/Alert";
 // composables
 import useAuth from "../../authentication/composables/useAuth";
 import useImageSelected from "../../../composables/useImageSelected";
+import useAlert from "../../../composables/useAlert";
 
 export default defineComponent({
   name: "Profile",
@@ -205,6 +206,7 @@ export default defineComponent({
   setup() {
     const { user, updateUserSession, updateUserAvatar } = useAuth();
     const { imageSelected, image, onSelectedImage } = useImageSelected();
+    const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
 
     let userForm = ref({
       id: user.value.id,
@@ -232,18 +234,11 @@ export default defineComponent({
       }
     };
 
-    // alert
-    let headerMessage = ref("");
-    let alertMessage = ref("");
-    let isAlertOpen = ref(false);
+    // edit avatar
 
-    const openAlert = (header, message) => {
+    const openAlertHandler = (header, message) => {
       headerMessage.value = "Editar Perfil";
       isAlertOpen.value = true;
-    };
-
-    const closeAlert = () => {
-      isAlertOpen.value = false;
     };
 
     const onSelectImage = () => {
@@ -273,7 +268,7 @@ export default defineComponent({
       alertMessage,
       isAlertOpen,
       closeAlert,
-      openAlert,
+      openAlertHandler,
       imageSelected,
       onEditAvatar,
       onSelectedImage,

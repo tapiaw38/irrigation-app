@@ -2,8 +2,7 @@ import authApi from "../../../../api/authApi";
 import api from "../../../../api/api";
 
 export const login = async ({ commit }, userForm) => {
-
-  const { email, password } = userForm
+  const { email, password } = userForm;
 
   try {
     const { data } = await authApi.post("/users/login", { email, password });
@@ -20,16 +19,14 @@ export const logout = async ({ commit }) => {
 };
 
 export const checkAuthentication = async ({ commit }) => {
-
-  const idToken = localStorage.getItem("access_token")
+  const idToken = localStorage.getItem("access_token");
 
   if (!idToken) {
-    commit("logoutUser")
-    return { ok: false, message: 'no Token' }
+    commit("logoutUser");
+    return { ok: false, message: "no Token" };
   }
   return { ok: true };
-
-}
+};
 
 export const loadUser = async ({ commit }, id) => {
   try {
@@ -44,25 +41,26 @@ export const loadUser = async ({ commit }, id) => {
 export const setUser = async ({ commit }, user) => {
   try {
     const { data } = await api.put(`/users/partial/${user.id}`, user);
-    commit('setUser', data.response)
+    commit("setUser", data.response);
     return { ok: true };
   } catch (error) {
     return { ok: false, message: error.response.data };
   }
-}
+};
 
 export const setUserAvatar = async ({ commit }, profile) => {
   if (!profile) return { ok: false, message: "Profile is required" };
   try {
     const formData = new FormData();
-    formData.append('picture', profile.picture);
-    formData.append('is_active', profile.is_active);
-    formData
+    formData.append("picture", profile.picture);
 
-    const { data } = await api.put(`/users/update/avatar/${profile.id}`, formData);
-    commit('setUserProfile', data.response)
+    const { data } = await api.put(
+      `/users/update/avatar/${profile.id}`,
+      formData
+    );
+    commit("setUserProfile", data.response);
     return { ok: true };
   } catch (error) {
     return { ok: false, message: error.response.data };
   }
-}
+};

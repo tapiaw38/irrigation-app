@@ -33,12 +33,6 @@
           <td class="text-left">
             <q-btn
               round
-              text-color="info"
-              icon="las la-image"
-              class="q-mr-sm"
-            />
-            <q-btn
-              round
               text-color="secondary"
               icon="las la-file"
               class="q-mr-sm"

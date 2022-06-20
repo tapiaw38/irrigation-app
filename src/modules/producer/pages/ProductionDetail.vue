@@ -86,27 +86,77 @@
         </div>
       </div>
       <div class="flex container-image">
-        <div class="image-icon">
+        <div class="image-icon flex justify-center content-center">
           <q-img src="../../../assets/img/undraw_images.svg" />
         </div>
-        <div
-          v-if="!production?.picture"
-          class="flex justify-center content-center"
-        >
-          <div class="title2 gray justify-center flex items-center q-mr-sm">
-            No hay imagen de la producción
-          </div>
+        <div class="flex justify-center content-center">
           <q-img
+            v-if="!production?.picture"
             src="../../../assets/img/undraw_zoom.svg"
-            style="width: 300px"
+            style="width: 80%"
           />
-        </div>
-        <div v-else class="flex justify-center content-center">
-          <q-img :src="production?.picture" style="width: 300px" />
+          <q-img v-else :src="production?.picture" style="width: 90%" />
+          <div class="edit-image">
+            <q-btn
+              round
+              color="primary"
+              flat
+              icon="las la-camera"
+              @click="openAlertHandler"
+            />
+          </div>
         </div>
       </div>
     </div>
     <!--Dialog content-->
+    <!-- change picture-->
+    <alert
+      :dialog="isAlertOpen"
+      :headerMessage="headerMessage"
+      :message="alertMessage"
+      :showIcon="false"
+      @close="closeAlert()"
+    >
+      <template v-slot:body>
+        <div class="flex justify-center q-mb-sm" style="width: 300px">
+          <q-img class="avatar" size="6rem">
+            <q-img
+              v-if="production.picture && imageSelected === null"
+              :src="production?.picture"
+            />
+            <q-img
+              v-else-if="!production.picture && imageSelected === null"
+              src="../../../assets/img/undraw_zoom.svg"
+            />
+            <q-img v-else :src="imageSelected" />
+          </q-img>
+        </div>
+        <div class="flex justify-center">
+          <q-input
+            @update:model-value="
+              (val) => {
+                onSelectedImage(val[0]);
+              }
+            "
+            filled
+            type="file"
+            class="hidden image-input"
+          />
+          <q-btn
+            round
+            icon="las la-arrow-circle-up"
+            color="primary"
+            @click="onSelectImage"
+          />
+          <q-btn
+            label="Aplicar"
+            color="primary"
+            class="btn-block"
+            @click="onEditPicture"
+          />
+        </div>
+      </template>
+    </alert>
   </div>
 </template>
 
@@ -116,6 +166,11 @@ import { defineComponent, onMounted, ref, computed } from "vue";
 // composables
 import useMapbox from "../composables/useMapbox";
 import useProducer from "../composables/useProducer";
+import useAlert from "../../../composables/useAlert";
+import useImageSelected from "../../../composables/useImageSelected";
+
+//components
+import Alert from "../../../components/Alert";
 
 export default defineComponent({
   name: "ProductionDetail",
@@ -125,10 +180,15 @@ export default defineComponent({
       required: true,
     },
   },
-  components: {},
+  components: {
+    Alert,
+  },
   setup(props) {
     const { createMap } = useMapbox();
-    const { getProductionById, production } = useProducer();
+    const { getProductionById, production, updateProductionPicture } =
+      useProducer();
+    const { imageSelected, image, onSelectedImage } = useImageSelected();
+    const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
 
     const map = ref({
       container: "map",
@@ -155,8 +215,31 @@ export default defineComponent({
       ];
     });
 
+    // change picture
+    const openAlertHandler = (header, message) => {
+      headerMessage.value = "Editar Imagen";
+      isAlertOpen.value = true;
+    };
+
+    const onSelectImage = () => {
+      document.querySelector(".image-input").click();
+    };
+
+    const onEditPicture = async () => {
+      let formProduction = {
+        id: production?.value.id,
+        picture: image.value,
+      };
+      const { ok } = await updateProductionPicture(formProduction);
+      if (ok) {
+        closeAlert();
+        return;
+      }
+    };
+
+    // mount
     onMounted(async () => {
-      const { ok } = await getProductionById(props.id);
+      const { ok, message } = await getProductionById(props.id);
       if (ok) {
         map.value.markers = createMarkers.value;
         createMap(map.value);
@@ -165,6 +248,16 @@ export default defineComponent({
 
     return {
       production,
+      openAlertHandler,
+      isAlertOpen,
+      closeAlert,
+      headerMessage,
+      alertMessage,
+      imageSelected,
+      image,
+      onSelectedImage,
+      onEditPicture,
+      onSelectImage,
     };
   },
 });

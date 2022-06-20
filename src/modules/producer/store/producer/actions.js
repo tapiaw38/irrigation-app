@@ -1,6 +1,5 @@
 import api from "../../../../api/api";
 
-
 export const addProducers = async ({ commit }, producers) => {
   try {
     const { data } = await api.post("/producers/create", producers);
@@ -19,7 +18,7 @@ export const addProductions = async ({ commit }, productions) => {
   } catch (error) {
     return { ok: false, message: error.response.data };
   }
-}
+};
 
 export const loadProducers = async ({ commit }) => {
   try {
@@ -63,7 +62,10 @@ export const loadProductionById = async ({ commit }, id) => {
 
 export const updateProducer = async ({ commit }, producer) => {
   try {
-    const { data } = await api.put(`/producers/update/${producer.id}`, producer);
+    const { data } = await api.put(
+      `/producers/update/${producer.id}`,
+      producer
+    );
     commit("updateProducer", data.response);
     return { ok: true };
   } catch (e) {
@@ -73,7 +75,10 @@ export const updateProducer = async ({ commit }, producer) => {
 
 export const updateProduction = async ({ commit }, production) => {
   try {
-    const { data } = await api.put(`/productions/update/${production.id}`, production);
+    const { data } = await api.put(
+      `/productions/update/${production.id}`,
+      production
+    );
     commit("updateProduction", data.response);
     return { ok: true };
   } catch (e) {
@@ -109,7 +114,7 @@ export const loadProducerStorage = async ({ commit }) => {
   } catch (e) {
     return { ok: false, message: e.response.data };
   }
-}
+};
 
 export const addProducerStorage = async ({ commit }, producer) => {
   try {
@@ -118,7 +123,7 @@ export const addProducerStorage = async ({ commit }, producer) => {
   } catch (error) {
     return { ok: false, message: error.response.data };
   }
-}
+};
 
 export const addProductionStorage = async ({ commit }, production) => {
   try {
@@ -127,7 +132,7 @@ export const addProductionStorage = async ({ commit }, production) => {
   } catch (error) {
     return { ok: false, message: error.response.data };
   }
-}
+};
 
 export const deleteProducersStorage = async ({ commit }) => {
   try {
@@ -136,7 +141,7 @@ export const deleteProducersStorage = async ({ commit }) => {
   } catch (error) {
     return { ok: false, message: "Error" };
   }
-}
+};
 
 export const deleteProductionsStorage = async ({ commit }) => {
   try {
@@ -145,4 +150,21 @@ export const deleteProductionsStorage = async ({ commit }) => {
   } catch (error) {
     return { ok: false, message: "Error" };
   }
-}
+};
+
+export const setProducerPicture = async ({ commit }, form) => {
+  if (!form) return { ok: false, message: "form is required" };
+  try {
+    const formData = new FormData();
+    formData.append("picture", form.picture);
+
+    const { data } = await api.put(
+      `/productions/upload/picture/${form.id}`,
+      formData
+    );
+    commit("setProducerPicture", data.response);
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, message: error.response.data };
+  }
+};

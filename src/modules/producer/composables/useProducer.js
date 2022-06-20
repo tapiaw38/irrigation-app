@@ -70,6 +70,11 @@ const useProducer = () => {
     return resp;
   }
 
+  const updateProductionPicture = (fromPicture) => {
+    const resp = store.dispatch("producer/setProducerPicture", fromPicture);
+    return resp;
+  };
+
   onMounted(() => {
     store.dispatch("producer/loadProducers");
     store.dispatch("producer/loadProductions");
@@ -95,7 +100,8 @@ const useProducer = () => {
     editProducer,
     editProduction,
     deleteProducer,
-    deleteProduction
+    deleteProduction,
+    updateProductionPicture,
   };
 };
 
