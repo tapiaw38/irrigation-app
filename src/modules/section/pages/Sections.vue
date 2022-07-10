@@ -35,6 +35,18 @@
               <q-btn
                 round
                 text-color="secondary"
+                icon="las la-file"
+                class="q-mr-sm"
+                @click="
+                  $router.push({
+                    name: 'section_detail',
+                    params: { id: section.id },
+                  })
+                "
+              />
+              <q-btn
+                round
+                text-color="secondary"
                 icon="las la-edit"
                 class="q-mr-sm"
                 @click="onToggleModal(section)"

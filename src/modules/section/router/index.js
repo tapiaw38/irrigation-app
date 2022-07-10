@@ -16,6 +16,16 @@ export default {
         import(/* webpackChunkName: "sectionAdd" */ "../pages/SectionAdd")
     },
     {
+      path: ":id/section",
+      name: "section_detail",
+      component: () =>
+        import(/* webpackChunkName: "sectionDetail" */ "../pages/SectionDetail"),
+      props: (route) => {
+        const id = Number(route.params.id);
+        return isNaN(id) ? { id: 1 } : { id };
+      },
+    },
+    {
       path: "intakes",
       name: "intakes",
       component: () =>
@@ -31,7 +41,7 @@ export default {
       path: ":id/intake",
       name: "intake_detail",
       component: () =>
-        import(/* webpackChunkName: "producerDetail" */ "../pages/IntakeDetail"),
+        import(/* webpackChunkName: "intakeDetail" */ "../pages/IntakeDetail"),
       props: (route) => {
         const id = Number(route.params.id);
         return isNaN(id) ? { id: 1 } : { id };
