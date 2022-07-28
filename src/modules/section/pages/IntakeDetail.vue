@@ -39,6 +39,10 @@
                 class="row"
               >
                 <div class="text-h6">
+                  <span class="text-subtitle2">{{
+                    production.watering_order &&
+                    `${production.watering_order} - `
+                  }}</span>
                   {{ production.producer.first_name }}
                   {{ production.producer.last_name }}: {{ production?.name }}
                   {{ production?.production_type }}
@@ -54,6 +58,12 @@
                         params: { id: production.id },
                       })
                     "
+                  />
+                  <q-btn
+                    color="primary"
+                    flat
+                    label="Editar"
+                    @click="openAlertHandler(production)"
                   />
                   <q-btn
                     color="negative"
@@ -79,18 +89,52 @@
         </div>
       </div>
     </div>
+    <!-- Alert -->
+    <alert
+      :dialog="isAlertOpen"
+      :headerMessage="headerMessage"
+      :message="alertMessage"
+      :showIcon="false"
+      @close="closeAlert()"
+    >
+      <template v-slot:body>
+        <!-- content for the body slot -->
+        <div class="q-pa-md row justify-center">
+          <div>
+            <q-input
+              label="Orden de riego"
+              v-model="intakeProductions.watering_order"
+              type="number"
+            ></q-input>
+            <q-btn
+              class="full-width q-mt-md"
+              label="Aplicar"
+              color="primary"
+              @click="updateIntakeProductionbyId()"
+            />
+          </div>
+        </div>
+      </template>
+    </alert>
   </div>
 </template>
 
 <script>
 import { defineComponent, computed, onMounted, ref } from "vue";
 
+// components
+import Alert from "../../../components/Alert.vue";
+
 // composables
 import useSection from "../composables/useSection";
 import useMapbox from "../../producer/composables/useMapbox";
+import useAlert from "../../../composables/useAlert";
 
 export default defineComponent({
   name: "IntakeDetail",
+  components: {
+    Alert,
+  },
   props: {
     id: {
       type: Number,
@@ -98,7 +142,14 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { intake, getIntakeById, deleteIntakeProduction } = useSection();
+    const {
+      intake,
+      getIntakeById,
+      updateIntakeProduction,
+      deleteIntakeProduction,
+    } = useSection();
+    const { headerMessage, alertMessage, isAlertOpen, closeAlert, openAlert } =
+      useAlert();
     const { createMap } = useMapbox();
 
     const map = ref({
@@ -155,8 +206,40 @@ export default defineComponent({
     let intakeProductions = ref({
       intake_id: null,
       production_id: null,
+      watering_order: null,
     });
 
+    // update intake productions
+    const openAlertHandler = (production) => {
+      intakeProductions.value.intake_id = String(props.id);
+      intakeProductions.value.production_id = String(production.id);
+      intakeProductions.value.watering_order = production.watering_order;
+      openAlert("Editar orden de riego");
+    };
+
+    const updateIntakeProductionbyId = async () => {
+      intakeProductions.value.intake_id = String(
+        intakeProductions.value.intake_id
+      );
+      intakeProductions.value.production_id = String(
+        intakeProductions.value.production_id
+      );
+      intakeProductions.value.watering_order = Number(
+        intakeProductions.value.watering_order
+      );
+
+      const { ok } = await updateIntakeProduction(intakeProductions.value);
+      if (ok) {
+        intakeProductions.value = {
+          intake_id: null,
+          production_id: null,
+          watering_order: null,
+        };
+        closeAlert();
+      }
+    };
+
+    // delete intake production
     const deleteIntakeProductionById = async (idProduction) => {
       intakeProductions.value.intake_id = String(props.id);
       intakeProductions.value.production_id = String(idProduction);
@@ -172,7 +255,15 @@ export default defineComponent({
 
     return {
       intake,
+      intakeProductions,
+      updateIntakeProductionbyId,
       deleteIntakeProductionById,
+      isAlertOpen,
+      headerMessage,
+      alertMessage,
+      closeAlert,
+      openAlert,
+      openAlertHandler,
     };
   },
 });

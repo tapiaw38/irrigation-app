@@ -22,7 +22,7 @@ export const updateUser = async ({ commit }, user) => {
 
 export const addUser = async ({ commit }, user) => {
   try {
-    const { data } = await api.post("/users/create", user);
+    const { data } = await api.post("/users/register", user);
     commit("addUser", data.response);
     return { ok: true };
   } catch (error) {

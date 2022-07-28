@@ -1,6 +1,5 @@
 import api from "../../../../api/api";
 
-
 export const addSections = async ({ commit }, sections) => {
   try {
     const { data } = await api.post("/sections/create", sections);
@@ -23,7 +22,10 @@ export const addIntakes = async ({ commit }, intakes) => {
 
 export const addIntakeProduction = async ({ commit }, intakeProduction) => {
   try {
-    const { data } = await api.post(`/intakes/production/${intakeProduction.intake_id}`, intakeProduction);
+    const { data } = await api.post(
+      `/intakes/production/${intakeProduction.intake_id}`,
+      intakeProduction
+    );
     commit("addIntakeProduction", data.response);
     return { ok: true };
   } catch (error) {
@@ -91,6 +93,19 @@ export const updateIntake = async ({ commit }, intake) => {
   }
 };
 
+export const updateIntakeProduction = async ({ commit }, intakeProduction) => {
+  try {
+    const { data } = await api.put(
+      `/intakes/production/update/${intakeProduction.intake_id}`,
+      intakeProduction
+    );
+    commit("updateIntakeProduction", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
 export const deleteSection = async ({ commit }, section) => {
   try {
     const { data } = await api.delete(`/sections/delete/${section.id}`);
@@ -113,7 +128,10 @@ export const deleteIntake = async ({ commit }, intake) => {
 
 export const deleteIntakeProduction = async ({ commit }, intakeProduction) => {
   try {
-    const { data } = await api.post(`/intakes/production/delete/${intakeProduction.intake_id}`, intakeProduction);
+    const { data } = await api.post(
+      `/intakes/production/delete/${intakeProduction.intake_id}`,
+      intakeProduction
+    );
     commit("deleteIntakeProduction", data.response);
     return { ok: true };
   } catch (e) {
@@ -155,7 +173,7 @@ export const addIntakesStorage = async ({ commit }, intake) => {
     commit("addIntakesStorage", intake);
     return { ok: true };
   } catch (error) {
-    return { ok: false, message: new Error('intake not saved') };
+    return { ok: false, message: new Error("intake not saved") };
   }
 };
 

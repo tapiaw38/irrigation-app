@@ -130,6 +130,11 @@
               <q-icon name="las la-seedling" @click.stop />
             </template>
           </q-select>
+          <q-input
+            label="Orden de riego"
+            v-model="intakeProduction.watering_order"
+            type="number"
+          ></q-input>
           <q-btn
             class="full-width q-mt-md"
             label="Aplicar"
@@ -254,6 +259,7 @@ export default defineComponent({
     let intakeProduction = ref({
       intake_id: null,
       production_id: null,
+      watering_order: null,
     });
 
     const createOpenAlertHandler = (i) => {
@@ -268,16 +274,21 @@ export default defineComponent({
       intakeProduction.value.intake_id = String(
         intakeProduction.value.intake_id
       );
+      intakeProduction.value.watering_order = Number(
+        intakeProduction.value.watering_order
+      );
       const { ok, message } = await createIntakeProduction(
         intakeProduction.value
       );
       if (!ok) {
         createOpenAlert("Error", "La producción ya existe en la Toma");
         intakeProduction.value.production_id = null;
+        intakeProduction.value.watering_order = null;
         return;
       }
       intakeProduction.value.production_id = null;
       intakeProduction.value.intake_id = null;
+      intakeProduction.value.watering_order = null;
       createCloseAlert();
     };
 

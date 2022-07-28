@@ -7,21 +7,19 @@ const linksList = [
     is_home: false,
   },
   {
+    title: "TURNOS DE RIEGO",
+    caption: "",
+    icon: "las la-ticket-alt",
+    link: "shifts",
+    is_home: false,
+  },
+  {
     title: "PRODUCTORES",
     caption: "",
     icon: "las la-users",
     link: "producer",
     is_home: true,
   },
-  /*
-  {
-    title: "TURNOS DE RIEGO",
-    caption: "",
-    icon: "las la-ticket-alt",
-    link: "shifts",
-    is_home: true,
-  },
-  */
   {
     title: "PRODUCCIONES",
     caption: "",

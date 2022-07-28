@@ -7,6 +7,7 @@ import auth from "../modules/authentication/store/auth";
 import user from "../modules/user/store/user";
 import producer from "../modules/producer/store/producer";
 import section from "src/modules/section/store/section";
+import shift from "src/modules/shift/store/shift";
 
 /*
  * If not building with SSR mode, you can
@@ -26,6 +27,7 @@ export default store(function (/* { ssrContext } */) {
       user,
       producer,
       section,
+      shift,
     },
 
     // enable strict mode (adds overhead!)
