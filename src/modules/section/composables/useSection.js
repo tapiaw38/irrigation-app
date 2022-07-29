@@ -1,5 +1,6 @@
 import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
+import { getIntakesBySection } from "../store/section/getters";
 
 const useSection = () => {
   const store = useStore();
@@ -47,6 +48,12 @@ const useSection = () => {
 
   const getIntakeById = async (id) => {
     const res = store.dispatch("section/loadIntakeById", id);
+    return res;
+  };
+
+  const getIntakesBySection = async (section) => {
+    const res = store.getters["section/getIntakesBySection"](section);
+    console.log("getIntakesBySection", res);
     return res;
   };
 
@@ -111,6 +118,7 @@ const useSection = () => {
     downloadSections,
     getSectionById,
     getIntakeById,
+    getIntakesBySection,
     editSection,
     editIntake,
     deleteSection,
