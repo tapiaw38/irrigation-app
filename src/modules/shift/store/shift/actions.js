@@ -29,3 +29,50 @@ export const loadShiftById = async ({ commit }, id) => {
     return { ok: false, message: e.response.data };
   }
 };
+
+
+export const updateShift = async ({ commit }, shift) => {
+  try {
+    const { data } = await api.put(`/turns/update/${shift.id}`, shift);
+    commit("updateShift", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
+export const deleteShift = async ({ commit }, shift) => {
+  try {
+    const { data } = await api.delete(`/turns/delete/${shift.id}`);
+    commit("deleteShift", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
+export const addShiftProduction = async ({ commit }, shiftProduction) => {
+  try {
+    const { data } = await api.post(
+      `/turns/production/${shiftProduction.turn_id}`,
+      shiftProduction
+    );
+    commit("addShiftProduction", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
+
+export const deleteShiftProduction = async ({ commit }, shiftProduction) => {
+  try {
+    const { data } = await api.post(
+      `/turns/production/delete/${shiftProduction.turn_id}`,
+      shiftProduction
+    );
+    commit("deleteShiftProduction", data.response);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e.response.data };
+  }
+};
