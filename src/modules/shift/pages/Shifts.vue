@@ -65,6 +65,7 @@
                   />
                 </div>
               </div>
+
               <q-card>
                 <q-tabs
                   v-model="tab"
@@ -264,13 +265,40 @@
         <div class="q-pa-md row justify-center">
           <q-form @submit="onSubmitCreateTurnProduction" class="q-pa-md">
             <q-select
-              :options="optionsProduction"
-              label="Producción"
+              :options="filteredProductionOptions"
+              label="Buscar Producción (Nombre, Productor o DNI)"
               dropdown-icon="las la-angle-down"
               v-model="turnProduction.production_id"
+              use-input
+              input-debounce="300"
+              @filter="filterProductions"
             >
               <template v-slot:prepend>
                 <q-icon name="las la-seedling" @click.stop />
+              </template>
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    No se encontraron producciones
+                  </q-item-section>
+                </q-item>
+              </template>
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>
+                      <strong>{{ scope.opt.productionName }}</strong> ({{
+                        scope.opt.productionType
+                      }})
+                    </q-item-label>
+                    <q-item-label caption>
+                      Productor: {{ scope.opt.producerName }}
+                      <span v-if="scope.opt.producerDni"
+                        >(DNI: {{ scope.opt.producerDni }})</span
+                      >
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
               </template>
             </q-select>
             <q-btn
@@ -447,16 +475,63 @@ export default defineComponent({
       };
     };
 
-    // productions option for select
+    // productions option for select with full details
     let optionsProduction = computed(() => {
       let productionOptions = [...productions.value];
       return productionOptions.map((production) => {
+        // Get intake info if available
+        let intakeInfo = null;
+        if (production.intake_id) {
+          const intake = intakes.value.find(
+            (i) => i.id === production.intake_id
+          );
+          if (intake) {
+            intakeInfo = `Toma ${intake.intake_number} - Sección ${
+              intake.section?.section_number || "N/A"
+            }`;
+          }
+        }
+
         return {
-          label: `${production.producer.first_name} ${production.name}`,
+          label: `${production.name} - ${production.producer.first_name} ${production.producer.last_name}`,
           value: production.id,
+          productionName: production.name,
+          productionType: production.production_type || "Sin tipo",
+          producerName: `${production.producer.first_name} ${production.producer.last_name}`,
+          producerDni: production.producer.document_number || null,
+          intakeInfo: intakeInfo,
         };
       });
     });
+
+    // Filtered production options for search
+    const filteredProductionOptions = ref([...optionsProduction.value]);
+
+    // Filter productions by name, producer name, or DNI
+    const filterProductions = (val, update) => {
+      update(() => {
+        if (val === "") {
+          filteredProductionOptions.value = optionsProduction.value;
+        } else {
+          const needle = val.toLowerCase();
+          filteredProductionOptions.value = optionsProduction.value.filter(
+            (prod) => {
+              const productionName = prod.productionName.toLowerCase();
+              const producerName = prod.producerName.toLowerCase();
+              const dni = prod.producerDni
+                ? prod.producerDni.toLowerCase()
+                : "";
+
+              return (
+                productionName.includes(needle) ||
+                producerName.includes(needle) ||
+                dni.includes(needle)
+              );
+            }
+          );
+        }
+      });
+    };
 
     return {
       sections,
@@ -500,6 +575,8 @@ export default defineComponent({
       openAlertProduction,
       // create turn production
       optionsProduction,
+      filteredProductionOptions,
+      filterProductions,
       turnProduction,
       onSubmitCreateTurnProduction,
       deleteTurnProduction,
@@ -527,5 +604,11 @@ export default defineComponent({
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.delete-production-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 </style>

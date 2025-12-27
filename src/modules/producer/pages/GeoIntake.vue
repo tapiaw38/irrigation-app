@@ -14,9 +14,8 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, watch, ref } from "vue";
 
-//composables
 import useMapbox from "../composables/useMapbox";
 import useSection from "../../section/composables/useSection";
 
@@ -26,27 +25,71 @@ export default defineComponent({
   setup() {
     const { createMap } = useMapbox();
     const { intakes } = useSection();
+    const isMounted = ref(false);
+    const mapCreated = ref(false);
 
-    let map = {
-      container: "map",
-      center: [-67.564368, -28.065752],
-      zoom: 13,
-      markers: intakes.value.map((intake) => {
-        return {
-          coordinates: [intake.longitude || 0, intake.latitude || 0],
-          title: `<div class="col">
-                    <div class="text-h6">Toma</div>
-                    <div class="text-subtitle2">Sección: ${intake.section?.section_number}</div>
-                    <div class="text-subtitle2">Toma N°${intake.intake_number}</div>
-                    <div class="text-subtitle2">${intake.name}</div>
-                  </div>
-                  `,
+    const createMapWithData = () => {
+      if (isMounted.value && intakes.value && intakes.value.length > 0 && !mapCreated.value) {
+        const validIntakes = intakes.value
+          .filter(intake =>
+            intake.latitude &&
+            intake.longitude &&
+            intake.latitude !== 0 &&
+            intake.longitude !== 0
+          )
+          .sort((a, b) => {
+            const numA = parseInt(a.intake_number) || 0;
+            const numB = parseInt(b.intake_number) || 0;
+            return numA - numB;
+          });
+
+        if (validIntakes.length === 0) {
+          return;
+        }
+
+        const lineCoordinates = validIntakes.map(intake => [
+          parseFloat(intake.longitude),
+          parseFloat(intake.latitude)
+        ]);
+
+        const mapConfig = {
+          container: "map",
+          center: [-67.564368, -28.065752],
+          zoom: 13,
+          markers: validIntakes.map((intake) => {
+            return {
+              coordinates: [parseFloat(intake.longitude), parseFloat(intake.latitude)],
+              title: `<div class="col">
+                        <div class="text-h6">Toma</div>
+                        <div class="text-subtitle2">Sección: ${intake.section?.section_number || ''}</div>
+                        <div class="text-subtitle2">Toma N°${intake.intake_number || ''}</div>
+                        <div class="text-subtitle2">${intake.name || ''}</div>
+                      </div>
+                      `,
+            };
+          }),
+          line: {
+            coordinates: lineCoordinates,
+            color: '#3b9ddd',
+            width: 3
+          }
         };
-      }),
+        createMap(mapConfig);
+        mapCreated.value = true;
+      }
     };
 
+    watch(
+      () => intakes.value,
+      () => {
+        createMapWithData();
+      },
+      { deep: true }
+    );
+
     onMounted(() => {
-      createMap(map);
+      isMounted.value = true;
+      createMapWithData();
     });
 
     return {};

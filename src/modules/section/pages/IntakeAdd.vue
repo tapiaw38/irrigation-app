@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 
 // composables
 import useGeoloaction from "../../../composables/useGeolocation";
@@ -93,15 +93,17 @@ export default defineComponent({
   },
   setup() {
     const { positionLoader, position } = useGeoloaction();
-    const { createIntakeStorage, allSectionStorage } = useSection();
+    const { createIntakeStorage, sections } = useSection();
     const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
 
-    // intakes option for select
-    let options = allSectionStorage.value.map((section) => {
-      return {
-        label: `${section.section_number}`,
-        value: section.id,
-      };
+    // intakes option for select - computed to react to changes
+    const options = computed(() => {
+      return sections.value.map((section) => {
+        return {
+          label: `${section.section_number} - ${section.name}`,
+          value: section.id,
+        };
+      });
     });
 
     // form

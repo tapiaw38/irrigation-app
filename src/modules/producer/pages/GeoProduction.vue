@@ -14,9 +14,8 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, watch } from "vue";
 
-//composables
 import useMapbox from "../composables/useMapbox";
 import useProducer from "../../producer/composables/useProducer";
 
@@ -27,26 +26,42 @@ export default defineComponent({
     const { createMap } = useMapbox();
     const { productions } = useProducer();
 
-    let map = {
-      container: "map",
-      center: [-67.564368, -28.065752],
-      zoom: 13,
-      markers: productions.value.map((production) => {
-        return {
-          coordinates: [production.longitude || 0, production.latitude || 0],
-          title: `<div class="col">
-                    <div class="text-h6">Produccion</div>
-                    <div class="text-subtitle2">${production.producer.first_name} ${production.producer.last_name}</div>
-                    <div class="text-subtitle2">${production.name}</div>
-                    <div class="text-subtitle2">${production.production_type}</div>
-                  </div>
-                  `,
+    let mapInstance = null;
+
+    const createMapWithData = () => {
+      if (productions.value && productions.value.length > 0 && !mapInstance) {
+        const mapConfig = {
+          container: "map",
+          center: [-67.564368, -28.065752],
+          zoom: 13,
+          markers: productions.value.map((production) => {
+            return {
+              coordinates: [production.longitude || 0, production.latitude || 0],
+              title: `<div class="col">
+                        <div class="text-h6">Produccion</div>
+                        <div class="text-subtitle2">${production.producer?.first_name || ''} ${production.producer?.last_name || ''}</div>
+                        <div class="text-subtitle2">${production.name || ''}</div>
+                        <div class="text-subtitle2">${production.production_type || ''}</div>
+                      </div>
+                      `,
+            };
+          }),
         };
-      }),
+        createMap(mapConfig);
+        mapInstance = true;
+      }
     };
 
+    watch(
+      () => productions.value,
+      () => {
+        createMapWithData();
+      },
+      { immediate: true, deep: true }
+    );
+
     onMounted(() => {
-      createMap(map);
+      createMapWithData();
     });
 
     return {};

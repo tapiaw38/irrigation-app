@@ -13,13 +13,32 @@
       <div class="q-gutter-md text-center">
         <q-form @submit="onCreateProduction()">
           <q-select
-            :options="options"
-            label="Productor"
+            :options="filteredOptions"
+            label="Buscar Productor (DNI, Nombre o Apellido)"
             dropdown-icon="las la-angle-down"
             v-model="production.producer"
+            use-input
+            input-debounce="300"
+            @filter="filterProducers"
+            @input-value="setSearchTerm"
           >
             <template v-slot:prepend>
               <q-icon name="las la-user" @click.stop />
+            </template>
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  No se encontraron productores
+                </q-item-section>
+              </q-item>
+            </template>
+            <template v-slot:option="scope">
+              <q-item v-bind="scope.itemProps">
+                <q-item-section>
+                  <q-item-label>{{ scope.opt.label }}</q-item-label>
+                  <q-item-label caption>DNI: {{ scope.opt.dni }}</q-item-label>
+                </q-item-section>
+              </q-item>
             </template>
           </q-select>
           <q-input
@@ -140,7 +159,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed } from "vue";
 
 //composables
 import useGeoloaction from "../../../composables/useGeolocation";
@@ -162,16 +181,25 @@ export default defineComponent({
   setup() {
     const { positionLoader, position } = useGeoloaction();
     const { imageSrc, captureImage } = useCamera();
-    const { allProducerStorage, createProductionStorage } = useProducer();
+    const { producers, createProductionStorage } = useProducer();
     const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
 
-    // producers option for select
-    let options = allProducerStorage.value.map((producer) => {
-      return {
-        label: `${producer.first_name} ${producer.last_name}`,
-        value: producer.id,
-      };
+    // producers option for select - computed to react to changes
+    const options = computed(() => {
+      return producers.value.map((producer) => {
+        return {
+          label: `${producer.first_name} ${producer.last_name}`,
+          value: producer.id,
+          dni: producer.document_number || 'Sin DNI',
+          firstName: producer.first_name,
+          lastName: producer.last_name,
+        };
+      });
     });
+
+    // filtered options for search
+    let filteredOptions = ref([]);
+    let searchTerm = ref('');
 
     // districts option for select
     let optionsDistrict = districtList.map((district) => {
@@ -228,6 +256,27 @@ export default defineComponent({
       imageSrc.value = "";
     };
 
+    // filter producers by DNI, first name or last name
+    const filterProducers = (val, update) => {
+      update(() => {
+        if (val === '') {
+          filteredOptions.value = options.value;
+        } else {
+          const needle = val.toLowerCase();
+          filteredOptions.value = options.value.filter(producer => {
+            const fullName = `${producer.firstName} ${producer.lastName}`.toLowerCase();
+            const dni = producer.dni.toLowerCase();
+            return fullName.includes(needle) || dni.includes(needle);
+          });
+        }
+      });
+    };
+
+    // set search term
+    const setSearchTerm = (val) => {
+      searchTerm.value = val;
+    };
+
     // create production
     const onCreateProduction = async () => {
       production.value.picture = imageSrc.value;
@@ -249,6 +298,8 @@ export default defineComponent({
 
     return {
       options,
+      filteredOptions,
+      searchTerm,
       optionsDistrict,
       position,
       positionLoader,
@@ -257,6 +308,8 @@ export default defineComponent({
       imageSrc,
       captureImage,
       deleteImg,
+      filterProducers,
+      setSearchTerm,
       onCreateProduction,
       headerMessage,
       alertMessage,
