@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, watch } from "vue";
+import { defineComponent, onMounted, watch, ref } from "vue";
 
 import useMapbox from "../composables/useMapbox";
 import useProducer from "../../producer/composables/useProducer";
@@ -25,18 +25,30 @@ export default defineComponent({
   setup() {
     const { createMap } = useMapbox();
     const { productions } = useProducer();
-
-    let mapInstance = null;
+    const isMounted = ref(false);
+    const mapCreated = ref(false);
 
     const createMapWithData = () => {
-      if (productions.value && productions.value.length > 0 && !mapInstance) {
+      if (isMounted.value && productions.value && productions.value.length > 0 && !mapCreated.value) {
+        const validProductions = productions.value.filter(
+          production =>
+            production.latitude &&
+            production.longitude &&
+            production.latitude !== 0 &&
+            production.longitude !== 0
+        );
+
+        if (validProductions.length === 0) {
+          return;
+        }
+
         const mapConfig = {
           container: "map",
           center: [-67.564368, -28.065752],
           zoom: 13,
-          markers: productions.value.map((production) => {
+          markers: validProductions.map((production) => {
             return {
-              coordinates: [production.longitude || 0, production.latitude || 0],
+              coordinates: [parseFloat(production.longitude), parseFloat(production.latitude)],
               title: `<div class="col">
                         <div class="text-h6">Produccion</div>
                         <div class="text-subtitle2">${production.producer?.first_name || ''} ${production.producer?.last_name || ''}</div>
@@ -48,7 +60,7 @@ export default defineComponent({
           }),
         };
         createMap(mapConfig);
-        mapInstance = true;
+        mapCreated.value = true;
       }
     };
 
@@ -57,10 +69,11 @@ export default defineComponent({
       () => {
         createMapWithData();
       },
-      { immediate: true, deep: true }
+      { deep: true }
     );
 
     onMounted(() => {
+      isMounted.value = true;
       createMapWithData();
     });
 

@@ -10,9 +10,18 @@ const useMapbox = () => {
       markers = [],
       line = null,
     }) => {
+    const containerElement = typeof container === 'string'
+      ? document.getElementById(container)
+      : container;
+
+    if (!containerElement) {
+      console.error(`Container "${container}" not found`);
+      return null;
+    }
+
     mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
     const map = new mapboxgl.Map({
-      container,
+      container: containerElement,
       style: "mapbox://styles/mapbox/streets-v11",
       center,
       zoom,
