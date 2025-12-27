@@ -84,6 +84,7 @@ import { computed, defineComponent, onMounted, ref } from "vue";
 // composables
 import useSection from "../composables/useSection";
 import useMapbox from "../../producer/composables/useMapbox";
+import useConfiguration from "../../configuration/composables/useConfiguration";
 
 // helpers
 import { formatDate } from "../../../helpers/formatDate";
@@ -99,6 +100,7 @@ export default defineComponent({
   setup(props) {
     const { section, getSectionById, intakes } = useSection();
     const { createMap } = useMapbox();
+    const { configuration } = useConfiguration();
 
     let intakesBySection = ref([]);
 
@@ -115,8 +117,8 @@ export default defineComponent({
     // mapbox
     let map = {
       container: "map",
-      center: [-67.564368, -28.065752],
-      zoom: 13,
+      center: configuration.value ? [configuration.value.default_location.longitude, configuration.value.default_location.latitude] : [-67.564368, -28.065752],
+      zoom: configuration.value ? configuration.value.default_location.zoom : 13,
       markers: intakes.value.map((intake) => {
         return {
           coordinates: [intake.longitude || 0, intake.latitude || 0],

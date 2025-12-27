@@ -62,6 +62,13 @@ const linksList = [
     link: "users",
     is_home: false,
   },
+  {
+    title: "CONFIGURACIÓN",
+    caption: "",
+    icon: "las la-cog",
+    link: "configuration",
+    is_home: false,
+  },
 ];
 
 export default linksList;

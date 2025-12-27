@@ -129,6 +129,7 @@ import Alert from "../../../components/Alert.vue";
 import useSection from "../composables/useSection";
 import useMapbox from "../../producer/composables/useMapbox";
 import useAlert from "../../../composables/useAlert";
+import useConfiguration from "../../configuration/composables/useConfiguration";
 
 export default defineComponent({
   name: "IntakeDetail",
@@ -151,11 +152,12 @@ export default defineComponent({
     const { headerMessage, alertMessage, isAlertOpen, closeAlert, openAlert } =
       useAlert();
     const { createMap } = useMapbox();
+    const { configuration } = useConfiguration();
 
     const map = ref({
       container: "map",
-      center: [-67.564368, -28.065752],
-      zoom: 13,
+      center: configuration.value ? [configuration.value.default_location.longitude, configuration.value.default_location.latitude] : [-67.564368, -28.065752],
+      zoom: configuration.value ? configuration.value.default_location.zoom : 13,
       markers: [],
     });
 

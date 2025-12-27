@@ -18,6 +18,7 @@ import { defineComponent, onMounted, watch, ref } from "vue";
 
 import useMapbox from "../composables/useMapbox";
 import useSection from "../../section/composables/useSection";
+import useConfiguration from "../../configuration/composables/useConfiguration";
 
 export default defineComponent({
   name: "GeoIntake",
@@ -25,6 +26,7 @@ export default defineComponent({
   setup() {
     const { createMap } = useMapbox();
     const { intakes } = useSection();
+    const { configuration } = useConfiguration();
     const isMounted = ref(false);
     const mapCreated = ref(false);
 
@@ -54,8 +56,10 @@ export default defineComponent({
 
         const mapConfig = {
           container: "map",
-          center: [-67.564368, -28.065752],
-          zoom: 13,
+          center: configuration.value
+            ? [configuration.value.default_location.longitude, configuration.value.default_location.latitude]
+            : [-67.564368, -28.065752],
+          zoom: configuration.value ? configuration.value.default_location.zoom : 13,
           markers: validIntakes.map((intake) => {
             return {
               coordinates: [parseFloat(intake.longitude), parseFloat(intake.latitude)],

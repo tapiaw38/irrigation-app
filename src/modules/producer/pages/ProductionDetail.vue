@@ -168,6 +168,7 @@ import useMapbox from "../composables/useMapbox";
 import useProducer from "../composables/useProducer";
 import useAlert from "../../../composables/useAlert";
 import useImageSelected from "../../../composables/useImageSelected";
+import useConfiguration from "../../configuration/composables/useConfiguration";
 
 //components
 import Alert from "../../../components/Alert";
@@ -189,11 +190,12 @@ export default defineComponent({
       useProducer();
     const { imageSelected, image, onSelectedImage } = useImageSelected();
     const { headerMessage, alertMessage, isAlertOpen, closeAlert } = useAlert();
+    const { configuration } = useConfiguration();
 
     const map = ref({
       container: "map",
-      center: [-67.564368, -28.065752],
-      zoom: 13,
+      center: configuration.value ? [configuration.value.default_location.longitude, configuration.value.default_location.latitude] : [-67.564368, -28.065752],
+      zoom: configuration.value ? configuration.value.default_location.zoom : 13,
       markers: [],
     });
 

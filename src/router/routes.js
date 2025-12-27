@@ -2,6 +2,7 @@ import producerRouter from "../modules/producer/router";
 import userRouter from "../modules/user/router";
 import sectionRouter from "../modules/section/router";
 import shiftRouter from "../modules/shift/router";
+import configurationRouter from "../modules/configuration/router";
 
 // guards
 import isAuthenticatedGuard from "../modules/authentication/router/auth-guard";
@@ -43,6 +44,11 @@ const routes = [
     path: "/shift",
     beforeEnter: [isAuthenticatedGuard],
     ...shiftRouter,
+  },
+  {
+    path: "/configuration",
+    beforeEnter: [isAuthenticatedGuard],
+    ...configurationRouter,
   },
   // Always leave this as last one,
   // but you can also remove it
